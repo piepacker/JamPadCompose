@@ -31,12 +31,13 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material)
+                implementation(compose.material3)
+
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
             }
         }
         val androidMain by getting {
-            dependencies {
-            }
+            dependencies { }
         }
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -48,8 +49,7 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
         }
         val desktopMain by getting {
-            dependencies {
-            }
+            dependencies { }
         }
     }
 }
