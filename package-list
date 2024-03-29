@@ -1,5 +1,11 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-$dokka.location:////PointingToDeclaration/lib/[root]/index.html
-$dokka.location://getPlatformName/#/PointingToDeclaration/lib/[root]/get-platform-name.html
 
+module:lib
+gg.jam.jampadcompose
+gg.jam.jampadcompose.dials
+gg.jam.jampadcompose.geometry
+gg.jam.jampadcompose.handlers
+gg.jam.jampadcompose.inputstate
+gg.jam.jampadcompose.ui
+gg.jam.jampadcompose.utils
