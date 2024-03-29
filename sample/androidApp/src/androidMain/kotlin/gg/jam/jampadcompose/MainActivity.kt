@@ -1,4 +1,4 @@
-package com.myapplication
+package gg.jam.jampadcompose
 
 import MainView
 import android.os.Bundle
