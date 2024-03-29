@@ -1,4 +1,4 @@
-import com.vanniktech.maven.publish.SonatypeHost
+//import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     kotlin("multiplatform")
