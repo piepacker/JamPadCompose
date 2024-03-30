@@ -68,8 +68,8 @@ fun GamePadScope.FaceButtonsDial(
             modifier = Modifier.fillMaxSize(),
             gravityArrangement = compositeArrangement
         ) {
-            compositeArrangement.getGravityPoints().forEach { id ->
-                foregroundComposite(id.keys.all { inputState.value.getDigitalKey(it) })
+            compositeArrangement.getGravityPoints().forEach { point ->
+                foregroundComposite(point.keys.all { inputState.value.getDigitalKey(it) })
             }
         }
     }

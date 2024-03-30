@@ -19,7 +19,7 @@ class CircumferenceCompositeGravityArrangement(
             .zipWithNext()
             .mapIndexed { index, (prev, next) ->
                 val radius = 0.9f
-                val angle = (baseRotation + 2 * Constants.PI * (index + 0.5) / ids.size).toFloat()
+                val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / ids.size)
                 GravityPoint(
                     Offset(cos(angle), sin(angle)) * radius,
                     0.25f,

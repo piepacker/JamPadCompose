@@ -9,7 +9,7 @@ data class ButtonHandler(override val id: Int, override val rect: Rect) : Handle
         pointers: List<Pointer>,
         inputState: InputState,
         gestureStartPointer: Pointer?
-    ): Handler.Result {
-        return Handler.Result(inputState.setDigitalKey(id, pointers.isNotEmpty()))
+    ): HandleResult {
+        return HandleResult(inputState.setDigitalKey(id, pointers.isNotEmpty()))
     }
 }

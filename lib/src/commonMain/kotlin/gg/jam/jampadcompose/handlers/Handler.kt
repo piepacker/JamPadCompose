@@ -7,13 +7,11 @@ interface Handler {
     val id: Int
     val rect: Rect
 
-    data class Result(val inputState: InputState, val gestureStartPointer: Pointer? = null)
-
     fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
         gestureStartPointer: Pointer?
-    ): Result
+    ): HandleResult
 
     fun handlerId(): String {
         return "${this::class.simpleName}:$id"

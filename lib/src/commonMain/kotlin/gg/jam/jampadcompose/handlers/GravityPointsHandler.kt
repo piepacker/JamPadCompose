@@ -22,7 +22,7 @@ class GravityPointsHandler(
         pointers: List<Pointer>,
         inputState: InputState,
         gestureStartPointer: Pointer?
-    ): Handler.Result {
+    ): HandleResult {
         val pressedKeys = pointers
             .flatMap { pointer ->
                 allPoints
@@ -35,6 +35,6 @@ class GravityPointsHandler(
             updatedState.setDigitalKey(key, key in pressedKeys)
         }
 
-        return Handler.Result(finalState)
+        return HandleResult(finalState)
     }
 }

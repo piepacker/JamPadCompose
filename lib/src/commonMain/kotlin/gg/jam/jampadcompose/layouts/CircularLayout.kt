@@ -42,7 +42,7 @@ internal fun CircularLayout(
             val centerY = constraints.maxHeight / 2
 
             placeables.forEachIndexed { index, placeable ->
-                val angle = baseRotation + 2 * Constants.PI * index / placeables.size
+                val angle = baseRotation + Constants.PI2 * index / placeables.size
                 val childX = (centerX + radius * cos(angle)).toInt() - placeable.width / 2
                 val childY = (centerY + radius * sin(angle)).toInt() - placeable.height / 2
                 placeable.place(childX, childY)

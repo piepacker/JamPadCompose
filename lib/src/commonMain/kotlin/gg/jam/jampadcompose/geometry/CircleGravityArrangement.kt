@@ -21,7 +21,6 @@ class CircleGravityArrangement(
         )
 
         val circumferenceGravityPoint = circumferenceGravityArrangement.getGravityPoints()
-
         return listOf(centralGravityPoint) + circumferenceGravityPoint
     }
 

@@ -27,6 +27,6 @@ data class InputState(
     }
 
     fun getAnalogKey(analogId: Int): Offset {
-        return analogKeys.getOrDefault(analogId, Offset.Zero)
+        return analogKeys.getOrElse(analogId) { Offset.Zero }
     }
 }

@@ -21,13 +21,13 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
         pointers: List<Pointer>,
         inputState: InputState,
         gestureStartPointer: Pointer?
-    ): Handler.Result {
+    ): HandleResult {
         val updatedGesture = pointers.firstOrNull { it.pointerId == gestureStartPointer?.pointerId }
 
         return when {
-            pointers.isEmpty() -> Handler.Result(inputState.setAnalogKey(id, Offset.Zero))
+            pointers.isEmpty() -> HandleResult(inputState.setAnalogKey(id, Offset.Zero))
             updatedGesture != null -> {
-                Handler.Result(
+                HandleResult(
                     inputState.setAnalogKey(id, findCloserState(updatedGesture)),
                     gestureStartPointer
                 )
@@ -35,19 +35,17 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
 
             else -> {
                 val gestureStart = pointers.first()
-                Handler.Result(
-                    inputState.setAnalogKey(id, findCloserState(gestureStart)),
-                    gestureStart
+                HandleResult(
+                    inputState.setAnalogKey(id, findCloserState(gestureStart)), gestureStart
                 )
             }
         }
     }
 
     private fun findCloserState(pointer: Pointer): Offset {
-        val position = State.entries
+        return State.entries
             .minBy { (pointer.position - it.position).getDistanceSquared() }
             .position
-
-        return position.copy(y = -position.y)
+            .let { it.copy(y = -it.y) }
     }
 }

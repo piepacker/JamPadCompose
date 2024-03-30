@@ -17,7 +17,7 @@ class CircumferenceGravityArrangement(
         val baseRotation = rotationInDegrees.toRadians()
 
         val primaryGravityPoints = ids.mapIndexed { index, id ->
-            val angle = (baseRotation + 2 * Constants.PI * index / ids.size).toFloat()
+            val angle = (baseRotation + Constants.PI2 * index / ids.size)
             GravityPoint(
                 Offset(cos(angle), sin(angle)),
                 1f,
