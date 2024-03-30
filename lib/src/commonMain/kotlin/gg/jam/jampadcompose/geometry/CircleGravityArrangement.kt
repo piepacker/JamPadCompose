@@ -5,20 +5,21 @@ import kotlinx.collections.immutable.persistentSetOf
 
 class CircleGravityArrangement(
     private val ids: List<Int>,
-    rotationInDegrees: Float
+    rotationInDegrees: Float,
 ) : GravityArrangement() {
-
-    private val circumferenceGravityArrangement = CircumferenceGravityArrangement(
-        ids.drop(1),
-        rotationInDegrees
-    )
+    private val circumferenceGravityArrangement =
+        CircumferenceGravityArrangement(
+            ids.drop(1),
+            rotationInDegrees,
+        )
 
     override fun computeGravityPoints(): List<GravityPoint> {
-        val centralGravityPoint = GravityPoint(
-            Offset.Zero,
-            1f,
-            persistentSetOf(ids.first())
-        )
+        val centralGravityPoint =
+            GravityPoint(
+                Offset.Zero,
+                1f,
+                persistentSetOf(ids.first()),
+            )
 
         val circumferenceGravityPoint = circumferenceGravityArrangement.getGravityPoints()
         return listOf(centralGravityPoint) + circumferenceGravityPoint

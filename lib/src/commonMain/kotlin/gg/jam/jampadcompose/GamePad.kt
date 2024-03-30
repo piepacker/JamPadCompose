@@ -19,58 +19,63 @@ import gg.jam.jampadcompose.utils.relativeTo
 fun GamePad(
     modifier: Modifier = Modifier,
     onInputStateUpdated: (InputState) -> Unit = { },
-    content: @Composable GamePadScope.() -> Unit
+    content: @Composable GamePadScope.() -> Unit,
 ) {
     val scope = remember { GamePadScope() }
     val rootPosition = remember { mutableStateOf(Offset.Zero) }
 
     Row(
-        modifier = modifier
-            .fillMaxSize()
-            .onGloballyPositioned { rootPosition.value = it.positionInRoot() }
-            .pointerInput("InputEventKey") {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        val trackedPointers = scope.getTrackedIds()
+        modifier =
+            modifier
+                .fillMaxSize()
+                .onGloballyPositioned { rootPosition.value = it.positionInRoot() }
+                .pointerInput("InputEventKey") {
+                    awaitPointerEventScope {
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            val trackedPointers = scope.getTrackedIds()
 
-                        val handlersAssociations = event.changes
-                            .asSequence()
-                            .filter { it.pressed }
-                            .map { Pointer(it.id.value, it.position + rootPosition.value) }
-                            .groupBy { pointer ->
-                                if (pointer.pointerId in trackedPointers) {
-                                    scope.getHandlerTracking(pointer.pointerId)
-                                } else {
-                                    scope.getHandlerAtPosition(pointer.position)
-                                }
-                            }
-
-                        scope.inputState.value = scope.getAllHandlers()
-                            .fold(scope.inputState.value) { state, handler ->
-                                val pointers =
-                                    handlersAssociations.getOrElse(handler) { emptyList() }
-
-                                val relativePointers = pointers
-                                    .map {
-                                        Pointer(
-                                            it.pointerId,
-                                            it.position.relativeTo(handler.rect)
-                                        )
+                            val handlersAssociations =
+                                event.changes
+                                    .asSequence()
+                                    .filter { it.pressed }
+                                    .map { Pointer(it.id.value, it.position + rootPosition.value) }
+                                    .groupBy { pointer ->
+                                        if (pointer.pointerId in trackedPointers) {
+                                            scope.getHandlerTracking(pointer.pointerId)
+                                        } else {
+                                            scope.getHandlerAtPosition(pointer.position)
+                                        }
                                     }
 
-                                val (updatedState, updatedTracked) = handler.handle(
-                                    relativePointers,
-                                    state,
-                                    scope.getStartGestureForHandler(handler)
-                                )
+                            scope.inputState.value =
+                                scope.getAllHandlers()
+                                    .fold(scope.inputState.value) { state, handler ->
+                                        val pointers =
+                                            handlersAssociations.getOrElse(handler) { emptyList() }
 
-                                scope.setStartGestureForHandler(handler, updatedTracked)
-                                updatedState
-                            }
+                                        val relativePointers =
+                                            pointers
+                                                .map {
+                                                    Pointer(
+                                                        it.pointerId,
+                                                        it.position.relativeTo(handler.rect),
+                                                    )
+                                                }
+
+                                        val (updatedState, updatedTracked) =
+                                            handler.handle(
+                                                relativePointers,
+                                                state,
+                                                scope.getStartGestureForHandler(handler),
+                                            )
+
+                                        scope.setStartGestureForHandler(handler, updatedTracked)
+                                        updatedState
+                                    }
+                        }
                     }
-                }
-            }
+                },
     ) {
         scope.content()
     }

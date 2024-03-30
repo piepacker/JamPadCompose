@@ -12,18 +12,18 @@ class CircumferenceGravityArrangement(
     private val ids: List<Int>,
     private val rotationInDegrees: Float,
 ) : GravityArrangement() {
-
     override fun computeGravityPoints(): List<GravityPoint> {
         val baseRotation = rotationInDegrees.toRadians()
 
-        val primaryGravityPoints = ids.mapIndexed { index, id ->
-            val angle = (baseRotation + Constants.PI2 * index / ids.size)
-            GravityPoint(
-                Offset(cos(angle), sin(angle)),
-                1f,
-                persistentSetOf(id)
-            )
-        }
+        val primaryGravityPoints =
+            ids.mapIndexed { index, id ->
+                val angle = (baseRotation + Constants.PI2 * index / ids.size)
+                GravityPoint(
+                    Offset(cos(angle), sin(angle)),
+                    1f,
+                    persistentSetOf(id),
+                )
+            }
 
         return primaryGravityPoints
     }

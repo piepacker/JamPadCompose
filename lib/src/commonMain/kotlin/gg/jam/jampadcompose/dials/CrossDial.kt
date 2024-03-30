@@ -26,32 +26,33 @@ fun GamePadScope.CrossDial(
     rightDial: @Composable (Boolean) -> Unit = {
         ButtonForegroundDefault(
             pressed = it,
-            icon = Icons.Default.KeyboardArrowRight
+            icon = Icons.Default.KeyboardArrowRight,
         )
     },
     bottomDial: @Composable (Boolean) -> Unit = {
         ButtonForegroundDefault(
             pressed = it,
-            icon = Icons.Default.KeyboardArrowDown
+            icon = Icons.Default.KeyboardArrowDown,
         )
     },
     leftDial: @Composable (Boolean) -> Unit = {
         ButtonForegroundDefault(
             pressed = it,
-            icon = Icons.Default.KeyboardArrowLeft
+            icon = Icons.Default.KeyboardArrowLeft,
         )
     },
     topDial: @Composable (Boolean) -> Unit = {
         ButtonForegroundDefault(
             pressed = it,
-            icon = Icons.Default.KeyboardArrowUp
+            icon = Icons.Default.KeyboardArrowUp,
         )
     },
 ) {
     Box(
-        modifier = modifier
-            .aspectRatio(1f)
-            .onGloballyPositioned { registerHandler(CrossHandler(id, it.boundsInRoot())) }
+        modifier =
+            modifier
+                .aspectRatio(1f)
+                .onGloballyPositioned { registerHandler(CrossHandler(id, it.boundsInRoot())) },
     ) {
         background()
 

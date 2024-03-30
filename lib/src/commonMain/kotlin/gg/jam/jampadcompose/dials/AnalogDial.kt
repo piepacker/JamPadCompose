@@ -28,18 +28,20 @@ fun GamePadScope.AnalogDial(
     val position = inputState.value.getAnalogKey(id)
 
     BoxWithConstraints(
-        modifier = modifier
-            .aspectRatio(1f)
-            .onGloballyPositioned { registerHandler(AnalogHandler(id, it.boundsInRoot())) },
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .aspectRatio(1f)
+                .onGloballyPositioned { registerHandler(AnalogHandler(id, it.boundsInRoot())) },
+        contentAlignment = Alignment.Center,
     ) {
         Box(modifier = Modifier.fillMaxSize(0.75f)) {
             background()
         }
         Box(
-            modifier = Modifier
-                .fillMaxSize(0.50f)
-                .offset(maxWidth * position.x * 0.25f, maxHeight * position.y * 0.25f)
+            modifier =
+                Modifier
+                    .fillMaxSize(0.50f)
+                    .offset(maxWidth * position.x * 0.25f, maxHeight * position.y * 0.25f),
         ) {
             foreground(inputState.value.getAnalogKey(id) != Offset.Zero)
         }

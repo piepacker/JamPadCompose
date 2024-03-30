@@ -11,7 +11,7 @@ import gg.jam.jampadcompose.inputstate.InputState
 class GamePadScope {
     private data class HandlerState(
         val handler: Handler,
-        var gestureStart: Pointer? = null
+        var gestureStart: Pointer? = null,
     )
 
     internal val inputState = mutableStateOf(InputState())
@@ -49,7 +49,10 @@ class GamePadScope {
         return handlers[handler.handlerId()]?.gestureStart
     }
 
-    internal fun setStartGestureForHandler(handler: Handler, newGestureStart: Pointer?) {
+    internal fun setStartGestureForHandler(
+        handler: Handler,
+        newGestureStart: Pointer?,
+    ) {
         handlers[handler.handlerId()]?.gestureStart = newGestureStart
     }
 }

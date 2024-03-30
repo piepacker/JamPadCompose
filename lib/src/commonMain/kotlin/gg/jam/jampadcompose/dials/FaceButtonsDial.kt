@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.GamePadScope
+import gg.jam.jampadcompose.config.FaceButtonsLayout
 import gg.jam.jampadcompose.geometry.CircleGravityArrangement
 import gg.jam.jampadcompose.geometry.CircumferenceCompositeGravityArrangement
 import gg.jam.jampadcompose.geometry.CircumferenceGravityArrangement
@@ -25,7 +26,7 @@ fun GamePadScope.FaceButtonsDial(
     modifier: Modifier = Modifier,
     rotationInDegrees: Float = 0f,
     ids: List<Int>,
-    startFromCenter: Boolean = false, // TODO... Let's find a better name for this value here.
+    faceButtonsLayout: FaceButtonsLayout = FaceButtonsLayout.CIRCUMFERENCE,
     includeComposite: Boolean = true,
     background: @Composable () -> Unit = { DialBackgroundDefault() },
     foreground: @Composable (Int, Boolean) -> Unit = { _, pressed ->
@@ -33,31 +34,32 @@ fun GamePadScope.FaceButtonsDial(
     },
     foregroundComposite: @Composable (Boolean) -> Unit = { pressed ->
         CompositeForegroundDefault(pressed = pressed)
-    }
+    },
 ) {
-    val primaryArrangement = rememberPrimaryArrangement(ids, startFromCenter, rotationInDegrees)
+    val primaryArrangement = rememberPrimaryArrangement(ids, faceButtonsLayout, rotationInDegrees)
     val compositeArrangement =
         rememberCompositeArrangement(includeComposite, ids, rotationInDegrees)
 
     Box(
-        modifier = modifier
-            .aspectRatio(1f)
-            .onGloballyPositioned {
-                registerHandler(
-                    GravityPointsHandler(
-                        ids.hashCode(),
-                        it.boundsInRoot(),
-                        primaryArrangement,
-                        compositeArrangement
+        modifier =
+            modifier
+                .aspectRatio(1f)
+                .onGloballyPositioned {
+                    registerHandler(
+                        GravityPointsHandler(
+                            ids.hashCode(),
+                            it.boundsInRoot(),
+                            primaryArrangement,
+                            compositeArrangement,
+                        ),
                     )
-                )
-            }
+                },
     ) {
         background()
 
         GravityPointsLayout(
             modifier = Modifier.fillMaxSize(),
-            gravityArrangement = primaryArrangement
+            gravityArrangement = primaryArrangement,
         ) {
             ids.forEach { id ->
                 foreground(id, inputState.value.getDigitalKey(id))
@@ -66,7 +68,7 @@ fun GamePadScope.FaceButtonsDial(
 
         GravityPointsLayout(
             modifier = Modifier.fillMaxSize(),
-            gravityArrangement = compositeArrangement
+            gravityArrangement = compositeArrangement,
         ) {
             compositeArrangement.getGravityPoints().forEach { point ->
                 foregroundComposite(point.keys.all { inputState.value.getDigitalKey(it) })
@@ -79,7 +81,7 @@ fun GamePadScope.FaceButtonsDial(
 private fun rememberCompositeArrangement(
     includeCompositeButtons: Boolean,
     ids: List<Int>,
-    rotationInDegrees: Float
+    rotationInDegrees: Float,
 ): GravityArrangement {
     return remember(ids, includeCompositeButtons, rotationInDegrees) {
         if (includeCompositeButtons) {
@@ -93,14 +95,13 @@ private fun rememberCompositeArrangement(
 @Composable
 private fun rememberPrimaryArrangement(
     ids: List<Int>,
-    startFromCenter: Boolean,
-    rotationInDegrees: Float
+    faceButtonsLayout: FaceButtonsLayout,
+    rotationInDegrees: Float,
 ): GravityArrangement {
-    return remember(ids, startFromCenter, rotationInDegrees) {
-        if (startFromCenter) {
-            CircleGravityArrangement(ids, rotationInDegrees)
-        } else {
-            CircumferenceGravityArrangement(ids, rotationInDegrees)
+    return remember(ids, faceButtonsLayout, rotationInDegrees) {
+        when (faceButtonsLayout) {
+            FaceButtonsLayout.CIRCUMFERENCE -> CircumferenceGravityArrangement(ids, rotationInDegrees)
+            FaceButtonsLayout.CIRCLE -> CircleGravityArrangement(ids, rotationInDegrees)
         }
     }
 }

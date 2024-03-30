@@ -14,23 +14,24 @@ import kotlin.math.sin
 internal fun CircularLayout(
     modifier: Modifier = Modifier,
     rotationInDegrees: Float = 0f,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Layout(
         modifier = modifier,
-        content = content
+        content = content,
     ) { measurables, constraints ->
         val layoutSize = minOf(constraints.maxHeight, constraints.maxWidth)
         val relativePlaceableSize =
             GeometryUtils.computeSizeOfItemsOnCircumference(measurables.size)
         val placeableSize = (layoutSize * relativePlaceableSize).roundToInt()
 
-        val childConstraints = constraints.copy(
-            minWidth = placeableSize,
-            maxWidth = placeableSize,
-            minHeight = placeableSize,
-            maxHeight = placeableSize,
-        )
+        val childConstraints =
+            constraints.copy(
+                minWidth = placeableSize,
+                maxWidth = placeableSize,
+                minHeight = placeableSize,
+                maxHeight = placeableSize,
+            )
 
         val placeables = measurables.map { it.measure(childConstraints) }
         val radius = (minOf(constraints.maxWidth, constraints.maxHeight) - placeableSize) / 2f

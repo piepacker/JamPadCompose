@@ -20,18 +20,19 @@ fun ButtonForegroundDefault(
     scale: Float = 0.75f,
     icon: ImageVector? = null,
     color: Color = MaterialTheme.colorScheme.primary,
-    pressedColor: Color = MaterialTheme.colorScheme.inversePrimary
+    pressedColor: Color = MaterialTheme.colorScheme.inversePrimary,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Surface(
-            modifier = modifier
-                .fillMaxSize(scale)
-                .aspectRatio(1f),
+            modifier =
+                modifier
+                    .fillMaxSize(scale)
+                    .aspectRatio(1f),
             shape = CircleShape,
-            color = if (pressed) pressedColor else color
+            color = if (pressed) pressedColor else color,
         ) {
             if (icon != null) {
                 Icon(imageVector = icon, contentDescription = null)

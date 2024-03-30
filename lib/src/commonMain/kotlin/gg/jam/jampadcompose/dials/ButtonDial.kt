@@ -18,16 +18,17 @@ fun GamePadScope.ButtonDial(
     background: @Composable () -> Unit = { DialBackgroundDefault() },
     foreground: @Composable () -> Unit = {
         ButtonForegroundDefault(
-            pressed = inputState.value.getDigitalKey(id)
+            pressed = inputState.value.getDigitalKey(id),
         )
-    }
+    },
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .onGloballyPositioned {
-                registerHandler(ButtonHandler(id, it.boundsInRoot()))
-            }
+        modifier =
+            modifier
+                .fillMaxSize()
+                .onGloballyPositioned {
+                    registerHandler(ButtonHandler(id, it.boundsInRoot()))
+                },
     ) {
         background()
         foreground()

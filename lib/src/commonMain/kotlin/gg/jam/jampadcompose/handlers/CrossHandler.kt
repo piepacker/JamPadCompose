@@ -5,7 +5,6 @@ import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.inputstate.InputState
 
 data class CrossHandler(override val id: Int, override val rect: Rect) : Handler {
-
     enum class State(val position: Offset) {
         UP(Offset(0f, 1f)),
         DOWN(Offset(0f, -1f)),
@@ -20,7 +19,7 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        gestureStartPointer: Pointer?
+        gestureStartPointer: Pointer?,
     ): HandleResult {
         val updatedGesture = pointers.firstOrNull { it.pointerId == gestureStartPointer?.pointerId }
 
@@ -29,14 +28,15 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
             updatedGesture != null -> {
                 HandleResult(
                     inputState.setAnalogKey(id, findCloserState(updatedGesture)),
-                    gestureStartPointer
+                    gestureStartPointer,
                 )
             }
 
             else -> {
                 val gestureStart = pointers.first()
                 HandleResult(
-                    inputState.setAnalogKey(id, findCloserState(gestureStart)), gestureStart
+                    inputState.setAnalogKey(id, findCloserState(gestureStart)),
+                    gestureStart,
                 )
             }
         }

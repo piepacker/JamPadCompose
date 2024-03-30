@@ -1,4 +1,3 @@
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,27 +24,31 @@ fun App() {
         Column {
             Spacer(modifier = Modifier.weight(0.8f))
             GamePad(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Column(
-                        modifier = Modifier
-                            .widthIn(0.dp, 200.dp)
-                            .weight(1f, fill = false),
+                        modifier =
+                            Modifier
+                                .widthIn(0.dp, 200.dp)
+                                .weight(1f, fill = false),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalAlignment = Alignment.Start
+                        horizontalAlignment = Alignment.Start,
                     ) {
                         Row(
-                            modifier = Modifier
-                                .height(54.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly
+                            modifier =
+                                Modifier
+                                    .height(54.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
                         ) {
                             ButtonDial(modifier = Modifier.weight(1f), id = 4)
                             ButtonDial(modifier = Modifier.weight(1f), id = 5)
@@ -62,17 +65,19 @@ fun App() {
                     }
 
                     Column(
-                        modifier = Modifier
-                            .widthIn(0.dp, 200.dp)
-                            .weight(1f, fill = false),
+                        modifier =
+                            Modifier
+                                .widthIn(0.dp, 200.dp)
+                                .weight(1f, fill = false),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalAlignment = Alignment.End
+                        horizontalAlignment = Alignment.End,
                     ) {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(54.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(54.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
                         ) {
                             ButtonDial(modifier = Modifier.weight(1f), id = 7)
                             ButtonDial(modifier = Modifier.weight(1f), id = 8)
@@ -80,7 +85,7 @@ fun App() {
                         }
                         FaceButtonsDial(
                             modifier = Modifier.weight(1f),
-                            ids = listOf(0, 1, 2, 3)
+                            ids = listOf(0, 1, 2, 3),
                         )
                         AnalogDial(
                             modifier = Modifier.weight(1f),

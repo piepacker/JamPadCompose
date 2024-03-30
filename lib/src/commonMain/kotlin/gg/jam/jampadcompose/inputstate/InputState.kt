@@ -8,9 +8,12 @@ import kotlinx.collections.immutable.persistentSetOf
 
 data class InputState(
     private val digitalKeys: PersistentSet<Int> = persistentSetOf(),
-    private val analogKeys: PersistentMap<Int, Offset> = persistentMapOf()
+    private val analogKeys: PersistentMap<Int, Offset> = persistentMapOf(),
 ) {
-    fun setDigitalKey(digitalId: Int, value: Boolean): InputState {
+    fun setDigitalKey(
+        digitalId: Int,
+        value: Boolean,
+    ): InputState {
         return if (value) {
             copy(digitalKeys = digitalKeys.add(digitalId))
         } else {
@@ -22,7 +25,10 @@ data class InputState(
         return digitalKeys.contains(digitalId)
     }
 
-    fun setAnalogKey(analogId: Int, offset: Offset): InputState {
+    fun setAnalogKey(
+        analogId: Int,
+        offset: Offset,
+    ): InputState {
         return copy(analogKeys = analogKeys.put(analogId, offset))
     }
 

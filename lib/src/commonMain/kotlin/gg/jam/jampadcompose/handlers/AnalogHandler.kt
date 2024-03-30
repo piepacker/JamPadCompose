@@ -6,12 +6,14 @@ import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.coerceIn
 
 data class AnalogHandler(override val id: Int, override val rect: Rect) : Handler {
-
     override fun handle(
-        pointers: List<Pointer>, inputState: InputState, gestureStartPointer: Pointer?
+        pointers: List<Pointer>,
+        inputState: InputState,
+        gestureStartPointer: Pointer?,
     ): HandleResult {
-        val updatedGesturePosition = pointers
-            .firstOrNull { it.pointerId == gestureStartPointer?.pointerId }
+        val updatedGesturePosition =
+            pointers
+                .firstOrNull { it.pointerId == gestureStartPointer?.pointerId }
 
         return when {
             pointers.isEmpty() -> HandleResult(inputState.setAnalogKey(id, Offset.Zero))

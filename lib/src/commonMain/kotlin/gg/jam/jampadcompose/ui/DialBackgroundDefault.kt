@@ -14,14 +14,15 @@ import androidx.compose.ui.Modifier
 fun DialBackgroundDefault(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Surface(
-            modifier = modifier
-                .aspectRatio(1f)
-                .fillMaxSize(),
+            modifier =
+                modifier
+                    .aspectRatio(1f)
+                    .fillMaxSize(),
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.background,
         ) { }
     }
 }

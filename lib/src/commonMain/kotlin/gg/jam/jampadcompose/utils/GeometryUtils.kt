@@ -3,7 +3,6 @@ package gg.jam.jampadcompose.utils
 import kotlin.math.sin
 
 object GeometryUtils {
-
     fun computeSizeOfItemsOnCircumference(itemsCount: Int): Float {
         val angle = sin(Constants.PI / maxOf(itemsCount, 2))
         return (angle / (1 + angle))

@@ -12,23 +12,28 @@ import kotlin.math.roundToInt
 internal fun GravityPointsLayout(
     modifier: Modifier = Modifier,
     gravityArrangement: GravityArrangement,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Layout(
         modifier = modifier,
-        content = content
+        content = content,
     ) { measurables, constraints ->
-        val placeableSize = (gravityArrangement.getSize() * minOf(
-            constraints.maxHeight,
-            constraints.maxWidth
-        )).roundToInt()
+        val placeableSize =
+            (
+                gravityArrangement.getSize() *
+                    minOf(
+                        constraints.maxHeight,
+                        constraints.maxWidth,
+                    )
+            ).roundToInt()
 
-        val childConstraints = constraints.copy(
-            minWidth = placeableSize,
-            maxWidth = placeableSize,
-            minHeight = placeableSize,
-            maxHeight = placeableSize,
-        )
+        val childConstraints =
+            constraints.copy(
+                minWidth = placeableSize,
+                maxWidth = placeableSize,
+                minHeight = placeableSize,
+                maxHeight = placeableSize,
+            )
 
         val placeables = measurables.map { it.measure(childConstraints) }
 
@@ -42,10 +47,13 @@ internal fun GravityPointsLayout(
                 .zip(offsets)
                 .forEach { (placeable, offset) ->
                     placeable.place(
-                        (center + offset * radius - Offset(
-                            placeableSize / 2f,
-                            placeableSize / 2f
-                        )).round()
+                        (
+                            center + offset * radius -
+                                Offset(
+                                    placeableSize / 2f,
+                                    placeableSize / 2f,
+                                )
+                        ).round(),
                     )
                 }
         }

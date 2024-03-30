@@ -1,4 +1,4 @@
-//import com.vanniktech.maven.publish.SonatypeHost
+// import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     kotlin("multiplatform")
@@ -75,8 +75,8 @@ android {
     }
 }
 
-//mavenPublishing {
-////    publishToMavenCentral(SonatypeHost.DEFAULT)
+// mavenPublishing {
+// //    publishToMavenCentral(SonatypeHost.DEFAULT)
 //    // or when publishing to https://s01.oss.sonatype.org
 //    publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
 //    signAllPublications()
@@ -107,4 +107,4 @@ android {
 //            developerConnection.set("scm:git:ssh://git@github.com/username/mylibrary.git")
 //        }
 //    }
-//}
+// }
