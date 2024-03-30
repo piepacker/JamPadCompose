@@ -32,52 +32,40 @@ fun GamePad(
                 awaitPointerEventScope {
                     while (true) {
                         val event = awaitPointerEvent()
+                        val trackedPointers = scope.getTrackedIds()
 
-                        val pointers = event.changes
+                        val handlersAssociations = event.changes
                             .asSequence()
                             .filter { it.pressed }
-                            .map {
-                                Pointer(it.id.value, it.position + rootPosition.value)
+                            .map { Pointer(it.id.value, it.position + rootPosition.value) }
+                            .groupBy { pointer ->
+                                if (pointer.pointerId in trackedPointers) {
+                                    scope.getHandlerTracking(pointer.pointerId)
+                                } else {
+                                    scope.getHandlerAtPosition(pointer.position)
+                                }
                             }
-                            .toList()
 
-                        val trackedPointersId = scope.gestureStart
-                            .values
-                            .mapNotNull { it?.pointerId }
-                            .toSet()
+                        scope.inputState.value = scope.getAllHandlers()
+                            .fold(scope.inputState.value) { state, handler ->
+                                val pointers =
+                                    handlersAssociations.getOrElse(handler) { emptyList() }
 
-                        val pointersInDial = pointers.groupBy { pointer ->
-                            scope.handlers.values.firstOrNull {
-                                it.rect.contains(pointer.position)
-                            }
-                        }
-
-                        scope.inputState.value =
-                            scope.handlers.values.fold(scope.inputState.value) { state, handler ->
-                                val currentlyTrackedPointer =
-                                    scope.gestureStart[handler.handlerId()]
-
-                                val dialUntrackedPointers = pointersInDial
-                                    .getOrElse(handler) { emptyList() }
-                                    .filter { it.pointerId !in trackedPointersId }
-
-                                val dialTrackedPointers = pointers
-                                    .filter { it.pointerId == scope.gestureStart[handler.handlerId()]?.pointerId }
-
-                                val allPointers = (dialUntrackedPointers + dialTrackedPointers)
-                                    .map { pointer ->
-                                        pointer.copy(
-                                            position = pointer.position.relativeTo(handler.rect)
+                                val relativePointers = pointers
+                                    .map {
+                                        Pointer(
+                                            it.pointerId,
+                                            it.position.relativeTo(handler.rect)
                                         )
                                     }
 
                                 val (updatedState, updatedTracked) = handler.handle(
-                                    allPointers,
+                                    relativePointers,
                                     state,
-                                    currentlyTrackedPointer
+                                    scope.getStartGestureForHandler(handler)
                                 )
 
-                                scope.gestureStart[handler.handlerId()] = updatedTracked
+                                scope.setStartGestureForHandler(handler, updatedTracked)
                                 updatedState
                             }
                     }

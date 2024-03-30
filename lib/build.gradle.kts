@@ -34,6 +34,7 @@ kotlin {
                 implementation(compose.material3)
 
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
+                api("org.lighthousegames:logging:1.4.1")
             }
         }
         val androidMain by getting {
