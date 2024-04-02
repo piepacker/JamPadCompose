@@ -1,5 +1,9 @@
 package gg.jam.jampadcompose.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import kotlin.math.sin
 
 object GeometryUtils {
@@ -14,5 +18,11 @@ object GeometryUtils {
 
     fun Float.toDegrees(): Float {
         return this * 180f / Constants.PI
+    }
+
+    @Composable
+    fun Dp.textUnit(): TextUnit {
+        val sizeInDp = this
+        return with(LocalDensity.current) { sizeInDp.toSp() }
     }
 }

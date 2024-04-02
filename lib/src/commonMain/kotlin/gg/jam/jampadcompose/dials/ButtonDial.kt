@@ -15,12 +15,8 @@ import gg.jam.jampadcompose.ui.DialBackgroundDefault
 fun GamePadScope.ButtonDial(
     modifier: Modifier = Modifier,
     id: Int,
-    background: @Composable () -> Unit = { DialBackgroundDefault() },
-    foreground: @Composable () -> Unit = {
-        ButtonForegroundDefault(
-            pressed = inputState.value.getDigitalKey(id),
-        )
-    },
+    background: @Composable (Boolean) -> Unit = { DialBackgroundDefault() },
+    foreground: @Composable (Boolean) -> Unit = { ButtonForegroundDefault(pressed = it) },
 ) {
     Box(
         modifier =
@@ -30,7 +26,8 @@ fun GamePadScope.ButtonDial(
                     registerHandler(ButtonHandler(id, it.boundsInRoot()))
                 },
     ) {
-        background()
-        foreground()
+        val pressed = inputState.value.getDigitalKey(id)
+        background(pressed)
+        foreground(pressed)
     }
 }
