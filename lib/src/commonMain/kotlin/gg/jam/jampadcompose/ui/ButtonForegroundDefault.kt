@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import gg.jam.jampadcompose.utils.GeometryUtils.textUnit
@@ -24,7 +24,7 @@ fun ButtonForegroundDefault(
     modifier: Modifier = Modifier,
     pressed: Boolean,
     scale: Float = 0.75f,
-    icon: ImageVector? = null,
+    iconPainter: Painter? = null,
     label: String? = null,
     color: Color = MaterialTheme.colorScheme.primary,
     pressedColor: Color = MaterialTheme.colorScheme.inversePrimary,
@@ -43,8 +43,8 @@ fun ButtonForegroundDefault(
             shape = CircleShape,
             color = if (pressed) pressedColor else color,
         ) {
-            if (icon != null) {
-                Icon(imageVector = icon, contentDescription = null)
+            if (iconPainter != null) {
+                Icon(painter = iconPainter, contentDescription = null)
             }
 
             if (label != null) {

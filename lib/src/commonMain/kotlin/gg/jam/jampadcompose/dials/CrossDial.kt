@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.GamePadScope
@@ -26,25 +27,25 @@ fun GamePadScope.CrossDial(
     rightDial: @Composable (Boolean) -> Unit = {
         ButtonForegroundDefault(
             pressed = it,
-            icon = Icons.Default.KeyboardArrowRight,
+            iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowRight),
         )
     },
     bottomDial: @Composable (Boolean) -> Unit = {
         ButtonForegroundDefault(
             pressed = it,
-            icon = Icons.Default.KeyboardArrowDown,
+            iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowDown),
         )
     },
     leftDial: @Composable (Boolean) -> Unit = {
         ButtonForegroundDefault(
             pressed = it,
-            icon = Icons.Default.KeyboardArrowLeft,
+            iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowLeft),
         )
     },
     topDial: @Composable (Boolean) -> Unit = {
         ButtonForegroundDefault(
             pressed = it,
-            icon = Icons.Default.KeyboardArrowUp,
+            iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowUp),
         )
     },
 ) {
