@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +25,7 @@ fun ButtonForegroundDefault(
     modifier: Modifier = Modifier,
     pressed: Boolean,
     scale: Float = 0.75f,
+    iconScale: Float = 1f,
     iconPainter: Painter? = null,
     label: String? = null,
     color: Color = MaterialTheme.colorScheme.primary,
@@ -44,10 +46,15 @@ fun ButtonForegroundDefault(
             color = if (pressed) pressedColor else color,
         ) {
             if (iconPainter != null) {
-                Icon(painter = iconPainter, contentDescription = null)
-            }
-
-            if (label != null) {
+                Icon(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .scale(iconScale),
+                    painter = iconPainter,
+                    contentDescription = label,
+                )
+            } else if (label != null) {
                 Text(
                     modifier =
                         Modifier
