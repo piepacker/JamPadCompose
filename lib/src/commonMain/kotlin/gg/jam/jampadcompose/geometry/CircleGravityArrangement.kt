@@ -5,7 +5,7 @@ import kotlinx.collections.immutable.persistentSetOf
 
 class CircleGravityArrangement(
     private val ids: List<Int>,
-    sockets: Int,
+    private val sockets: Int,
     rotationInDegrees: Float,
 ) : GravityArrangement() {
     private val circumferenceGravityArrangement =
@@ -28,6 +28,9 @@ class CircleGravityArrangement(
     }
 
     override fun computeSize(): Float {
+        if (sockets == 1) {
+            return 0.5f
+        }
         return minOf(circumferenceGravityArrangement.getSize(), 0.33f)
     }
 }

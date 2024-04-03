@@ -13,6 +13,10 @@ class CircumferenceCompositeGravityArrangement(
     private val rotationInDegrees: Float,
 ) : GravityArrangement() {
     override fun computeGravityPoints(): List<GravityPoint> {
+        if (sockets <= 1) {
+            return emptyList()
+        }
+
         val baseRotation = rotationInDegrees.toRadians()
 
         val circleBack =

@@ -14,6 +14,10 @@ class CircumferenceGravityArrangement(
     private val rotationInDegrees: Float,
 ) : GravityArrangement() {
     override fun computeGravityPoints(): List<GravityPoint> {
+        if (sockets <= 1) {
+            return emptyList()
+        }
+
         val baseRotation = rotationInDegrees.toRadians()
 
         val primaryGravityPoints =
@@ -30,6 +34,9 @@ class CircumferenceGravityArrangement(
     }
 
     override fun computeSize(): Float {
+        if (sockets == 1) {
+            return 0.5f
+        }
         return GeometryUtils.computeSizeOfItemsOnCircumference(sockets)
     }
 }
