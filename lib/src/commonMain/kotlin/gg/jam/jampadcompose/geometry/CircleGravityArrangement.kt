@@ -5,11 +5,13 @@ import kotlinx.collections.immutable.persistentSetOf
 
 class CircleGravityArrangement(
     private val ids: List<Int>,
+    sockets: Int,
     rotationInDegrees: Float,
 ) : GravityArrangement() {
     private val circumferenceGravityArrangement =
         CircumferenceGravityArrangement(
             ids.drop(1),
+            sockets - 1,
             rotationInDegrees,
         )
 

@@ -9,17 +9,25 @@ import kotlin.math.sin
 
 class CircumferenceCompositeGravityArrangement(
     private val ids: List<Int>,
+    private val sockets: Int,
     private val rotationInDegrees: Float,
 ) : GravityArrangement() {
     override fun computeGravityPoints(): List<GravityPoint> {
         val baseRotation = rotationInDegrees.toRadians()
 
+        val circleBack =
+            if (sockets == ids.size) {
+                ids.take(1)
+            } else {
+                emptyList()
+            }
+
         val compositeGravityPoints =
-            (ids + ids.take(1))
+            (ids + circleBack)
                 .zipWithNext()
                 .mapIndexed { index, (prev, next) ->
                     val radius = 0.9f
-                    val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / ids.size)
+                    val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / sockets)
                     GravityPoint(
                         Offset(cos(angle), sin(angle)) * radius,
                         0.25f,

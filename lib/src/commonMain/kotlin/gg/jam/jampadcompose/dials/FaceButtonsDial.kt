@@ -26,6 +26,7 @@ fun GamePadScope.FaceButtonsDial(
     modifier: Modifier = Modifier,
     rotationInDegrees: Float = 0f,
     ids: List<Int>,
+    sockets: Int = ids.size,
     faceButtonsLayout: FaceButtonsLayout = FaceButtonsLayout.CIRCUMFERENCE,
     includeComposite: Boolean = true,
     background: @Composable () -> Unit = { DialBackgroundDefault() },
@@ -36,9 +37,9 @@ fun GamePadScope.FaceButtonsDial(
         CompositeForegroundDefault(pressed = pressed)
     },
 ) {
-    val primaryArrangement = rememberPrimaryArrangement(ids, faceButtonsLayout, rotationInDegrees)
+    val primaryArrangement = rememberPrimaryArrangement(ids, sockets, faceButtonsLayout, rotationInDegrees)
     val compositeArrangement =
-        rememberCompositeArrangement(includeComposite, ids, rotationInDegrees)
+        rememberCompositeArrangement(includeComposite, ids, sockets, rotationInDegrees)
 
     Box(
         modifier =
@@ -47,7 +48,7 @@ fun GamePadScope.FaceButtonsDial(
                 .onGloballyPositioned {
                     registerHandler(
                         GravityPointsHandler(
-                            ids.hashCode(),
+                            listOf(ids, faceButtonsLayout, rotationInDegrees, sockets).hashCode(),
                             it.boundsInRoot(),
                             primaryArrangement,
                             compositeArrangement,
@@ -81,11 +82,12 @@ fun GamePadScope.FaceButtonsDial(
 private fun rememberCompositeArrangement(
     includeCompositeButtons: Boolean,
     ids: List<Int>,
+    sockets: Int,
     rotationInDegrees: Float,
 ): GravityArrangement {
     return remember(ids, includeCompositeButtons, rotationInDegrees) {
         if (includeCompositeButtons) {
-            CircumferenceCompositeGravityArrangement(ids, rotationInDegrees)
+            CircumferenceCompositeGravityArrangement(ids, sockets, rotationInDegrees)
         } else {
             EmptyGravityArrangement
         }
@@ -95,13 +97,20 @@ private fun rememberCompositeArrangement(
 @Composable
 private fun rememberPrimaryArrangement(
     ids: List<Int>,
+    sockets: Int,
     faceButtonsLayout: FaceButtonsLayout,
     rotationInDegrees: Float,
 ): GravityArrangement {
     return remember(ids, faceButtonsLayout, rotationInDegrees) {
         when (faceButtonsLayout) {
-            FaceButtonsLayout.CIRCUMFERENCE -> CircumferenceGravityArrangement(ids, rotationInDegrees)
-            FaceButtonsLayout.CIRCLE -> CircleGravityArrangement(ids, rotationInDegrees)
+            FaceButtonsLayout.CIRCUMFERENCE ->
+                CircumferenceGravityArrangement(
+                    ids,
+                    sockets,
+                    rotationInDegrees,
+                )
+
+            FaceButtonsLayout.CIRCLE -> CircleGravityArrangement(ids, sockets, rotationInDegrees)
         }
     }
 }
