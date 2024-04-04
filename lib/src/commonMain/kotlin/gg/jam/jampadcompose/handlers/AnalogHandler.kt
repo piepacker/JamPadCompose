@@ -33,6 +33,6 @@ data class AnalogHandler(override val id: Int, override val rect: Rect) : Handle
         withOffset: Offset,
         withGestureStart: Pointer? = null,
     ): HandleResult {
-        return HandleResult(inputState.setAnalogKey(id, withOffset), withGestureStart)
+        return HandleResult(inputState.setContinuousDirection(id, withOffset), withGestureStart)
     }
 }

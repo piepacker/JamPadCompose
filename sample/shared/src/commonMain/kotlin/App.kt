@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import gg.jam.jampadcompose.GamePad
+import gg.jam.jampadcompose.config.HapticFeedbackType
 import gg.jam.jampadcompose.dials.AnalogDial
 import gg.jam.jampadcompose.dials.ButtonDial
 import gg.jam.jampadcompose.dials.CrossDial
@@ -24,6 +25,7 @@ fun App() {
         Column {
             Spacer(modifier = Modifier.weight(0.8f))
             GamePad(
+                hapticFeedbackType = HapticFeedbackType.PRESS,
                 modifier =
                     Modifier
                         .fillMaxWidth()

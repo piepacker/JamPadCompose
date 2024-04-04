@@ -8,7 +8,8 @@ import kotlinx.collections.immutable.persistentSetOf
 
 data class InputState(
     internal val digitalKeys: PersistentSet<Int> = persistentSetOf(),
-    internal val analogKeys: PersistentMap<Int, Offset> = persistentMapOf(),
+    internal val continuousDirections: PersistentMap<Int, Offset> = persistentMapOf(),
+    internal val discreteDirections: PersistentMap<Int, Offset> = persistentMapOf(),
 ) {
     fun setDigitalKey(
         digitalId: Int,
@@ -25,21 +26,39 @@ data class InputState(
         return digitalKeys.contains(digitalId)
     }
 
-    fun setAnalogKey(
+    fun setContinuousDirection(
         analogId: Int,
         offset: Offset,
     ): InputState {
         return if (offset == Offset.Unspecified) {
-            copy(analogKeys = analogKeys.remove(analogId))
+            copy(continuousDirections = continuousDirections.remove(analogId))
         } else {
-            copy(analogKeys = analogKeys.put(analogId, offset))
+            copy(continuousDirections = continuousDirections.put(analogId, offset))
         }
     }
 
-    fun getAnalogKey(
+    fun getContinuousDirection(
         analogId: Int,
         default: Offset = Offset.Unspecified,
     ): Offset {
-        return analogKeys.getOrElse(analogId) { default }
+        return continuousDirections.getOrElse(analogId) { default }
+    }
+
+    fun setDiscreteDirection(
+        analogId: Int,
+        offset: Offset,
+    ): InputState {
+        return if (offset == Offset.Unspecified) {
+            copy(discreteDirections = discreteDirections.remove(analogId))
+        } else {
+            copy(discreteDirections = discreteDirections.put(analogId, offset))
+        }
+    }
+
+    fun getDiscreteDirection(
+        analogId: Int,
+        default: Offset = Offset.Unspecified,
+    ): Offset {
+        return discreteDirections.getOrElse(analogId) { default }
     }
 }

@@ -56,6 +56,6 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
         withOffset: Offset,
         withGestureStart: Pointer? = null,
     ): HandleResult {
-        return HandleResult(inputState.setAnalogKey(id, withOffset), withGestureStart)
+        return HandleResult(inputState.setDiscreteDirection(id, withOffset), withGestureStart)
     }
 }

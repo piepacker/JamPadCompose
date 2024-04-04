@@ -59,7 +59,7 @@ fun GamePadScope.CrossDial(
         background()
 
         CircularLayout(modifier = Modifier.fillMaxSize()) {
-            val position = inputState.value.getAnalogKey(id, Offset.Zero)
+            val position = inputState.value.getDiscreteDirection(id, Offset.Zero)
 
             rightDial(position.x > 0.5f)
             bottomDial(position.y < -0.5f)
