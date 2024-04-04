@@ -7,8 +7,8 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.persistentSetOf
 
 data class InputState(
-    private val digitalKeys: PersistentSet<Int> = persistentSetOf(),
-    private val analogKeys: PersistentMap<Int, Offset> = persistentMapOf(),
+    internal val digitalKeys: PersistentSet<Int> = persistentSetOf(),
+    internal val analogKeys: PersistentMap<Int, Offset> = persistentMapOf(),
 ) {
     fun setDigitalKey(
         digitalId: Int,
