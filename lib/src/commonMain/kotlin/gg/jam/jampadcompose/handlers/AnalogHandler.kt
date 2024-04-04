@@ -9,26 +9,30 @@ data class AnalogHandler(override val id: Int, override val rect: Rect) : Handle
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        gestureStartPointer: Pointer?,
+        currentGestureStart: Pointer?,
     ): HandleResult {
-        val updatedGesturePosition =
-            pointers
-                .firstOrNull { it.pointerId == gestureStartPointer?.pointerId }
+        val currentGesture = pointers.firstOrNull { it.pointerId == currentGestureStart?.pointerId }
 
         return when {
-            pointers.isEmpty() -> HandleResult(inputState.setAnalogKey(id, Offset.Zero))
-            gestureStartPointer == null -> {
-                val gestureStart = pointers.first()
-                HandleResult(inputState.setAnalogKey(id, Offset.Zero), gestureStart)
+            pointers.isNotEmpty() && currentGestureStart == null -> {
+                update(inputState, withOffset = Offset.Zero, pointers.first())
             }
 
-            updatedGesturePosition != null -> {
-                val dragPosition = (updatedGesturePosition.position - gestureStartPointer.position)
-                val updatedPosition = dragPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
-                HandleResult(inputState.setAnalogKey(id, updatedPosition), gestureStartPointer)
+            currentGestureStart != null && currentGesture != null -> {
+                val deltaPosition = (currentGesture.position - currentGestureStart.position)
+                val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
+                update(inputState, withOffset = offsetValue, withGestureStart = currentGestureStart)
             }
 
-            else -> HandleResult(inputState.setAnalogKey(id, Offset.Zero))
+            else -> update(inputState, withOffset = Offset.Unspecified)
         }
+    }
+
+    private fun update(
+        inputState: InputState,
+        withOffset: Offset,
+        withGestureStart: Pointer? = null,
+    ): HandleResult {
+        return HandleResult(inputState.setAnalogKey(id, withOffset), withGestureStart)
     }
 }

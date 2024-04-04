@@ -10,7 +10,7 @@ interface Handler {
     fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        gestureStartPointer: Pointer?,
+        currentGestureStart: Pointer?,
     ): HandleResult
 
     fun handlerId(): String {

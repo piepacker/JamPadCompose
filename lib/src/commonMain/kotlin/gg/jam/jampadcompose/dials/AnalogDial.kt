@@ -25,7 +25,7 @@ fun GamePadScope.AnalogDial(
         ButtonForegroundDefault(pressed = it, scale = 1f)
     },
 ) {
-    val position = inputState.value.getAnalogKey(id)
+    val position = inputState.value.getAnalogKey(id, Offset.Zero)
 
     BoxWithConstraints(
         modifier =
@@ -43,7 +43,7 @@ fun GamePadScope.AnalogDial(
                     .fillMaxSize(0.50f)
                     .offset(maxWidth * position.x * 0.25f, maxHeight * position.y * 0.25f),
         ) {
-            foreground(inputState.value.getAnalogKey(id) != Offset.Zero)
+            foreground(inputState.value.getAnalogKey(id) != Offset.Unspecified)
         }
     }
 }

@@ -19,24 +19,26 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        gestureStartPointer: Pointer?,
+        currentGestureStart: Pointer?,
     ): HandleResult {
-        val updatedGesture = pointers.firstOrNull { it.pointerId == gestureStartPointer?.pointerId }
+        val currentGesture = pointers.firstOrNull { it.pointerId == currentGestureStart?.pointerId }
 
         return when {
-            pointers.isEmpty() -> HandleResult(inputState.setAnalogKey(id, Offset.Zero))
-            updatedGesture != null -> {
-                HandleResult(
-                    inputState.setAnalogKey(id, findCloserState(updatedGesture)),
-                    gestureStartPointer,
+            pointers.isEmpty() -> update(inputState, withOffset = Offset.Unspecified)
+            currentGesture != null -> {
+                update(
+                    inputState,
+                    withOffset = findCloserState(currentGesture),
+                    withGestureStart = currentGestureStart,
                 )
             }
 
             else -> {
                 val gestureStart = pointers.first()
-                HandleResult(
-                    inputState.setAnalogKey(id, findCloserState(gestureStart)),
-                    gestureStart,
+                update(
+                    inputState,
+                    withOffset = findCloserState(gestureStart),
+                    withGestureStart = gestureStart,
                 )
             }
         }
@@ -47,5 +49,13 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
             .minBy { (pointer.position - it.position).getDistanceSquared() }
             .position
             .let { it.copy(y = -it.y) }
+    }
+
+    private fun update(
+        inputState: InputState,
+        withOffset: Offset,
+        withGestureStart: Pointer? = null,
+    ): HandleResult {
+        return HandleResult(inputState.setAnalogKey(id, withOffset), withGestureStart)
     }
 }

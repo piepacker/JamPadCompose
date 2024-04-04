@@ -26,9 +26,10 @@ fun GamePad(
     val scope = remember { GamePadScope() }
     val rootPosition = remember { mutableStateOf(Offset.Zero) }
 
-    val inputHapticGenerator = remember {
-        InputHapticGenerator(HapticGenerator)
-    }
+    val inputHapticGenerator =
+        remember {
+            InputHapticGenerator(HapticGenerator)
+        }
 
     Row(
         modifier =

@@ -29,10 +29,17 @@ data class InputState(
         analogId: Int,
         offset: Offset,
     ): InputState {
-        return copy(analogKeys = analogKeys.put(analogId, offset))
+        return if (offset == Offset.Unspecified) {
+            copy(analogKeys = analogKeys.remove(analogId))
+        } else {
+            copy(analogKeys = analogKeys.put(analogId, offset))
+        }
     }
 
-    fun getAnalogKey(analogId: Int): Offset {
-        return analogKeys.getOrElse(analogId) { Offset.Zero }
+    fun getAnalogKey(
+        analogId: Int,
+        default: Offset = Offset.Unspecified,
+    ): Offset {
+        return analogKeys.getOrElse(analogId) { default }
     }
 }

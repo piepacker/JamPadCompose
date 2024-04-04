@@ -7,7 +7,6 @@ import android.os.Vibrator
 import android.os.VibratorManager
 
 actual object HapticGenerator {
-
     private lateinit var vibrator: Vibrator
 
     private var weakEffect: VibrationEffect? = null
@@ -20,10 +19,11 @@ actual object HapticGenerator {
     }
 
     actual fun generate(type: HapticEffect) {
-        val effect = when (type) {
-            HapticEffect.PRESS -> strongEffect
-            HapticEffect.RELEASE -> weakEffect
-        }
+        val effect =
+            when (type) {
+                HapticEffect.PRESS -> strongEffect
+                HapticEffect.RELEASE -> weakEffect
+            }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && effect != null) {
             vibrator.vibrate(effect)

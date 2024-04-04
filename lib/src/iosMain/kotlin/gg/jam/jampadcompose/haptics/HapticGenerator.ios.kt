@@ -3,7 +3,6 @@ package gg.jam.jampadcompose.haptics
 import platform.UIKit.UIImpactFeedbackGenerator
 
 actual object HapticGenerator {
-
     private val impactFeedbackGenerator = UIImpactFeedbackGenerator()
 
     actual fun generate(type: HapticEffect) {

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -58,7 +59,7 @@ fun GamePadScope.CrossDial(
         background()
 
         CircularLayout(modifier = Modifier.fillMaxSize()) {
-            val position = inputState.value.getAnalogKey(id)
+            val position = inputState.value.getAnalogKey(id, Offset.Zero)
 
             rightDial(position.x > 0.5f)
             bottomDial(position.y < -0.5f)

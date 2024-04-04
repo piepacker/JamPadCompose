@@ -21,7 +21,7 @@ class GravityPointsHandler(
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        gestureStartPointer: Pointer?,
+        currentGestureStart: Pointer?,
     ): HandleResult {
         val pressedKeys =
             pointers

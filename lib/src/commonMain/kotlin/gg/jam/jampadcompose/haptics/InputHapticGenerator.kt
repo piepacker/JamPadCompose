@@ -4,7 +4,6 @@ import androidx.compose.ui.geometry.Offset
 import gg.jam.jampadcompose.inputstate.InputState
 
 class InputHapticGenerator(private val generator: HapticGenerator) {
-
     private var previousInputState: InputState? = null
 
     fun onInputStateChanged(current: InputState) {
@@ -15,8 +14,9 @@ class InputHapticGenerator(private val generator: HapticGenerator) {
             return
         }
 
-        val effect = keyEffect(previous, current)
-            ?: analogEffect(previous, current)
+        val effect =
+            keyEffect(previous, current)
+                ?: analogEffect(previous, current)
 
         if (effect != null) {
             generator.generate(effect)
@@ -25,7 +25,10 @@ class InputHapticGenerator(private val generator: HapticGenerator) {
         previousInputState = current
     }
 
-    private fun keyEffect(previous: InputState, current: InputState): HapticEffect? {
+    private fun keyEffect(
+        previous: InputState,
+        current: InputState,
+    ): HapticEffect? {
         if (previous.digitalKeys == current.digitalKeys) {
             return null
         }
@@ -40,14 +43,19 @@ class InputHapticGenerator(private val generator: HapticGenerator) {
         }
     }
 
-    private fun analogEffect(previous: InputState, current: InputState): HapticEffect? {
-        val previouslyActiveAnalogs = previous.analogKeys
-            .values
-            .count { it != Offset.Zero }
+    private fun analogEffect(
+        previous: InputState,
+        current: InputState,
+    ): HapticEffect? {
+        val previouslyActiveAnalogs =
+            previous.analogKeys
+                .values
+                .count { it != Offset.Zero }
 
-        val currentlyActiveAnalogs = current.analogKeys
-            .values
-            .count { it != Offset.Zero }
+        val currentlyActiveAnalogs =
+            current.analogKeys
+                .values
+                .count { it != Offset.Zero }
 
         return when {
             currentlyActiveAnalogs > previouslyActiveAnalogs -> HapticEffect.PRESS
