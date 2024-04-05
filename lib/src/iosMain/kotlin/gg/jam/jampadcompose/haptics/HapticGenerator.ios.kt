@@ -7,7 +7,7 @@ import platform.UIKit.UIImpactFeedbackGenerator
 object IosHapticGenerator : HapticGenerator {
     private val impactFeedbackGenerator = UIImpactFeedbackGenerator()
 
-    actual fun generate(type: HapticEffect) {
+    override fun generate(type: HapticEffect) {
         when (type) {
             HapticEffect.PRESS -> impactFeedbackGenerator.impactOccurredWithIntensity(0.5)
             HapticEffect.RELEASE -> impactFeedbackGenerator.impactOccurredWithIntensity(0.3)
