@@ -1,24 +1,20 @@
 package gg.jam.jampadcompose.haptics
 
-import android.app.Application
+import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 
-actual object HapticGenerator {
-    private lateinit var vibrator: Vibrator
+class AndroidHapticGenerator(applicationContext: Context) : HapticGenerator {
+    private val vibrator = buildVibrator(applicationContext)
+    private val strongEffect = buildStrongVibrationEffect()
+    private val weakEffect = buildWeakVibrationEffect()
 
-    private var weakEffect: VibrationEffect? = null
-    private var strongEffect: VibrationEffect? = null
-
-    fun initialize(application: Application) {
-        vibrator = buildVibrator(application)
-        strongEffect = buildStrongVibrationEffect()
-        weakEffect = buildWeakVibrationEffect()
-    }
-
-    actual fun generate(type: HapticEffect) {
+    override fun generate(type: HapticEffect) {
         val effect =
             when (type) {
                 HapticEffect.PRESS -> strongEffect
@@ -30,11 +26,11 @@ actual object HapticGenerator {
         }
     }
 
-    private fun buildVibrator(application: Application): Vibrator {
+    private fun buildVibrator(applicationContext: Context): Vibrator {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            application.getSystemService(VibratorManager::class.java).defaultVibrator
+            applicationContext.getSystemService(VibratorManager::class.java).defaultVibrator
         } else {
-            application.getSystemService(Vibrator::class.java)
+            applicationContext.getSystemService(Vibrator::class.java)
         }
     }
 
@@ -60,5 +56,13 @@ actual object HapticGenerator {
         }
 
         return VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+    }
+}
+
+@Composable
+actual fun rememberHapticGenerator(): HapticGenerator {
+    val applicationContext = LocalContext.current.applicationContext
+    return remember {
+        AndroidHapticGenerator(applicationContext)
     }
 }

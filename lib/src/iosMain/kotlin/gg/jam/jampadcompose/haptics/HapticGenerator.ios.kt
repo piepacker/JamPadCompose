@@ -1,8 +1,10 @@
 package gg.jam.jampadcompose.haptics
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import platform.UIKit.UIImpactFeedbackGenerator
 
-actual object HapticGenerator {
+object IosHapticGenerator : HapticGenerator {
     private val impactFeedbackGenerator = UIImpactFeedbackGenerator()
 
     actual fun generate(type: HapticEffect) {
@@ -11,4 +13,9 @@ actual object HapticGenerator {
             HapticEffect.RELEASE -> impactFeedbackGenerator.impactOccurredWithIntensity(0.3)
         }
     }
+}
+
+@Composable
+actual fun rememberHapticGenerator(): HapticGenerator {
+    return remember { IosHapticGenerator }
 }

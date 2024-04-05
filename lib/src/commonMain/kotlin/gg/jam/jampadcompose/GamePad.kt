@@ -13,8 +13,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import gg.jam.jampadcompose.config.HapticFeedbackType
 import gg.jam.jampadcompose.handlers.Pointer
-import gg.jam.jampadcompose.haptics.HapticGenerator
 import gg.jam.jampadcompose.haptics.InputHapticGenerator
+import gg.jam.jampadcompose.haptics.rememberHapticGenerator
 import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.relativeTo
 
@@ -28,10 +28,8 @@ fun GamePad(
     val scope = remember { GamePadScope() }
     val rootPosition = remember { mutableStateOf(Offset.Zero) }
 
-    val inputHapticGenerator =
-        remember {
-            InputHapticGenerator(HapticGenerator, hapticFeedbackType)
-        }
+    val hapticGenerator = rememberHapticGenerator()
+    val inputHapticGenerator = remember { InputHapticGenerator(hapticGenerator, hapticFeedbackType) }
 
     Row(
         modifier =
