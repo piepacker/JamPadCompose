@@ -27,38 +27,38 @@ data class InputState(
     }
 
     fun setContinuousDirection(
-        analogId: Int,
+        continuousDirectionId: Int,
         offset: Offset,
     ): InputState {
         return if (offset == Offset.Unspecified) {
-            copy(continuousDirections = continuousDirections.remove(analogId))
+            copy(continuousDirections = continuousDirections.remove(continuousDirectionId))
         } else {
-            copy(continuousDirections = continuousDirections.put(analogId, offset))
+            copy(continuousDirections = continuousDirections.put(continuousDirectionId, offset))
         }
     }
 
     fun getContinuousDirection(
-        analogId: Int,
+        continuousDirectionId: Int,
         default: Offset = Offset.Unspecified,
     ): Offset {
-        return continuousDirections.getOrElse(analogId) { default }
+        return continuousDirections.getOrElse(continuousDirectionId) { default }
     }
 
     fun setDiscreteDirection(
-        analogId: Int,
+        discreteDirectionId: Int,
         offset: Offset,
     ): InputState {
         return if (offset == Offset.Unspecified) {
-            copy(discreteDirections = discreteDirections.remove(analogId))
+            copy(discreteDirections = discreteDirections.remove(discreteDirectionId))
         } else {
-            copy(discreteDirections = discreteDirections.put(analogId, offset))
+            copy(discreteDirections = discreteDirections.put(discreteDirectionId, offset))
         }
     }
 
     fun getDiscreteDirection(
-        analogId: Int,
+        discreteDirectionId: Int,
         default: Offset = Offset.Unspecified,
     ): Offset {
-        return discreteDirections.getOrElse(analogId) { default }
+        return discreteDirections.getOrElse(discreteDirectionId) { default }
     }
 }
