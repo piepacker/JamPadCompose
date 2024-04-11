@@ -1,4 +1,4 @@
-package gg.jam.jampadcompose.dials
+package gg.jam.jampadcompose.controls
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -8,22 +8,22 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.GamePadScope
-import gg.jam.jampadcompose.handlers.CrossHandler
-import gg.jam.jampadcompose.ui.CrossForegroundDefault
-import gg.jam.jampadcompose.ui.DialBackgroundDefault
+import gg.jam.jampadcompose.handlers.CrossPointerHandler
+import gg.jam.jampadcompose.ui.DefaultCrossForeground
+import gg.jam.jampadcompose.ui.DefaultDialBackground
 
 @Composable
-fun GamePadScope.CrossDial(
+fun GamePadScope.ControlCross(
     modifier: Modifier = Modifier,
     id: Int,
-    background: @Composable () -> Unit = { DialBackgroundDefault() },
-    foreground: @Composable (Offset) -> Unit = { CrossForegroundDefault(direction = it) },
+    background: @Composable () -> Unit = { DefaultDialBackground() },
+    foreground: @Composable (Offset) -> Unit = { DefaultCrossForeground(direction = it) },
 ) {
     Box(
         modifier =
             modifier
                 .aspectRatio(1f)
-                .onGloballyPositioned { registerHandler(CrossHandler(id, it.boundsInRoot())) },
+                .onGloballyPositioned { registerHandler(CrossPointerHandler(id, it.boundsInRoot())) },
     ) {
         background()
         foreground(inputState.value.getDiscreteDirection(id))

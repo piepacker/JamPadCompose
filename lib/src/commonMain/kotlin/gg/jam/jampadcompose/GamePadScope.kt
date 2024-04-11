@@ -3,14 +3,14 @@ package gg.jam.jampadcompose
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
-import gg.jam.jampadcompose.handlers.Handler
 import gg.jam.jampadcompose.handlers.Pointer
+import gg.jam.jampadcompose.handlers.PointerHandler
 import gg.jam.jampadcompose.inputstate.InputState
 
 @Stable
 class GamePadScope {
     private data class HandlerState(
-        val handler: Handler,
+        val pointerHandler: PointerHandler,
         var gestureStart: Pointer? = null,
     )
 
@@ -18,13 +18,13 @@ class GamePadScope {
 
     private val handlers = mutableMapOf<String, HandlerState>()
 
-    internal fun registerHandler(handler: Handler) {
-        handlers[handler.handlerId()] = HandlerState(handler, null)
+    internal fun registerHandler(pointerHandler: PointerHandler) {
+        handlers[pointerHandler.handlerId()] = HandlerState(pointerHandler, null)
     }
 
-    internal fun getAllHandlers(): Collection<Handler> {
+    internal fun getAllHandlers(): Collection<PointerHandler> {
         return handlers.values
-            .map { it.handler }
+            .map { it.pointerHandler }
     }
 
     internal fun getTrackedIds(): Set<Long> {
@@ -33,26 +33,26 @@ class GamePadScope {
             .toSet()
     }
 
-    internal fun getHandlerAtPosition(position: Offset): Handler? {
+    internal fun getHandlerAtPosition(position: Offset): PointerHandler? {
         return handlers.values
             .firstOrNull { (handler, _) -> handler.rect.contains(position) }
-            ?.handler
+            ?.pointerHandler
     }
 
-    internal fun getHandlerTracking(pointerId: Long): Handler? {
+    internal fun getHandlerTracking(pointerId: Long): PointerHandler? {
         return handlers.values
             .firstOrNull { (_, startGesture) -> startGesture?.pointerId == pointerId }
-            ?.handler
+            ?.pointerHandler
     }
 
-    internal fun getStartGestureForHandler(handler: Handler): Pointer? {
-        return handlers[handler.handlerId()]?.gestureStart
+    internal fun getStartGestureForHandler(pointerHandler: PointerHandler): Pointer? {
+        return handlers[pointerHandler.handlerId()]?.gestureStart
     }
 
     internal fun setStartGestureForHandler(
-        handler: Handler,
+        pointerHandler: PointerHandler,
         newGestureStart: Pointer?,
     ) {
-        handlers[handler.handlerId()]?.gestureStart = newGestureStart
+        handlers[pointerHandler.handlerId()]?.gestureStart = newGestureStart
     }
 }

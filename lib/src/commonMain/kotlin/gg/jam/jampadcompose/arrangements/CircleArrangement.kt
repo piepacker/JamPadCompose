@@ -1,9 +1,9 @@
-package gg.jam.jampadcompose.geometry
+package gg.jam.jampadcompose.arrangements
 
 import androidx.compose.ui.geometry.Offset
 import kotlinx.collections.immutable.persistentSetOf
 
-class CircleGravityArrangement(
+class CircleArrangement(
     private val ids: List<Int>,
     private val sockets: Int,
     rotationInDegrees: Float,

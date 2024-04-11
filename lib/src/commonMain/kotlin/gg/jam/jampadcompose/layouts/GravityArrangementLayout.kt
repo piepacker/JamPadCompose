@@ -5,11 +5,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.round
-import gg.jam.jampadcompose.geometry.GravityArrangement
+import gg.jam.jampadcompose.arrangements.GravityArrangement
 import kotlin.math.roundToInt
 
 @Composable
-internal fun GravityPointsLayout(
+internal fun GravityArrangementLayout(
     modifier: Modifier = Modifier,
     gravityArrangement: GravityArrangement,
     content: @Composable () -> Unit,

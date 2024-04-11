@@ -1,4 +1,4 @@
-package gg.jam.jampadcompose.geometry
+package gg.jam.jampadcompose.arrangements
 
 import gg.jam.jampadcompose.utils.memoize
 

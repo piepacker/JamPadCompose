@@ -1,6 +1,6 @@
-package gg.jam.jampadcompose.geometry
+package gg.jam.jampadcompose.arrangements
 
-object EmptyGravityArrangement : GravityArrangement() {
+object EmptyArrangement : GravityArrangement() {
     override fun computeGravityPoints(): List<GravityPoint> {
         return emptyList()
     }

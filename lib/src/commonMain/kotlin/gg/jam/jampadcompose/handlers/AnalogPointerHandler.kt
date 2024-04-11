@@ -5,12 +5,12 @@ import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.coerceIn
 
-data class AnalogHandler(override val id: Int, override val rect: Rect) : Handler {
+data class AnalogPointerHandler(override val id: Int, override val rect: Rect) : PointerHandler {
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
         currentGestureStart: Pointer?,
-    ): HandleResult {
+    ): Result {
         val currentGesture = pointers.firstOrNull { it.pointerId == currentGestureStart?.pointerId }
 
         return when {
@@ -32,7 +32,7 @@ data class AnalogHandler(override val id: Int, override val rect: Rect) : Handle
         inputState: InputState,
         withOffset: Offset,
         withGestureStart: Pointer? = null,
-    ): HandleResult {
-        return HandleResult(inputState.setContinuousDirection(id, withOffset), withGestureStart)
+    ): Result {
+        return Result(inputState.setContinuousDirection(id, withOffset), withGestureStart)
     }
 }

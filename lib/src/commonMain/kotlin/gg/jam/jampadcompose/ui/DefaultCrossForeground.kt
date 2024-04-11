@@ -14,29 +14,29 @@ import gg.jam.jampadcompose.layouts.CircularLayout
 import gg.jam.jampadcompose.utils.ifUnspecified
 
 @Composable
-fun CrossForegroundDefault(
+fun DefaultCrossForeground(
     modifier: Modifier = Modifier,
     direction: Offset,
     rightDial: @Composable (Boolean) -> Unit = {
-        ButtonForegroundDefault(
+        DefaultButtonForeground(
             pressed = it,
             iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowRight),
         )
     },
     bottomDial: @Composable (Boolean) -> Unit = {
-        ButtonForegroundDefault(
+        DefaultButtonForeground(
             pressed = it,
             iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowDown),
         )
     },
     leftDial: @Composable (Boolean) -> Unit = {
-        ButtonForegroundDefault(
+        DefaultButtonForeground(
             pressed = it,
             iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowLeft),
         )
     },
     topDial: @Composable (Boolean) -> Unit = {
-        ButtonForegroundDefault(
+        DefaultButtonForeground(
             pressed = it,
             iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowUp),
         )

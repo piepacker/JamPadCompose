@@ -1,15 +1,15 @@
 package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Rect
-import gg.jam.jampadcompose.geometry.GravityArrangement
+import gg.jam.jampadcompose.arrangements.GravityArrangement
 import gg.jam.jampadcompose.inputstate.InputState
 
-class GravityPointsHandler(
+class GravityPointsPointerHandler(
     override val id: Int,
     override val rect: Rect,
     primaryArrangement: GravityArrangement,
     compositeArrangement: GravityArrangement,
-) : Handler {
+) : PointerHandler {
     private val gravityPoints = primaryArrangement.getGravityPoints()
     private val compositePoints = compositeArrangement.getGravityPoints()
     private val allPoints = gravityPoints + compositePoints
@@ -22,7 +22,7 @@ class GravityPointsHandler(
         pointers: List<Pointer>,
         inputState: InputState,
         currentGestureStart: Pointer?,
-    ): HandleResult {
+    ): Result {
         val pressedKeys =
             pointers
                 .flatMap { pointer ->
@@ -37,6 +37,6 @@ class GravityPointsHandler(
                 updatedState.setDigitalKey(key, key in pressedKeys)
             }
 
-        return HandleResult(finalState)
+        return Result(finalState)
     }
 }

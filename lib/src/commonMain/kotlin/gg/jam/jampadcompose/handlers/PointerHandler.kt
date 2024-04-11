@@ -3,7 +3,7 @@ package gg.jam.jampadcompose.handlers
 import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.inputstate.InputState
 
-interface Handler {
+interface PointerHandler {
     val id: Int
     val rect: Rect
 
@@ -11,7 +11,7 @@ interface Handler {
         pointers: List<Pointer>,
         inputState: InputState,
         currentGestureStart: Pointer?,
-    ): HandleResult
+    ): Result
 
     fun handlerId(): String {
         return "${this::class.simpleName}:$id"

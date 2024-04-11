@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import gg.jam.jampadcompose.GamePad
 import gg.jam.jampadcompose.config.HapticFeedbackType
-import gg.jam.jampadcompose.dials.AnalogDial
-import gg.jam.jampadcompose.dials.ButtonDial
-import gg.jam.jampadcompose.dials.CrossDial
-import gg.jam.jampadcompose.dials.FaceButtonsDial
+import gg.jam.jampadcompose.controls.ControlAnalog
+import gg.jam.jampadcompose.controls.ControlButton
+import gg.jam.jampadcompose.controls.ControlCross
+import gg.jam.jampadcompose.controls.ControlFaceButtons
 
 @Composable
 fun App() {
@@ -52,15 +52,15 @@ fun App() {
                                     .height(54.dp),
                             horizontalArrangement = Arrangement.SpaceEvenly,
                         ) {
-                            ButtonDial(modifier = Modifier.weight(1f), id = 4)
-                            ButtonDial(modifier = Modifier.weight(1f), id = 5)
-                            ButtonDial(modifier = Modifier.weight(1f), id = 6)
+                            ControlButton(modifier = Modifier.weight(1f), id = 4)
+                            ControlButton(modifier = Modifier.weight(1f), id = 5)
+                            ControlButton(modifier = Modifier.weight(1f), id = 6)
                         }
-                        CrossDial(
+                        ControlCross(
                             modifier = Modifier.weight(1f),
                             id = 0,
                         )
-                        AnalogDial(
+                        ControlAnalog(
                             modifier = Modifier.weight(1f),
                             id = 1,
                         )
@@ -81,15 +81,15 @@ fun App() {
                                     .height(54.dp),
                             horizontalArrangement = Arrangement.SpaceEvenly,
                         ) {
-                            ButtonDial(modifier = Modifier.weight(1f), id = 7)
-                            ButtonDial(modifier = Modifier.weight(1f), id = 8)
-                            ButtonDial(modifier = Modifier.weight(1f), id = 9)
+                            ControlButton(modifier = Modifier.weight(1f), id = 7)
+                            ControlButton(modifier = Modifier.weight(1f), id = 8)
+                            ControlButton(modifier = Modifier.weight(1f), id = 9)
                         }
-                        FaceButtonsDial(
+                        ControlFaceButtons(
                             modifier = Modifier.weight(1f),
                             ids = listOf(0, 1, 2, 3),
                         )
-                        AnalogDial(
+                        ControlAnalog(
                             modifier = Modifier.weight(1f),
                             id = 2,
                         )

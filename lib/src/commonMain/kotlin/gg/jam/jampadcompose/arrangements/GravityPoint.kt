@@ -1,4 +1,4 @@
-package gg.jam.jampadcompose.geometry
+package gg.jam.jampadcompose.arrangements
 
 import androidx.compose.ui.geometry.Offset
 import kotlinx.collections.immutable.ImmutableSet

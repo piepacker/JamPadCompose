@@ -4,7 +4,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.inputstate.InputState
 
-data class CrossHandler(override val id: Int, override val rect: Rect) : Handler {
+data class CrossPointerHandler(override val id: Int, override val rect: Rect) : PointerHandler {
     enum class State(val position: Offset) {
         UP(Offset(0f, 1f)),
         DOWN(Offset(0f, -1f)),
@@ -20,7 +20,7 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
         pointers: List<Pointer>,
         inputState: InputState,
         currentGestureStart: Pointer?,
-    ): HandleResult {
+    ): Result {
         val currentGesture = pointers.firstOrNull { it.pointerId == currentGestureStart?.pointerId }
 
         return when {
@@ -55,7 +55,7 @@ data class CrossHandler(override val id: Int, override val rect: Rect) : Handler
         inputState: InputState,
         withOffset: Offset,
         withGestureStart: Pointer? = null,
-    ): HandleResult {
-        return HandleResult(inputState.setDiscreteDirection(id, withOffset), withGestureStart)
+    ): Result {
+        return Result(inputState.setDiscreteDirection(id, withOffset), withGestureStart)
     }
 }

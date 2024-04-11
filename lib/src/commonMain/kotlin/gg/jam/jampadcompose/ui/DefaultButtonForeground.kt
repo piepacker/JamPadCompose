@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import gg.jam.jampadcompose.utils.GeometryUtils.textUnit
 
 @Composable
-fun ButtonForegroundDefault(
+fun DefaultButtonForeground(
     modifier: Modifier = Modifier,
     pressed: Boolean,
     scale: Float = 0.75f,

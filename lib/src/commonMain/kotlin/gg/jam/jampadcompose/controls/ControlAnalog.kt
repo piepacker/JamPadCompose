@@ -1,4 +1,4 @@
-package gg.jam.jampadcompose.dials
+package gg.jam.jampadcompose.controls
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -12,17 +12,17 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.GamePadScope
-import gg.jam.jampadcompose.handlers.AnalogHandler
-import gg.jam.jampadcompose.ui.ButtonForegroundDefault
-import gg.jam.jampadcompose.ui.DialBackgroundDefault
+import gg.jam.jampadcompose.handlers.AnalogPointerHandler
+import gg.jam.jampadcompose.ui.DefaultButtonForeground
+import gg.jam.jampadcompose.ui.DefaultDialBackground
 
 @Composable
-fun GamePadScope.AnalogDial(
+fun GamePadScope.ControlAnalog(
     modifier: Modifier = Modifier,
     id: Int,
-    background: @Composable () -> Unit = { DialBackgroundDefault() },
+    background: @Composable () -> Unit = { DefaultDialBackground() },
     foreground: @Composable (Boolean) -> Unit = {
-        ButtonForegroundDefault(pressed = it, scale = 1f)
+        DefaultButtonForeground(pressed = it, scale = 1f)
     },
 ) {
     val position = inputState.value.getContinuousDirection(id, Offset.Zero)
@@ -31,7 +31,7 @@ fun GamePadScope.AnalogDial(
         modifier =
             modifier
                 .aspectRatio(1f)
-                .onGloballyPositioned { registerHandler(AnalogHandler(id, it.boundsInRoot())) },
+                .onGloballyPositioned { registerHandler(AnalogPointerHandler(id, it.boundsInRoot())) },
         contentAlignment = Alignment.Center,
     ) {
         Box(modifier = Modifier.fillMaxSize(0.75f)) {

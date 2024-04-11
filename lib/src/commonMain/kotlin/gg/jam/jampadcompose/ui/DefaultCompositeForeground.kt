@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun CompositeForegroundDefault(
+fun DefaultCompositeForeground(
     modifier: Modifier = Modifier,
     pressed: Boolean,
     color: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
