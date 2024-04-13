@@ -9,14 +9,14 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.GamePadScope
 import gg.jam.jampadcompose.handlers.CrossPointerHandler
+import gg.jam.jampadcompose.ui.DefaultControlBackground
 import gg.jam.jampadcompose.ui.DefaultCrossForeground
-import gg.jam.jampadcompose.ui.DefaultDialBackground
 
 @Composable
 fun GamePadScope.ControlCross(
     modifier: Modifier = Modifier,
     id: Int,
-    background: @Composable () -> Unit = { DefaultDialBackground() },
+    background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Offset) -> Unit = { DefaultCrossForeground(direction = it) },
 ) {
     Box(

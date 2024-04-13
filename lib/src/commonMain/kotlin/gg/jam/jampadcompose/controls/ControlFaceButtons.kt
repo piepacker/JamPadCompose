@@ -19,7 +19,7 @@ import gg.jam.jampadcompose.handlers.GravityPointsPointerHandler
 import gg.jam.jampadcompose.layouts.GravityArrangementLayout
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultCompositeForeground
-import gg.jam.jampadcompose.ui.DefaultDialBackground
+import gg.jam.jampadcompose.ui.DefaultControlBackground
 
 @Composable
 fun GamePadScope.ControlFaceButtons(
@@ -29,7 +29,7 @@ fun GamePadScope.ControlFaceButtons(
     sockets: Int = ids.size,
     faceButtonsLayout: FaceButtonsLayout = FaceButtonsLayout.CIRCUMFERENCE,
     includeComposite: Boolean = true,
-    background: @Composable () -> Unit = { DefaultDialBackground() },
+    background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Int, Boolean) -> Unit = { _, pressed ->
         DefaultButtonForeground(pressed = pressed)
     },

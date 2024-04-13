@@ -9,13 +9,13 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.GamePadScope
 import gg.jam.jampadcompose.handlers.ButtonPointerHandler
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
-import gg.jam.jampadcompose.ui.DefaultDialBackground
+import gg.jam.jampadcompose.ui.DefaultControlBackground
 
 @Composable
 fun GamePadScope.ControlButton(
     modifier: Modifier = Modifier,
     id: Int,
-    background: @Composable (Boolean) -> Unit = { DefaultDialBackground() },
+    background: @Composable (Boolean) -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Boolean) -> Unit = { DefaultButtonForeground(pressed = it) },
 ) {
     Box(

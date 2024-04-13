@@ -1,6 +1,6 @@
 package gg.jam.jampadcompose
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import gg.jam.jampadcompose.config.HapticFeedbackType
 import gg.jam.jampadcompose.handlers.Pointer
+import gg.jam.jampadcompose.handlers.PointerHandler
 import gg.jam.jampadcompose.haptics.InputHapticGenerator
 import gg.jam.jampadcompose.haptics.rememberHapticGenerator
 import gg.jam.jampadcompose.inputstate.InputState
@@ -31,18 +32,18 @@ fun GamePad(
     val hapticGenerator = rememberHapticGenerator()
     val inputHapticGenerator = remember { InputHapticGenerator(hapticGenerator, hapticFeedbackType) }
 
-    Row(
+    Box(
         modifier =
             modifier
                 .fillMaxSize()
                 .onGloballyPositioned { rootPosition.value = it.positionInRoot() }
-                .pointerInput("InputEventKey") {
+                .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
                             val event = awaitPointerEvent()
                             val trackedPointers = scope.getTrackedIds()
 
-                            val handlersAssociations =
+                            val handlersAssociations: Map<PointerHandler?, List<Pointer>> =
                                 event.changes
                                     .asSequence()
                                     .filter { it.pressed }

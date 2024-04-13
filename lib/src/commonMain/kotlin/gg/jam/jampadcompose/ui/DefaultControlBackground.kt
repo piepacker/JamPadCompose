@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun DefaultDialBackground(modifier: Modifier = Modifier) {
+fun DefaultControlBackground(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -22,7 +22,7 @@ fun DefaultDialBackground(modifier: Modifier = Modifier) {
                     .aspectRatio(1f)
                     .fillMaxSize(),
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.surfaceVariant,
         ) { }
     }
 }

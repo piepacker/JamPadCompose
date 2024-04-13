@@ -14,13 +14,13 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.GamePadScope
 import gg.jam.jampadcompose.handlers.AnalogPointerHandler
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
-import gg.jam.jampadcompose.ui.DefaultDialBackground
+import gg.jam.jampadcompose.ui.DefaultControlBackground
 
 @Composable
 fun GamePadScope.ControlAnalog(
     modifier: Modifier = Modifier,
     id: Int,
-    background: @Composable () -> Unit = { DefaultDialBackground() },
+    background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Boolean) -> Unit = {
         DefaultButtonForeground(pressed = it, scale = 1f)
     },
