@@ -36,13 +36,13 @@ import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.relativeTo
 
 @Composable
-fun GamePad(
+fun JamPad(
     modifier: Modifier = Modifier,
     onInputStateUpdated: (InputState) -> Unit = { },
     hapticFeedbackType: HapticFeedbackType = HapticFeedbackType.PRESS,
-    content: @Composable GamePadScope.() -> Unit,
+    content: @Composable JamPadScope.() -> Unit,
 ) {
-    val scope = remember { GamePadScope() }
+    val scope = remember { JamPadScope() }
     val rootPosition = remember { mutableStateOf(Offset.Zero) }
 
     val hapticGenerator = rememberHapticGenerator()

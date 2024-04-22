@@ -24,7 +24,7 @@ import gg.jam.jampadcompose.handlers.PointerHandler
 import gg.jam.jampadcompose.inputstate.InputState
 
 @Stable
-class GamePadScope {
+class JamPadScope {
     private data class HandlerState(
         val pointerHandler: PointerHandler,
         var gestureStart: Pointer? = null,

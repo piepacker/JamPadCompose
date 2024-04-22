@@ -23,13 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import gg.jam.jampadcompose.GamePadScope
+import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.handlers.CrossPointerHandler
 import gg.jam.jampadcompose.ui.DefaultControlBackground
 import gg.jam.jampadcompose.ui.DefaultCrossForeground
 
 @Composable
-fun GamePadScope.ControlCross(
+fun JamPadScope.ControlCross(
     modifier: Modifier = Modifier,
     id: Int,
     background: @Composable () -> Unit = { DefaultControlBackground() },

@@ -24,7 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import gg.jam.jampadcompose.GamePadScope
+import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.arrangements.CircleArrangement
 import gg.jam.jampadcompose.arrangements.CircumferenceGravityArrangement
 import gg.jam.jampadcompose.arrangements.CompositeCircumferenceArrangement
@@ -38,7 +38,7 @@ import gg.jam.jampadcompose.ui.DefaultCompositeForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
 
 @Composable
-fun GamePadScope.ControlFaceButtons(
+fun JamPadScope.ControlFaceButtons(
     modifier: Modifier = Modifier,
     rotationInDegrees: Float = 0f,
     ids: List<Int>,

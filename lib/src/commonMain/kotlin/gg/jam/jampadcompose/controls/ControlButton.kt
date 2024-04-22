@@ -22,13 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import gg.jam.jampadcompose.GamePadScope
+import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.handlers.ButtonPointerHandler
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
 
 @Composable
-fun GamePadScope.ControlButton(
+fun JamPadScope.ControlButton(
     modifier: Modifier = Modifier,
     id: Int,
     background: @Composable (Boolean) -> Unit = { DefaultControlBackground() },

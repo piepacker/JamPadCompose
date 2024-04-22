@@ -28,7 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import gg.jam.jampadcompose.GamePad
+import gg.jam.jampadcompose.JamPad
 import gg.jam.jampadcompose.config.HapticFeedbackType
 import gg.jam.jampadcompose.controls.ControlAnalog
 import gg.jam.jampadcompose.controls.ControlButton
@@ -44,7 +44,7 @@ fun App() {
 
 @Composable
 private fun SampleGamePad() {
-    GamePad(
+    JamPad(
         hapticFeedbackType = HapticFeedbackType.PRESS,
         modifier = Modifier.fillMaxSize(),
     ) {
