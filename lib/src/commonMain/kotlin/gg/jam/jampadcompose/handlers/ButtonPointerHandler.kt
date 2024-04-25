@@ -23,7 +23,7 @@ data class ButtonPointerHandler(override val id: Int, override val rect: Rect) :
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        currentGestureStart: Pointer?,
+        startDragGesture: Pointer?,
     ): Result {
         return Result(inputState.setDigitalKey(id, pointers.isNotEmpty()))
     }

@@ -87,14 +87,14 @@ fun JamPad(
                                                     )
                                                 }
 
-                                        val (updatedState, updatedTracked) =
+                                        val (updatedState, startDragGesture) =
                                             handler.handle(
                                                 relativePointers,
                                                 state,
-                                                scope.getStartGestureForHandler(handler),
+                                                scope.getStartDragGestureForHandler(handler),
                                             )
 
-                                        scope.setStartGestureForHandler(handler, updatedTracked)
+                                        scope.setStartDragGestureForHandler(handler, startDragGesture)
                                         updatedState
                                     }
                         }

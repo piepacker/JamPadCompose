@@ -26,7 +26,7 @@ interface PointerHandler {
     fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        currentGestureStart: Pointer?,
+        startDragGesture: Pointer?,
     ): Result
 
     fun handlerId(): String {

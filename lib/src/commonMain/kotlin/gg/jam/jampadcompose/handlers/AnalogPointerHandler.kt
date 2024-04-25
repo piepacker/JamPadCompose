@@ -25,19 +25,19 @@ data class AnalogPointerHandler(override val id: Int, override val rect: Rect) :
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        currentGestureStart: Pointer?,
+        startDragGesture: Pointer?,
     ): Result {
-        val currentGesture = pointers.firstOrNull { it.pointerId == currentGestureStart?.pointerId }
+        val currentGesture = pointers.firstOrNull { it.pointerId == startDragGesture?.pointerId }
 
         return when {
-            pointers.isNotEmpty() && currentGestureStart == null -> {
+            pointers.isNotEmpty() && startDragGesture == null -> {
                 update(inputState, withOffset = Offset.Zero, pointers.first())
             }
 
-            currentGestureStart != null && currentGesture != null -> {
-                val deltaPosition = (currentGesture.position - currentGestureStart.position)
+            startDragGesture != null && currentGesture != null -> {
+                val deltaPosition = (currentGesture.position - startDragGesture.position)
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
-                update(inputState, withOffset = offsetValue, withGestureStart = currentGestureStart)
+                update(inputState, withOffset = offsetValue, withGestureStart = startDragGesture)
             }
 
             else -> update(inputState, withOffset = Offset.Unspecified)

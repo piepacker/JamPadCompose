@@ -37,7 +37,7 @@ class GravityPointsPointerHandler(
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        currentGestureStart: Pointer?,
+        startDragGesture: Pointer?,
     ): Result {
         val pressedKeys =
             pointers

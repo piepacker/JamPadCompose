@@ -35,9 +35,9 @@ data class CrossPointerHandler(override val id: Int, override val rect: Rect) : 
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
-        currentGestureStart: Pointer?,
+        startDragGesture: Pointer?,
     ): Result {
-        val currentGesture = pointers.firstOrNull { it.pointerId == currentGestureStart?.pointerId }
+        val currentGesture = pointers.firstOrNull { it.pointerId == startDragGesture?.pointerId }
 
         return when {
             pointers.isEmpty() -> update(inputState, withOffset = Offset.Unspecified)
@@ -45,16 +45,16 @@ data class CrossPointerHandler(override val id: Int, override val rect: Rect) : 
                 update(
                     inputState,
                     withOffset = findCloserState(currentGesture),
-                    withGestureStart = currentGestureStart,
+                    withGestureStart = startDragGesture,
                 )
             }
 
             else -> {
-                val gestureStart = pointers.first()
+                val firstPointer = pointers.first()
                 update(
                     inputState,
-                    withOffset = findCloserState(gestureStart),
-                    withGestureStart = gestureStart,
+                    withOffset = findCloserState(firstPointer),
+                    withGestureStart = firstPointer,
                 )
             }
         }

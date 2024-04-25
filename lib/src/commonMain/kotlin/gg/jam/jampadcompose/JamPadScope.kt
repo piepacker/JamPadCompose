@@ -27,7 +27,7 @@ import gg.jam.jampadcompose.inputstate.InputState
 class JamPadScope {
     private data class HandlerState(
         val pointerHandler: PointerHandler,
-        var gestureStart: Pointer? = null,
+        var startDragGesture: Pointer? = null,
     )
 
     internal val inputState = mutableStateOf(InputState())
@@ -45,7 +45,7 @@ class JamPadScope {
 
     internal fun getTrackedIds(): Set<Long> {
         return handlers.values
-            .mapNotNull { it.gestureStart?.pointerId }
+            .mapNotNull { it.startDragGesture?.pointerId }
             .toSet()
     }
 
@@ -57,18 +57,18 @@ class JamPadScope {
 
     internal fun getHandlerTracking(pointerId: Long): PointerHandler? {
         return handlers.values
-            .firstOrNull { (_, startGesture) -> startGesture?.pointerId == pointerId }
+            .firstOrNull { (_, dragGesture) -> dragGesture?.pointerId == pointerId }
             ?.pointerHandler
     }
 
-    internal fun getStartGestureForHandler(pointerHandler: PointerHandler): Pointer? {
-        return handlers[pointerHandler.handlerId()]?.gestureStart
+    internal fun getStartDragGestureForHandler(pointerHandler: PointerHandler): Pointer? {
+        return handlers[pointerHandler.handlerId()]?.startDragGesture
     }
 
-    internal fun setStartGestureForHandler(
+    internal fun setStartDragGestureForHandler(
         pointerHandler: PointerHandler,
         newGestureStart: Pointer?,
     ) {
-        handlers[pointerHandler.handlerId()]?.gestureStart = newGestureStart
+        handlers[pointerHandler.handlerId()]?.startDragGesture = newGestureStart
     }
 }
