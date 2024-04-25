@@ -33,7 +33,7 @@ data class AnalogPointerHandler(override val id: Int, override val rect: Rect) :
             pointers.isEmpty() -> {
                 Result(
                     inputState.setContinuousDirection(id, Offset.Unspecified),
-                    null
+                    null,
                 )
             }
             startDragGesture != null && currentDragGesture != null -> {
@@ -41,14 +41,14 @@ data class AnalogPointerHandler(override val id: Int, override val rect: Rect) :
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
                 Result(
                     inputState.setContinuousDirection(id, offsetValue),
-                    startDragGesture
+                    startDragGesture,
                 )
             }
             else -> {
                 val firstPointer = pointers.first()
                 Result(
                     inputState.setContinuousDirection(id, Offset.Zero),
-                    firstPointer
+                    firstPointer,
                 )
             }
         }

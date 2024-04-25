@@ -43,14 +43,14 @@ data class CrossPointerHandler(override val id: Int, override val rect: Rect) : 
             pointers.isEmpty() -> {
                 Result(
                     inputState.setDiscreteDirection(id, Offset.Unspecified),
-                    null
+                    null,
                 )
             }
 
             currentDragGesture != null -> {
                 Result(
                     inputState.setDiscreteDirection(id, findCloserState(currentDragGesture)),
-                    startDragGesture
+                    startDragGesture,
                 )
             }
 
@@ -58,7 +58,7 @@ data class CrossPointerHandler(override val id: Int, override val rect: Rect) : 
                 val firstPointer = pointers.first()
                 Result(
                     inputState.setDiscreteDirection(id, findCloserState(firstPointer)),
-                    firstPointer
+                    firstPointer,
                 )
             }
         }
