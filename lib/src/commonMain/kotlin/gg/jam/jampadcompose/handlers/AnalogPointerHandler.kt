@@ -27,28 +27,30 @@ data class AnalogPointerHandler(override val id: Int, override val rect: Rect) :
         inputState: InputState,
         startDragGesture: Pointer?,
     ): Result {
-        val currentGesture = pointers.firstOrNull { it.pointerId == startDragGesture?.pointerId }
+        val currentDragGesture = pointers.firstOrNull { it.pointerId == startDragGesture?.pointerId }
 
         return when {
-            pointers.isNotEmpty() && startDragGesture == null -> {
-                update(inputState, withOffset = Offset.Zero, pointers.first())
+            pointers.isEmpty() -> {
+                Result(
+                    inputState.setContinuousDirection(id, Offset.Unspecified),
+                    null
+                )
             }
-
-            startDragGesture != null && currentGesture != null -> {
-                val deltaPosition = (currentGesture.position - startDragGesture.position)
+            startDragGesture != null && currentDragGesture != null -> {
+                val deltaPosition = (currentDragGesture.position - startDragGesture.position)
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
-                update(inputState, withOffset = offsetValue, withGestureStart = startDragGesture)
+                Result(
+                    inputState.setContinuousDirection(id, offsetValue),
+                    startDragGesture
+                )
             }
-
-            else -> update(inputState, withOffset = Offset.Unspecified)
+            else -> {
+                val firstPointer = pointers.first()
+                Result(
+                    inputState.setContinuousDirection(id, Offset.Zero),
+                    firstPointer
+                )
+            }
         }
-    }
-
-    private fun update(
-        inputState: InputState,
-        withOffset: Offset,
-        withGestureStart: Pointer? = null,
-    ): Result {
-        return Result(inputState.setContinuousDirection(id, withOffset), withGestureStart)
     }
 }

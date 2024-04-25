@@ -37,24 +37,28 @@ data class CrossPointerHandler(override val id: Int, override val rect: Rect) : 
         inputState: InputState,
         startDragGesture: Pointer?,
     ): Result {
-        val currentGesture = pointers.firstOrNull { it.pointerId == startDragGesture?.pointerId }
+        val currentDragGesture = pointers.firstOrNull { it.pointerId == startDragGesture?.pointerId }
 
         return when {
-            pointers.isEmpty() -> update(inputState, withOffset = Offset.Unspecified)
-            currentGesture != null -> {
-                update(
-                    inputState,
-                    withOffset = findCloserState(currentGesture),
-                    withGestureStart = startDragGesture,
+            pointers.isEmpty() -> {
+                Result(
+                    inputState.setDiscreteDirection(id, Offset.Unspecified),
+                    null
+                )
+            }
+
+            currentDragGesture != null -> {
+                Result(
+                    inputState.setDiscreteDirection(id, findCloserState(currentDragGesture)),
+                    startDragGesture
                 )
             }
 
             else -> {
                 val firstPointer = pointers.first()
-                update(
-                    inputState,
-                    withOffset = findCloserState(firstPointer),
-                    withGestureStart = firstPointer,
+                Result(
+                    inputState.setDiscreteDirection(id, findCloserState(firstPointer)),
+                    firstPointer
                 )
             }
         }
@@ -65,13 +69,5 @@ data class CrossPointerHandler(override val id: Int, override val rect: Rect) : 
             .minBy { (pointer.position - it.position).getDistanceSquared() }
             .position
             .let { it.copy(y = -it.y) }
-    }
-
-    private fun update(
-        inputState: InputState,
-        withOffset: Offset,
-        withGestureStart: Pointer? = null,
-    ): Result {
-        return Result(inputState.setDiscreteDirection(id, withOffset), withGestureStart)
     }
 }
