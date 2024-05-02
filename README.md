@@ -12,6 +12,12 @@ The following controls are currently supported:
 
 ### Usage
 
+Include the library in your project. Check latest tag for version:
+
+```
+implementation("io.github.piepacker:jampadcompose:x.y.z")
+```
+
 Here's a how you can use JamPadCompose to create a very simple gamepad layout.
 
 ```kotlin
