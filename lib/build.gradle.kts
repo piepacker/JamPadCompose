@@ -76,11 +76,9 @@ android {
 }
 
 mavenPublishing {
-    //    publishToMavenCentral(SonatypeHost.DEFAULT)
-    // or when publishing to https://s01.oss.sonatype.org
-    publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     signAllPublications()
-    coordinates("gg.jam", "jampadcompose", "0.0.1-SNAPSHOT")
+    coordinates("io.github.piepacker", "jampadcompose", "0.0.1-alpha1")
 
     pom {
         name.set(project.name)
