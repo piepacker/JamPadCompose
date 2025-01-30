@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Jam.gg 2024.
+ * Copyright (c) Jam.gg 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,34 +14,32 @@
  * limitations under the License.
  */
 
-package gg.jam.jampadcompose.layouts
+package gg.jam.jampadcompose.layouts.circular
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.unit.round
-import gg.jam.jampadcompose.arrangements.GravityArrangement
+import gg.jam.jampadcompose.utils.Constants
+import gg.jam.jampadcompose.utils.GeometryUtils
+import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
+import kotlin.math.cos
 import kotlin.math.roundToInt
+import kotlin.math.sin
 
 @Composable
-internal fun GravityArrangementLayout(
+internal fun CircularLayout(
     modifier: Modifier = Modifier,
-    gravityArrangement: GravityArrangement,
+    rotationInDegrees: Float = 0f,
     content: @Composable () -> Unit,
 ) {
     Layout(
         modifier = modifier,
         content = content,
     ) { measurables, constraints ->
-        val placeableSize =
-            (
-                gravityArrangement.getSize() *
-                    minOf(
-                        constraints.maxHeight,
-                        constraints.maxWidth,
-                    )
-            ).roundToInt()
+        val layoutSize = minOf(constraints.maxHeight, constraints.maxWidth)
+        val relativePlaceableSize =
+            GeometryUtils.computeSizeOfItemsOnCircumference(measurables.size)
+        val placeableSize = (layoutSize * relativePlaceableSize).roundToInt()
 
         val childConstraints =
             constraints.copy(
@@ -52,26 +50,20 @@ internal fun GravityArrangementLayout(
             )
 
         val placeables = measurables.map { it.measure(childConstraints) }
-
         val radius = (minOf(constraints.maxWidth, constraints.maxHeight) - placeableSize) / 2f
 
-        layout(constraints.maxWidth, constraints.maxHeight) {
-            val center = Offset(constraints.maxWidth / 2f, constraints.maxHeight / 2f)
-            val offsets = gravityArrangement.getGravityPoints().map { it.position }
+        val baseRotation = rotationInDegrees.toRadians()
 
-            placeables
-                .zip(offsets)
-                .forEach { (placeable, offset) ->
-                    placeable.place(
-                        (
-                            center + offset * radius -
-                                Offset(
-                                    placeableSize / 2f,
-                                    placeableSize / 2f,
-                                )
-                        ).round(),
-                    )
-                }
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            val centerX = constraints.maxWidth / 2
+            val centerY = constraints.maxHeight / 2
+
+            placeables.forEachIndexed { index, placeable ->
+                val angle = baseRotation + Constants.PI2 * index / placeables.size
+                val childX = (centerX + radius * cos(angle)).toInt() - placeable.width / 2
+                val childY = (centerY + radius * sin(angle)).toInt() - placeable.height / 2
+                placeable.place(childX, childY)
+            }
         }
     }
 }

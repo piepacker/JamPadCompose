@@ -32,7 +32,7 @@ import gg.jam.jampadcompose.arrangements.EmptyArrangement
 import gg.jam.jampadcompose.arrangements.GravityArrangement
 import gg.jam.jampadcompose.config.FaceButtonsLayout
 import gg.jam.jampadcompose.handlers.GravityPointsPointerHandler
-import gg.jam.jampadcompose.layouts.GravityArrangementLayout
+import gg.jam.jampadcompose.layouts.gravity.GravityArrangementLayout
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultCompositeForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
