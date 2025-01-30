@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import gg.jam.jampadcompose.layouts.CircularLayout
+import gg.jam.jampadcompose.layouts.circular.CircularLayout
 import gg.jam.jampadcompose.utils.ifUnspecified
 
 @Composable

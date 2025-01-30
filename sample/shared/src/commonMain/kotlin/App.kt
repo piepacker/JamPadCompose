@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Jam.gg 2024.
+ * Copyright (c) Jam.gg 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,9 @@
  */
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,77 +48,50 @@ private fun SampleGamePad() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom,
         ) {
-            HalfPad(
-                modifier = Modifier.weight(1f, fill = false),
-                top = {
-                    ControlButton(modifier = Modifier.weight(1f), id = 0)
-                    ControlButton(modifier = Modifier.weight(1f), id = 1)
-                    ControlButton(modifier = Modifier.weight(1f), id = 2)
-                },
-                primary = {
+            LayoutRadial(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f, fill = false),
+                primaryDial = {
                     ControlCross(
                         modifier = Modifier.fillMaxSize(),
                         id = 0,
                     )
                 },
-                secondary = {
+                secondaryDials = {
+                    ControlButton(modifier = Modifier.radialPosition(120f), id = 0)
+                    ControlButton(modifier = Modifier.radialPosition(90f), id = 1)
+                    ControlButton(modifier = Modifier.radialPosition(60f), id = 2)
                     ControlAnalog(
-                        modifier = Modifier.fillMaxSize(),
-                        id = 1,
+                        modifier = Modifier
+                            .radialPosition(-90f)
+                            .radialScale(2f),
+                        id = 1
                     )
                 },
             )
-            HalfPad(
-                modifier = Modifier.weight(1f, fill = false),
-                top = {
-                    ControlButton(modifier = Modifier.weight(1f), id = 3)
-                    ControlButton(modifier = Modifier.weight(1f), id = 4)
-                    ControlButton(modifier = Modifier.weight(1f), id = 5)
-                },
-                primary = {
+            LayoutRadial(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f, fill = false),
+                primaryDial = {
                     ControlFaceButtons(
                         modifier = Modifier.fillMaxSize(),
                         ids = listOf(6, 7, 8),
                     )
                 },
-                secondary = {
+                secondaryDials = {
+                    ControlButton(modifier = Modifier.radialPosition(120f), id = 3)
+                    ControlButton(modifier = Modifier.radialPosition(90f), id = 4)
+                    ControlButton(modifier = Modifier.radialPosition(60f), id = 5)
                     ControlAnalog(
-                        modifier = Modifier.fillMaxSize(),
-                        id = 2,
+                        modifier = Modifier
+                            .radialPosition(-90f)
+                            .radialScale(2f),
+                        id = 2
                     )
                 },
             )
-        }
-    }
-}
-
-@Composable
-private fun HalfPad(
-    modifier: Modifier = Modifier,
-    top: @Composable () -> Unit,
-    primary: @Composable () -> Unit,
-    secondary: @Composable () -> Unit,
-) {
-    Column(
-        modifier =
-            modifier
-                .padding(16.dp)
-                .aspectRatio(3f / 7f)
-                .widthIn(0.dp, 50.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.Start,
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().aspectRatio(3f),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-        ) {
-            top()
-        }
-        Box(modifier = Modifier.fillMaxWidth().aspectRatio(1f)) {
-            primary()
-        }
-        Box(modifier = Modifier.fillMaxWidth().aspectRatio(1f)) {
-            secondary()
         }
     }
 }
