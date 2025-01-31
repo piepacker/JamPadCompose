@@ -17,6 +17,7 @@
 package gg.jam.jampadcompose.inputstate
 
 import androidx.compose.ui.geometry.Offset
+import gg.jam.jampadcompose.inputstate.InputState
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentMapOf
