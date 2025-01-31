@@ -19,7 +19,7 @@ package gg.jam.jampadcompose
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -32,13 +32,16 @@ import gg.jam.jampadcompose.handlers.Pointer
 import gg.jam.jampadcompose.handlers.PointerHandler
 import gg.jam.jampadcompose.haptics.InputHapticGenerator
 import gg.jam.jampadcompose.haptics.rememberHapticGenerator
+import gg.jam.jampadcompose.inputevents.InputEvent
+import gg.jam.jampadcompose.inputevents.InputEventsGenerator
 import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.relativeTo
 
 @Composable
 fun JamPad(
     modifier: Modifier = Modifier,
-    onInputStateUpdated: (InputState) -> Unit = { },
+    onInputStateUpdated: ((InputState) -> Unit)? = null,
+    onInputEvents: ((List<InputEvent>) -> Unit)? = null,
     hapticFeedbackType: HapticFeedbackType = HapticFeedbackType.PRESS,
     content: @Composable JamPadScope.() -> Unit,
 ) {
@@ -47,6 +50,7 @@ fun JamPad(
 
     val hapticGenerator = rememberHapticGenerator()
     val inputHapticGenerator = remember { InputHapticGenerator(hapticGenerator, hapticFeedbackType) }
+    val inputEventsGenerator = remember { InputEventsGenerator() }
 
     Box(
         modifier =
@@ -104,13 +108,21 @@ fun JamPad(
         scope.content()
     }
 
-    DisposableEffect(key1 = scope.inputState.value) {
-        onInputStateUpdated(scope.inputState.value)
-        onDispose { }
+    val inputState = scope.inputState.value
+
+    if (onInputStateUpdated != null) {
+        LaunchedEffect(inputState) {
+            onInputStateUpdated.invoke(inputState)
+        }
     }
 
-    DisposableEffect(key1 = scope.inputState.value) {
-        inputHapticGenerator.onInputStateChanged(scope.inputState.value)
-        onDispose { }
+    if (onInputEvents != null) {
+        LaunchedEffect(inputState) {
+            onInputEvents(inputEventsGenerator.onInputStateChanged(inputState))
+        }
+    }
+
+    LaunchedEffect(inputState) {
+        inputHapticGenerator.onInputStateChanged(inputState)
     }
 }
