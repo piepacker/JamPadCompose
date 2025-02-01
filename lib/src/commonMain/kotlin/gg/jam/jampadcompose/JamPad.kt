@@ -35,7 +35,7 @@ import gg.jam.jampadcompose.haptics.rememberHapticGenerator
 import gg.jam.jampadcompose.inputevents.InputEvent
 import gg.jam.jampadcompose.inputevents.InputEventsGenerator
 import gg.jam.jampadcompose.inputstate.InputState
-import gg.jam.jampadcompose.utils.relativeTo
+import gg.jam.jampadcompose.utils.relativeToCenter
 
 @Composable
 fun JamPad(
@@ -87,7 +87,7 @@ fun JamPad(
                                                 .map {
                                                     Pointer(
                                                         it.pointerId,
-                                                        it.position.relativeTo(handler.rect),
+                                                        it.position.relativeToCenter(handler.rect),
                                                     )
                                                 }
 
