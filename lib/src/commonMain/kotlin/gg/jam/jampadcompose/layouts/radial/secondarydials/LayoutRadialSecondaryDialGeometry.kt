@@ -18,7 +18,6 @@ package gg.jam.jampadcompose.layouts.radial.secondarydials
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import gg.jam.jampadcompose.utils.GeometryUtils
 import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
 import kotlin.math.cos
@@ -37,10 +36,11 @@ object LayoutRadialSecondaryDialGeometry {
         return primaryDialCenter + Offset(cos(angle), sin(angle)) * distance
     }
 
-    internal fun findLayoutSizeRelativeToPrimaryDial(
+    /** Returns the Rect representing the whole layout with the primary dial centered in 0,0. */
+    internal fun findLayoutRectRelativeToPrimaryDial(
         secondaryDialMeasurablesParentData: List<LayoutRadialSecondaryDialProperties>,
         secondaryDialBaseScale: Float,
-    ): Size {
+    ): Rect {
         val secondaryDialsRectangles =
             secondaryDialMeasurablesParentData
                 .map { parentData ->
@@ -56,9 +56,6 @@ object LayoutRadialSecondaryDialGeometry {
                 }
 
         val primaryRect = Rect(-0.5f, -0.5f, +0.5f, +0.5f)
-        val mergedRectangles =
-            GeometryUtils.mergeRectangles(listOf(primaryRect) + secondaryDialsRectangles)
-
-        return Size(mergedRectangles.width, mergedRectangles.height)
+        return GeometryUtils.mergeRectangles(listOf(primaryRect) + secondaryDialsRectangles)
     }
 }

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.Placeable
@@ -26,12 +27,13 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.round
-import androidx.compose.ui.unit.toOffset
 import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.layouts.radial.secondarydials.LayoutRadialSecondaryDialGeometry
 import gg.jam.jampadcompose.layouts.radial.secondarydials.LayoutRadialSecondaryDialProperties
 import gg.jam.jampadcompose.layouts.radial.secondarydials.LayoutRadialSecondaryDialsScope
 import gg.jam.jampadcompose.utils.GeometryUtils
+import gg.jam.jampadcompose.utils.min
+import gg.jam.jampadcompose.utils.relativeToTopLeft
 import kotlin.math.roundToInt
 
 @Composable
@@ -61,23 +63,35 @@ fun JamPadScope.LayoutRadial(
             secondaryDialsBaseRotationInDegrees,
         )
 
-        val radialRelativeSize =
-            LayoutRadialSecondaryDialGeometry.findLayoutSizeRelativeToPrimaryDial(
+        val relativeLayoutRect =
+            LayoutRadialSecondaryDialGeometry.findLayoutRectRelativeToPrimaryDial(
                 secondaryDialsProperties,
                 secondaryDialsBaseScale,
             )
 
-        val minRelativeSize = minOf(
-            constraints.maxWidth / radialRelativeSize.width,
-            constraints.maxHeight / radialRelativeSize.height,
+        val relativeLayoutSizes = Offset(
+            constraints.maxWidth / relativeLayoutRect.width,
+            constraints.maxHeight / relativeLayoutRect.height,
         )
 
-        val primaryDialSize = minRelativeSize.roundToInt()
+        val primaryDialSize = relativeLayoutSizes.min().roundToInt()
+
+        val relativeLayoutAspectRatio = relativeLayoutRect.height / relativeLayoutRect.width
+
+        val layoutSize = if (relativeLayoutSizes.x < relativeLayoutSizes.y) {
+            Size(constraints.maxWidth.toFloat(), (constraints.maxWidth * relativeLayoutAspectRatio))
+        } else {
+            Size((constraints.maxHeight / relativeLayoutAspectRatio), constraints.maxHeight.toFloat())
+        }
+
+        val primaryDialCenter = Offset(0f, 0f)
+            .relativeToTopLeft(relativeLayoutRect)
+            .let { Offset(it.x * layoutSize.width, it.y * layoutSize.height) }
 
         val placePrimaryDial = placePrimaryDial(
             primaryDialMeasurable,
             primaryDialSize,
-            constraints,
+            primaryDialCenter,
         )
 
         val secondaryDialSize = primaryDialSize * secondaryDialsBaseScale
@@ -87,10 +101,10 @@ fun JamPadScope.LayoutRadial(
             secondaryDialsProperties,
             primaryDialSize,
             secondaryDialSize,
-            constraints,
+            primaryDialCenter,
         )
 
-        layout(constraints.maxWidth, constraints.maxHeight) {
+        layout(layoutSize.width.roundToInt(), layoutSize.height.roundToInt()) {
             placePrimaryDial()
             placeSecondaryDials()
         }
@@ -111,14 +125,13 @@ private fun findSecondaryDialProperties(
 private fun placePrimaryDial(
     primaryDialMeasurable: Measurable,
     primaryDialSize: Int,
-    layoutConstraints: Constraints,
+    primaryLayoutCenter: Offset,
 ): Placeable.PlacementScope.() -> Unit {
     val placeable =
         primaryDialMeasurable.measure(Constraints.fixed(primaryDialSize, primaryDialSize))
 
     return {
-        val center = Offset(layoutConstraints.maxWidth / 2f, layoutConstraints.maxHeight / 2f)
-        val position = center - Offset(placeable.width / 2f, placeable.height / 2f)
+        val position = primaryLayoutCenter - Offset(placeable.width / 2f, placeable.height / 2f)
         placeable.place(position.round())
     }
 }
@@ -128,7 +141,7 @@ private fun placeSecondaryDials(
     secondaryParentData: List<LayoutRadialSecondaryDialProperties>,
     primaryDialSize: Int,
     secondaryDialSize: Float,
-    layoutConstraints: Constraints,
+    primaryLayoutCenter: Offset,
 ): Placeable.PlacementScope.() -> Unit {
     val placeables = secondaryMeasurables.mapIndexed { index, measurable ->
         val parentData = secondaryParentData[index]
@@ -138,15 +151,12 @@ private fun placeSecondaryDials(
     }
 
     return {
-        val center =
-            IntOffset(layoutConstraints.maxWidth, layoutConstraints.maxHeight).toOffset() / 2f
-
         placeables.forEachIndexed { index, placeable ->
             val position = LayoutRadialSecondaryDialGeometry.findSecondaryDialCenterPosition(
                 secondaryParentData[index],
                 primaryDialSize.toFloat(),
                 secondaryDialSize,
-                center,
+                primaryLayoutCenter,
             )
             val sizeOffset = IntOffset(placeable.width, placeable.height) / 2f
             placeable.place(position.round() - sizeOffset)

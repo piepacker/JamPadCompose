@@ -20,7 +20,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.isUnspecified
 
-fun Offset.relativeTo(rect: Rect): Offset {
+/** Return the relative position in the given rectangle with respect to the top left corner.
+ *  Result in range [0, 1] on both axis. */
+fun Offset.relativeToTopLeft(rect: Rect): Offset {
+    val relativePosition = this - rect.topLeft
+    return Offset(relativePosition.x / rect.width, relativePosition.y / rect.height)
+}
+
+/** Return the relative position in the given rectangle with respect to the top left corner.
+ *  Result in range [-1, 1] on both axis. */
+fun Offset.relativeToCenter(rect: Rect): Offset {
     val relativePosition = this - rect.center
     return Offset(relativePosition.x / rect.width, relativePosition.y / rect.height) * 2f
 }
@@ -35,3 +44,5 @@ fun Offset.coerceIn(
 fun Offset.ifUnspecified(producer: () -> Offset): Offset {
     return if (this.isUnspecified) producer() else this
 }
+
+fun Offset.min() = minOf(this.x, this.y)
