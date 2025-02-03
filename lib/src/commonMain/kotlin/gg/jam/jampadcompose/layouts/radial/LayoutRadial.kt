@@ -25,7 +25,9 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.layouts.radial.secondarydials.LayoutRadialSecondaryDialGeometry
@@ -39,6 +41,7 @@ import kotlin.math.roundToInt
 @Composable
 fun JamPadScope.LayoutRadial(
     modifier: Modifier = Modifier,
+    primaryDialMaxSize: Dp = 160.dp,
     secondaryDialsBaseRotationInDegrees: Float = 0f,
     secondaryDialsBaseScale: Float = GeometryUtils.computeSizeOfItemsAroundCircumference(12),
     primaryDial: @Composable () -> Unit,
@@ -74,15 +77,15 @@ fun JamPadScope.LayoutRadial(
             constraints.maxHeight / relativeLayoutRect.height,
         )
 
-        val primaryDialSize = relativeLayoutSizes.min().roundToInt()
+        val primaryDialSize = minOf(
+            relativeLayoutSizes.min().roundToInt(),
+            primaryDialMaxSize.roundToPx()
+        )
 
-        val relativeLayoutAspectRatio = relativeLayoutRect.height / relativeLayoutRect.width
-
-        val layoutSize = if (relativeLayoutSizes.x < relativeLayoutSizes.y) {
-            Size(constraints.maxWidth.toFloat(), (constraints.maxWidth * relativeLayoutAspectRatio))
-        } else {
-            Size((constraints.maxHeight / relativeLayoutAspectRatio), constraints.maxHeight.toFloat())
-        }
+        val layoutSize = Size(
+            primaryDialSize * relativeLayoutRect.width,
+            primaryDialSize * relativeLayoutRect.height
+        )
 
         val primaryDialCenter = Offset(0f, 0f)
             .relativeToTopLeft(relativeLayoutRect)
