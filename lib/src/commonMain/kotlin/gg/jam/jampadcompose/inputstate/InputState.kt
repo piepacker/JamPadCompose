@@ -17,7 +17,8 @@
 package gg.jam.jampadcompose.inputstate
 
 import androidx.compose.ui.geometry.Offset
-import gg.jam.jampadcompose.inputstate.InputState
+import gg.jam.jampadcompose.ids.DirectionId
+import gg.jam.jampadcompose.ids.KeyId
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentMapOf
@@ -29,53 +30,35 @@ data class InputState(
     internal val discreteDirections: PersistentMap<Int, Offset> = persistentMapOf(),
 ) {
     fun setDigitalKey(
-        digitalId: Int,
+        digitalId: KeyId,
         value: Boolean,
     ): InputState {
         return if (value) {
-            copy(digitalKeys = digitalKeys.add(digitalId))
+            copy(digitalKeys = digitalKeys.add(digitalId.value))
         } else {
-            copy(digitalKeys = digitalKeys.remove(digitalId))
+            copy(digitalKeys = digitalKeys.remove(digitalId.value))
         }
     }
 
-    fun getDigitalKey(digitalId: Int): Boolean {
-        return digitalKeys.contains(digitalId)
+    fun getDigitalKey(digitalId: KeyId): Boolean {
+        return digitalKeys.contains(digitalId.value)
     }
 
-    fun setContinuousDirection(
-        continuousDirectionId: Int,
+    fun setDirection(
+        continuousDirectionId: DirectionId,
         offset: Offset,
     ): InputState {
         return if (offset == Offset.Unspecified) {
-            copy(continuousDirections = continuousDirections.remove(continuousDirectionId))
+            copy(continuousDirections = continuousDirections.remove(continuousDirectionId.value))
         } else {
-            copy(continuousDirections = continuousDirections.put(continuousDirectionId, offset))
+            copy(continuousDirections = continuousDirections.put(continuousDirectionId.value, offset))
         }
     }
 
-    fun getContinuousDirection(
-        continuousDirectionId: Int,
+    fun getDirection(
+        continuousDirectionId: DirectionId,
         default: Offset = Offset.Unspecified,
     ): Offset {
-        return continuousDirections.getOrElse(continuousDirectionId) { default }
-    }
-
-    fun setDiscreteDirection(
-        discreteDirectionId: Int,
-        offset: Offset,
-    ): InputState {
-        return if (offset == Offset.Unspecified) {
-            copy(discreteDirections = discreteDirections.remove(discreteDirectionId))
-        } else {
-            copy(discreteDirections = discreteDirections.put(discreteDirectionId, offset))
-        }
-    }
-
-    fun getDiscreteDirection(
-        discreteDirectionId: Int,
-        default: Offset = Offset.Unspecified,
-    ): Offset {
-        return discreteDirections.getOrElse(discreteDirectionId) { default }
+        return continuousDirections.getOrElse(continuousDirectionId.value) { default }
     }
 }

@@ -17,10 +17,11 @@
 package gg.jam.jampadcompose.arrangements
 
 import androidx.compose.ui.geometry.Offset
+import gg.jam.jampadcompose.ids.KeyId
 import kotlinx.collections.immutable.persistentSetOf
 
 class CircleArrangement(
-    private val ids: List<Int>,
+    private val ids: List<KeyId>,
     private val sockets: Int,
     rotationInDegrees: Float,
 ) : GravityArrangement() {

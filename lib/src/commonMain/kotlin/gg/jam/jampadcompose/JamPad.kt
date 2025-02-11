@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -29,13 +30,12 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import gg.jam.jampadcompose.config.HapticFeedbackType
 import gg.jam.jampadcompose.handlers.Pointer
-import gg.jam.jampadcompose.handlers.PointerHandler
 import gg.jam.jampadcompose.haptics.InputHapticGenerator
 import gg.jam.jampadcompose.haptics.rememberHapticGenerator
+import gg.jam.jampadcompose.ids.ControlId
 import gg.jam.jampadcompose.inputevents.InputEvent
 import gg.jam.jampadcompose.inputevents.InputEventsGenerator
 import gg.jam.jampadcompose.inputstate.InputState
-import gg.jam.jampadcompose.utils.relativeToCenter
 
 @Composable
 fun JamPad(
@@ -43,6 +43,8 @@ fun JamPad(
     onInputStateUpdated: ((InputState) -> Unit)? = null,
     onInputEvents: ((List<InputEvent>) -> Unit)? = null,
     hapticFeedbackType: HapticFeedbackType = HapticFeedbackType.PRESS,
+    simulatedControlIds: MutableState<Set<ControlId>> = mutableStateOf(emptySet()),
+    simulatedState: MutableState<InputState> = mutableStateOf(InputState()),
     content: @Composable JamPadScope.() -> Unit,
 ) {
     val scope = remember { JamPadScope() }
@@ -51,6 +53,14 @@ fun JamPad(
     val hapticGenerator = rememberHapticGenerator()
     val inputHapticGenerator = remember { InputHapticGenerator(hapticGenerator, hapticFeedbackType) }
     val inputEventsGenerator = remember { InputEventsGenerator() }
+
+    LaunchedEffect(simulatedState.value) {
+        scope.inputState.value = scope.handleSimulatedInputEvents(
+            simulatedControlIds.value,
+            scope.inputState.value,
+            simulatedState.value
+        )
+    }
 
     Box(
         modifier =
@@ -61,46 +71,17 @@ fun JamPad(
                     awaitPointerEventScope {
                         while (true) {
                             val event = awaitPointerEvent()
-                            val trackedPointers = scope.getTrackedIds()
+                            val pointers = event.changes
+                                .asSequence()
+                                .filter { it.pressed }
+                                .map { Pointer(it.id.value, it.position + rootPosition.value) }
 
-                            val handlersAssociations: Map<PointerHandler?, List<Pointer>> =
-                                event.changes
-                                    .asSequence()
-                                    .filter { it.pressed }
-                                    .map { Pointer(it.id.value, it.position + rootPosition.value) }
-                                    .groupBy { pointer ->
-                                        if (pointer.pointerId in trackedPointers) {
-                                            scope.getHandlerTracking(pointer.pointerId)
-                                        } else {
-                                            scope.getHandlerAtPosition(pointer.position)
-                                        }
-                                    }
-
-                            scope.inputState.value =
-                                scope.getAllHandlers()
-                                    .fold(scope.inputState.value) { state, handler ->
-                                        val pointers =
-                                            handlersAssociations.getOrElse(handler) { emptyList() }
-
-                                        val relativePointers =
-                                            pointers
-                                                .map {
-                                                    Pointer(
-                                                        it.pointerId,
-                                                        it.position.relativeToCenter(handler.rect),
-                                                    )
-                                                }
-
-                                        val (updatedState, startDragGesture) =
-                                            handler.handle(
-                                                relativePointers,
-                                                state,
-                                                scope.getStartDragGestureForHandler(handler),
-                                            )
-
-                                        scope.setStartDragGestureForHandler(handler, startDragGesture)
-                                        updatedState
-                                    }
+                            val updatedInputState = scope.handleInputEvent(pointers)
+                            scope.inputState.value = scope.handleSimulatedInputEvents(
+                                simulatedControlIds.value,
+                                updatedInputState,
+                                simulatedState.value
+                            )
                         }
                     }
                 },

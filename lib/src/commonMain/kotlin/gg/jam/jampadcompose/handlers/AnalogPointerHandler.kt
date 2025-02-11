@@ -18,10 +18,11 @@ package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import gg.jam.jampadcompose.ids.DirectionId
 import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.coerceIn
 
-data class AnalogPointerHandler(override val id: Int, override val rect: Rect) : PointerHandler {
+data class AnalogPointerHandler(override val id: DirectionId, override val rect: Rect) : PointerHandler {
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
@@ -32,7 +33,7 @@ data class AnalogPointerHandler(override val id: Int, override val rect: Rect) :
         return when {
             pointers.isEmpty() -> {
                 Result(
-                    inputState.setContinuousDirection(id, Offset.Unspecified),
+                    inputState.setDirection(id, Offset.Unspecified),
                     null,
                 )
             }
@@ -40,14 +41,14 @@ data class AnalogPointerHandler(override val id: Int, override val rect: Rect) :
                 val deltaPosition = (currentDragGesture.position - startDragGesture.position)
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
                 Result(
-                    inputState.setContinuousDirection(id, offsetValue),
+                    inputState.setDirection(id, offsetValue),
                     startDragGesture,
                 )
             }
             else -> {
                 val firstPointer = pointers.first()
                 Result(
-                    inputState.setContinuousDirection(id, Offset.Zero),
+                    inputState.setDirection(id, Offset.Zero),
                     firstPointer,
                 )
             }

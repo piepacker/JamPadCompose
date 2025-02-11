@@ -17,6 +17,7 @@
 package gg.jam.jampadcompose.arrangements
 
 import androidx.compose.ui.geometry.Offset
+import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.utils.Constants
 import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
 import kotlinx.collections.immutable.persistentSetOf
@@ -24,7 +25,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class CompositeCircumferenceArrangement(
-    private val ids: List<Int>,
+    private val ids: List<KeyId>,
     private val sockets: Int,
     private val rotationInDegrees: Float,
 ) : GravityArrangement() {

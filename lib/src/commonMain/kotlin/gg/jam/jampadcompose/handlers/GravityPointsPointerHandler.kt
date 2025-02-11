@@ -18,10 +18,11 @@ package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.arrangements.GravityArrangement
+import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
 
 class GravityPointsPointerHandler(
-    override val id: Int,
+    override val id: KeyId,
     override val rect: Rect,
     primaryArrangement: GravityArrangement,
     compositeArrangement: GravityArrangement,

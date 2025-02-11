@@ -29,6 +29,7 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 api(project(":lib"))
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
             }
         }
         val androidMain by getting {

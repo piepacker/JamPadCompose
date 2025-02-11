@@ -29,6 +29,8 @@ import gg.jam.jampadcompose.controls.ControlAnalog
 import gg.jam.jampadcompose.controls.ControlButton
 import gg.jam.jampadcompose.controls.ControlCross
 import gg.jam.jampadcompose.controls.ControlFaceButtons
+import gg.jam.jampadcompose.ids.DirectionId
+import gg.jam.jampadcompose.ids.KeyId
 
 @Composable
 fun App() {
@@ -49,46 +51,38 @@ private fun SampleGamePad() {
             verticalAlignment = Alignment.Bottom,
         ) {
             LayoutRadial(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .weight(1f, fill = false),
+                modifier = Modifier.padding(8.dp).weight(1f, fill = false),
                 primaryDial = {
                     ControlCross(
                         modifier = Modifier.fillMaxSize(),
-                        id = 0,
+                        id = DirectionId(0),
                     )
                 },
                 secondaryDials = {
-                    ControlButton(modifier = Modifier.radialPosition(120f), id = 0)
-                    ControlButton(modifier = Modifier.radialPosition(90f), id = 1)
-                    ControlButton(modifier = Modifier.radialPosition(60f), id = 2)
+                    ControlButton(modifier = Modifier.radialPosition(120f), id = KeyId(0))
+                    ControlButton(modifier = Modifier.radialPosition(90f), id = KeyId(1))
+                    ControlButton(modifier = Modifier.radialPosition(60f), id = KeyId(2))
                     ControlAnalog(
-                        modifier = Modifier
-                            .radialPosition(-90f)
-                            .radialScale(2f),
-                        id = 1
+                        modifier = Modifier.radialPosition(-90f).radialScale(2f),
+                        id = DirectionId(1)
                     )
                 },
             )
             LayoutRadial(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .weight(1f, fill = false),
+                modifier = Modifier.padding(8.dp).weight(1f, fill = false),
                 primaryDial = {
                     ControlFaceButtons(
                         modifier = Modifier.fillMaxSize(),
-                        ids = listOf(6, 7, 8),
+                        ids = listOf(6, 7, 8).map { KeyId(it) },
                     )
                 },
                 secondaryDials = {
-                    ControlButton(modifier = Modifier.radialPosition(120f), id = 3)
-                    ControlButton(modifier = Modifier.radialPosition(90f), id = 4)
-                    ControlButton(modifier = Modifier.radialPosition(60f), id = 5)
+                    ControlButton(modifier = Modifier.radialPosition(120f), id = KeyId(3))
+                    ControlButton(modifier = Modifier.radialPosition(90f), id = KeyId(4))
+                    ControlButton(modifier = Modifier.radialPosition(60f), id = KeyId(5))
                     ControlAnalog(
-                        modifier = Modifier
-                            .radialPosition(-90f)
-                            .radialScale(2f),
-                        id = 2
+                        modifier = Modifier.radialPosition(-90f).radialScale(2f),
+                        id = DirectionId(2)
                     )
                 },
             )
