@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.JamPadScope
+import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.arrangements.CircleArrangement
 import gg.jam.jampadcompose.arrangements.CircumferenceGravityArrangement
 import gg.jam.jampadcompose.arrangements.CompositeCircumferenceArrangement
@@ -41,12 +42,12 @@ import gg.jam.jampadcompose.ui.DefaultControlBackground
 fun JamPadScope.ControlFaceButtons(
     modifier: Modifier = Modifier,
     rotationInDegrees: Float = 0f,
-    ids: List<Int>,
+    ids: List<KeyId>,
     sockets: Int = ids.size,
     faceButtonsLayout: FaceButtonsLayout = FaceButtonsLayout.CIRCUMFERENCE,
     includeComposite: Boolean = true,
     background: @Composable () -> Unit = { DefaultControlBackground() },
-    foreground: @Composable (Int, Boolean) -> Unit = { _, pressed ->
+    foreground: @Composable (KeyId, Boolean) -> Unit = { _, pressed ->
         DefaultButtonForeground(pressed = pressed)
     },
     foregroundComposite: @Composable (Boolean) -> Unit = { pressed ->
@@ -62,9 +63,10 @@ fun JamPadScope.ControlFaceButtons(
             modifier
                 .aspectRatio(1f)
                 .onGloballyPositioned {
+                    val id = KeyId(listOf(ids, faceButtonsLayout, rotationInDegrees, sockets).hashCode())
                     registerHandler(
                         GravityPointsPointerHandler(
-                            listOf(ids, faceButtonsLayout, rotationInDegrees, sockets).hashCode(),
+                            id,
                             it.boundsInRoot(),
                             primaryArrangement,
                             compositeArrangement,
@@ -97,7 +99,7 @@ fun JamPadScope.ControlFaceButtons(
 @Composable
 private fun rememberCompositeArrangement(
     includeCompositeButtons: Boolean,
-    ids: List<Int>,
+    ids: List<KeyId>,
     sockets: Int,
     rotationInDegrees: Float,
 ): GravityArrangement {
@@ -112,7 +114,7 @@ private fun rememberCompositeArrangement(
 
 @Composable
 private fun rememberPrimaryArrangement(
-    ids: List<Int>,
+    ids: List<KeyId>,
     sockets: Int,
     faceButtonsLayout: FaceButtonsLayout,
     rotationInDegrees: Float,

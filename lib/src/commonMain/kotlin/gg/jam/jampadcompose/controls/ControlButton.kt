@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
+import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.handlers.ButtonPointerHandler
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
@@ -30,7 +31,7 @@ import gg.jam.jampadcompose.ui.DefaultControlBackground
 @Composable
 fun JamPadScope.ControlButton(
     modifier: Modifier = Modifier,
-    id: Int,
+    id: KeyId,
     background: @Composable (Boolean) -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Boolean) -> Unit = { DefaultButtonForeground(pressed = it) },
 ) {

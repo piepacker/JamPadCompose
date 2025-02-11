@@ -17,12 +17,13 @@
 package gg.jam.jampadcompose.arrangements
 
 import androidx.compose.ui.geometry.Offset
+import gg.jam.jampadcompose.ids.KeyId
 import kotlinx.collections.immutable.ImmutableSet
 
 data class GravityPoint(
     val position: Offset,
     val strength: Float,
-    val keys: ImmutableSet<Int>,
+    val keys: ImmutableSet<KeyId>,
 ) {
     fun distance(point: Offset): Float {
         return (point - position).getDistanceSquared() / strength

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Jam.gg 2024.
+ * Copyright (c) Jam.gg 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package gg.jam.jampadcompose.handlers
+package gg.jam.jampadcompose.ids
 
-import androidx.compose.ui.geometry.Rect
-import gg.jam.jampadcompose.ids.KeyId
-import gg.jam.jampadcompose.inputstate.InputState
+import kotlin.jvm.JvmInline
 
-data class ButtonPointerHandler(override val id: KeyId, override val rect: Rect) : PointerHandler {
-    override fun handle(
-        pointers: List<Pointer>,
-        inputState: InputState,
-        startDragGesture: Pointer?,
-    ): Result {
-        return Result(inputState.setDigitalKey(id, pointers.isNotEmpty()))
-    }
-}
+@JvmInline
+value class DirectionId(val value: Int) : ControlId
