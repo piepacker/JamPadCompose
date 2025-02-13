@@ -21,18 +21,20 @@ import gg.jam.jampadcompose.arrangements.GravityArrangement
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
 
-class GravityPointsPointerHandler(
-    override val id: KeyId,
+internal class FaceButtonsPointerHandler(
+    override val id: Int,
     override val rect: Rect,
     primaryArrangement: GravityArrangement,
     compositeArrangement: GravityArrangement,
 ) : PointerHandler {
+
     private val gravityPoints = primaryArrangement.getGravityPoints()
     private val compositePoints = compositeArrangement.getGravityPoints()
     private val allPoints = gravityPoints + compositePoints
     private val allKeys =
         allPoints
             .flatMap { it.keys }
+            .map { KeyId(it) }
             .toSet()
 
     override fun handle(
@@ -52,7 +54,7 @@ class GravityPointsPointerHandler(
 
         val finalState =
             allKeys.fold(inputState) { updatedState, key ->
-                updatedState.setDigitalKey(key, key in pressedKeys)
+                updatedState.setDigitalKey(key, key.value in pressedKeys)
             }
 
         return Result(finalState)

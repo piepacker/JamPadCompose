@@ -18,15 +18,14 @@ package gg.jam.jampadcompose.arrangements
 
 import androidx.compose.ui.geometry.Offset
 import gg.jam.jampadcompose.ids.KeyId
-import kotlinx.collections.immutable.persistentSetOf
 
-class CircleArrangement(
+internal class FaceButtonsCircleArrangement(
     private val ids: List<KeyId>,
     private val sockets: Int,
     rotationInDegrees: Float,
 ) : GravityArrangement() {
-    private val circumferenceGravityArrangement =
-        CircumferenceGravityArrangement(
+    private val faceButtonsCircumferenceArrangement =
+        FaceButtonsCircumferenceArrangement(
             ids.drop(1),
             sockets - 1,
             rotationInDegrees,
@@ -37,10 +36,10 @@ class CircleArrangement(
             GravityPoint(
                 Offset.Zero,
                 1f,
-                persistentSetOf(ids.first()),
+                setOf(ids.first().value),
             )
 
-        val circumferenceGravityPoint = circumferenceGravityArrangement.getGravityPoints()
+        val circumferenceGravityPoint = faceButtonsCircumferenceArrangement.getGravityPoints()
         return listOf(centralGravityPoint) + circumferenceGravityPoint
     }
 
@@ -48,6 +47,6 @@ class CircleArrangement(
         if (sockets == 1) {
             return 0.5f
         }
-        return minOf(circumferenceGravityArrangement.getSize(), 0.33f)
+        return minOf(faceButtonsCircumferenceArrangement.getSize(), 0.33f)
     }
 }

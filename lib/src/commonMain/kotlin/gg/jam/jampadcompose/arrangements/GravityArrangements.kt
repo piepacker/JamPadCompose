@@ -18,7 +18,7 @@ package gg.jam.jampadcompose.arrangements
 
 import gg.jam.jampadcompose.utils.memoize
 
-abstract class GravityArrangement {
+internal abstract class GravityArrangement {
     fun getGravityPoints(): List<GravityPoint> {
         return ::computeGravityPoints.memoize().invoke()
     }

@@ -23,10 +23,13 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import gg.jam.jampadcompose.arrangements.CrossCompositeArrangement
 import gg.jam.jampadcompose.layouts.circular.CircularLayout
+import gg.jam.jampadcompose.layouts.gravity.GravityArrangementLayout
 import gg.jam.jampadcompose.utils.ifUnspecified
 
 @Composable
@@ -57,13 +60,32 @@ fun DefaultCrossForeground(
             iconPainter = rememberVectorPainter(Icons.Default.KeyboardArrowUp),
         )
     },
+    foregroundComposite: @Composable (Boolean) -> Unit = { pressed ->
+        DefaultCompositeForeground(pressed = pressed)
+    },
 ) {
     val adjustedDirection = direction.ifUnspecified { Offset.Zero }
+    val isTop = adjustedDirection.y > 0.5f
+    val isLeft = adjustedDirection.x < -0.5f
+    val isRight = adjustedDirection.x > 0.5f
+    val isBottom = adjustedDirection.y < -0.5f
 
     CircularLayout(modifier = modifier.fillMaxSize()) {
-        rightDial(adjustedDirection.x > 0.5f)
-        bottomDial(adjustedDirection.y < -0.5f)
-        leftDial(adjustedDirection.x < -0.5f)
-        topDial(adjustedDirection.y > 0.5f)
+        rightDial(isRight)
+        bottomDial(isBottom)
+        leftDial(isLeft)
+        topDial(isTop)
+    }
+
+    val compositeArrangement = remember { CrossCompositeArrangement(0f) }
+
+    GravityArrangementLayout(
+        modifier = Modifier.fillMaxSize(),
+        gravityArrangement = compositeArrangement,
+    ) {
+        foregroundComposite(isBottom && isRight)
+        foregroundComposite(isBottom && isLeft)
+        foregroundComposite(isTop && isLeft)
+        foregroundComposite(isTop && isRight)
     }
 }

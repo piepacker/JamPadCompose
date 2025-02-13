@@ -26,13 +26,13 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.ids.KeyId
-import gg.jam.jampadcompose.arrangements.CircleArrangement
-import gg.jam.jampadcompose.arrangements.CircumferenceGravityArrangement
-import gg.jam.jampadcompose.arrangements.CompositeCircumferenceArrangement
+import gg.jam.jampadcompose.arrangements.FaceButtonsCircleArrangement
+import gg.jam.jampadcompose.arrangements.FaceButtonsCircumferenceArrangement
+import gg.jam.jampadcompose.arrangements.FaceButtonsCompositeArrangement
 import gg.jam.jampadcompose.arrangements.EmptyArrangement
 import gg.jam.jampadcompose.arrangements.GravityArrangement
 import gg.jam.jampadcompose.config.FaceButtonsLayout
-import gg.jam.jampadcompose.handlers.GravityPointsPointerHandler
+import gg.jam.jampadcompose.handlers.FaceButtonsPointerHandler
 import gg.jam.jampadcompose.layouts.gravity.GravityArrangementLayout
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultCompositeForeground
@@ -63,10 +63,9 @@ fun JamPadScope.ControlFaceButtons(
             modifier
                 .aspectRatio(1f)
                 .onGloballyPositioned {
-                    val id = KeyId(listOf(ids, faceButtonsLayout, rotationInDegrees, sockets).hashCode())
                     registerHandler(
-                        GravityPointsPointerHandler(
-                            id,
+                        FaceButtonsPointerHandler(
+                            listOf(ids, faceButtonsLayout, rotationInDegrees, sockets).hashCode(),
                             it.boundsInRoot(),
                             primaryArrangement,
                             compositeArrangement,
@@ -90,7 +89,7 @@ fun JamPadScope.ControlFaceButtons(
             gravityArrangement = compositeArrangement,
         ) {
             compositeArrangement.getGravityPoints().forEach { point ->
-                foregroundComposite(point.keys.all { inputState.value.getDigitalKey(it) })
+                foregroundComposite(point.keys.all { inputState.value.getDigitalKey(KeyId(it)) })
             }
         }
     }
@@ -105,7 +104,7 @@ private fun rememberCompositeArrangement(
 ): GravityArrangement {
     return remember(ids, includeCompositeButtons, rotationInDegrees) {
         if (includeCompositeButtons) {
-            CompositeCircumferenceArrangement(ids, sockets, rotationInDegrees)
+            FaceButtonsCompositeArrangement(ids, sockets, rotationInDegrees)
         } else {
             EmptyArrangement
         }
@@ -122,13 +121,13 @@ private fun rememberPrimaryArrangement(
     return remember(ids, faceButtonsLayout, rotationInDegrees) {
         when (faceButtonsLayout) {
             FaceButtonsLayout.CIRCUMFERENCE ->
-                CircumferenceGravityArrangement(
+                FaceButtonsCircumferenceArrangement(
                     ids,
                     sockets,
                     rotationInDegrees,
                 )
 
-            FaceButtonsLayout.CIRCLE -> CircleArrangement(ids, sockets, rotationInDegrees)
+            FaceButtonsLayout.CIRCLE -> FaceButtonsCircleArrangement(ids, sockets, rotationInDegrees)
         }
     }
 }

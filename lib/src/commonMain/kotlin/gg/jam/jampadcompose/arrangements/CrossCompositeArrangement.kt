@@ -17,43 +17,31 @@
 package gg.jam.jampadcompose.arrangements
 
 import androidx.compose.ui.geometry.Offset
-import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.utils.Constants
-import gg.jam.jampadcompose.utils.GeometryUtils
 import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
-import kotlinx.collections.immutable.persistentSetOf
 import kotlin.math.cos
 import kotlin.math.sin
 
-class CircumferenceGravityArrangement(
-    private val ids: List<KeyId>,
-    private val sockets: Int,
-    private val rotationInDegrees: Float,
-) : GravityArrangement() {
+internal class CrossCompositeArrangement(private val rotationInDegrees: Float, ) : GravityArrangement() {
     override fun computeGravityPoints(): List<GravityPoint> {
-        if (sockets <= 1) {
-            return emptyList()
-        }
-
         val baseRotation = rotationInDegrees.toRadians()
 
-        val primaryGravityPoints =
-            ids.mapIndexed { index, id ->
-                val angle = (baseRotation + Constants.PI2 * index / sockets)
-                GravityPoint(
-                    Offset(cos(angle), sin(angle)),
-                    1f,
-                    persistentSetOf(id),
-                )
-            }
+        val compositeGravityPoints =
+            (0 .. 4)
+                .map { index ->
+                    val radius = 0.9f
+                    val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / 4)
+                    GravityPoint(
+                        Offset(cos(angle), sin(angle)) * radius,
+                        0.25f,
+                        setOf(index),
+                    )
+                }
 
-        return primaryGravityPoints
+        return compositeGravityPoints
     }
 
     override fun computeSize(): Float {
-        if (sockets == 1) {
-            return 0.5f
-        }
-        return GeometryUtils.computeSizeOfItemsOnCircumference(sockets)
+        return 0.1f
     }
 }

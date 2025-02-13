@@ -20,11 +20,10 @@ import androidx.compose.ui.geometry.Offset
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.utils.Constants
 import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
-import kotlinx.collections.immutable.persistentSetOf
 import kotlin.math.cos
 import kotlin.math.sin
 
-class CompositeCircumferenceArrangement(
+internal class FaceButtonsCompositeArrangement(
     private val ids: List<KeyId>,
     private val sockets: Int,
     private val rotationInDegrees: Float,
@@ -52,7 +51,7 @@ class CompositeCircumferenceArrangement(
                     GravityPoint(
                         Offset(cos(angle), sin(angle)) * radius,
                         0.25f,
-                        persistentSetOf(prev, next),
+                        setOf(prev.value, next.value),
                     )
                 }
 

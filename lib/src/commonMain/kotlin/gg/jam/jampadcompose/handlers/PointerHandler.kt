@@ -17,11 +17,10 @@
 package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Rect
-import gg.jam.jampadcompose.ids.ControlId
 import gg.jam.jampadcompose.inputstate.InputState
 
 interface PointerHandler {
-    val id: ControlId
+    val id: Int
     val rect: Rect
 
     fun handle(

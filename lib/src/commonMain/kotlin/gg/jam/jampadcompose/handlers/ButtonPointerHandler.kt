@@ -20,13 +20,19 @@ import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
 
-data class ButtonPointerHandler(override val id: KeyId, override val rect: Rect) : PointerHandler {
+data class ButtonPointerHandler(
+    private val buttonId: KeyId,
+    override val rect: Rect
+) : PointerHandler {
+
+    override val id: Int = buttonId.value
+
     override fun handle(
         pointers: List<Pointer>,
         inputState: InputState,
         startDragGesture: Pointer?,
         data: Any?,
     ): Result {
-        return Result(inputState.setDigitalKey(id, pointers.isNotEmpty()))
+        return Result(inputState.setDigitalKey(KeyId(id), pointers.isNotEmpty()))
     }
 }
