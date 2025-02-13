@@ -27,12 +27,14 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 data class AnalogPointerHandler(
-    override val id: DirectionId,
+    private val directionId: DirectionId,
     override val rect: Rect,
     private val analogPressId: KeyId?,
 ) : PointerHandler {
 
     data class Data(var lastDownEvent: Instant = Instant.DISTANT_PAST)
+
+    override val id: Int = directionId.value
 
     override fun handle(
         pointers: List<Pointer>,
@@ -53,7 +55,7 @@ data class AnalogPointerHandler(
                 val deltaPosition = (currentDragGesture.position - startDragGesture.position)
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
                 Result(
-                    inputState.setDirection(id, offsetValue),
+                    inputState.setDirection(directionId, offsetValue),
                     startDragGesture,
                 )
             }
@@ -77,7 +79,7 @@ data class AnalogPointerHandler(
         direction: Offset,
         pressed: Boolean,
     ): InputState {
-        var result = inputState.setDirection(id, direction)
+        var result = inputState.setDirection(directionId, direction)
 
         if (analogPressId != null) {
             result = result.setDigitalKey(analogPressId, pressed)
