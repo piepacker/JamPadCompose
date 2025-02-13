@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.ids.DirectionId
 import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.handlers.AnalogPointerHandler
+import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
 
@@ -37,6 +38,7 @@ import gg.jam.jampadcompose.ui.DefaultControlBackground
 fun JamPadScope.ControlAnalog(
     modifier: Modifier = Modifier,
     id: DirectionId,
+    analogPressId: KeyId? = null,
     background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Boolean) -> Unit = {
         DefaultButtonForeground(pressed = it, scale = 1f)
@@ -48,7 +50,12 @@ fun JamPadScope.ControlAnalog(
         modifier =
             modifier
                 .aspectRatio(1f)
-                .onGloballyPositioned { registerHandler(AnalogPointerHandler(id, it.boundsInRoot())) },
+                .onGloballyPositioned {
+                    registerHandler(
+                        AnalogPointerHandler(id, it.boundsInRoot(), analogPressId),
+                        AnalogPointerHandler.Data()
+                    )
+                },
         contentAlignment = Alignment.Center,
     ) {
         Box(modifier = Modifier.fillMaxSize(0.75f)) {

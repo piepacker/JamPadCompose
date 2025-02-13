@@ -16,7 +16,11 @@
 
 package gg.jam.jampadcompose.utils
 
+import kotlin.time.Duration.Companion.milliseconds
+
 object Constants {
     const val PI = kotlin.math.PI.toFloat()
     const val PI2 = 2 * PI
+
+    val DOUBLE_TAP_INTERVAL = 200.milliseconds
 }

@@ -37,6 +37,7 @@ data class CrossPointerHandler(override val id: DirectionId, override val rect: 
         pointers: List<Pointer>,
         inputState: InputState,
         startDragGesture: Pointer?,
+        data: Any?,
     ): Result {
         val currentDragGesture = pointers.firstOrNull { it.pointerId == startDragGesture?.pointerId }
 

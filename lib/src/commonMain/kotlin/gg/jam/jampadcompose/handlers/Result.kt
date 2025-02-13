@@ -18,4 +18,7 @@ package gg.jam.jampadcompose.handlers
 
 import gg.jam.jampadcompose.inputstate.InputState
 
-data class Result(val inputState: InputState, val startDragGesture: Pointer? = null)
+data class Result(
+    val inputState: InputState,
+    val startDragGesture: Pointer? = null,
+)
