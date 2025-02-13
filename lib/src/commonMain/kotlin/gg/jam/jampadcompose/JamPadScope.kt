@@ -32,19 +32,19 @@ class JamPadScope {
     private data class HandlerState(
         val pointerHandler: PointerHandler,
         var startDragGesture: Pointer? = null,
+        val data: Any? = null
     )
 
     internal val inputState = mutableStateOf(InputState())
 
     private val handlers = mutableMapOf<String, HandlerState>()
 
-    internal fun registerHandler(pointerHandler: PointerHandler) {
-        handlers[pointerHandler.handlerId()] = HandlerState(pointerHandler, null)
+    internal fun registerHandler(pointerHandler: PointerHandler, data: Any? = null) {
+        handlers[pointerHandler.handlerId()] = HandlerState(pointerHandler, null, data)
     }
 
-    private fun getAllHandlers(): Collection<PointerHandler> {
+    private fun getAllHandlers(): Collection<HandlerState> {
         return handlers.values
-            .map { it.pointerHandler }
     }
 
     private fun getTrackedIds(): Set<Long> {
@@ -65,17 +65,6 @@ class JamPadScope {
             ?.pointerHandler
     }
 
-    private fun getStartDragGestureForHandler(pointerHandler: PointerHandler): Pointer? {
-        return handlers[pointerHandler.handlerId()]?.startDragGesture
-    }
-
-    private fun setStartDragGestureForHandler(
-        pointerHandler: PointerHandler,
-        newGestureStart: Pointer?,
-    ) {
-        handlers[pointerHandler.handlerId()]?.startDragGesture = newGestureStart
-    }
-
     internal fun handleInputEvent(eventPointers: Sequence<Pointer>): InputState {
         val trackedPointers = getTrackedIds()
 
@@ -90,26 +79,28 @@ class JamPadScope {
 
         return getAllHandlers()
             .fold(inputState.value) { state, handler ->
+                val pointerHandler = handler.pointerHandler
                 val pointers =
-                    handlersAssociations.getOrElse(handler) { emptyList() }
+                    handlersAssociations.getOrElse(pointerHandler) { emptyList() }
 
                 val relativePointers =
                     pointers
                         .map {
                             Pointer(
                                 it.pointerId,
-                                it.position.relativeToCenter(handler.rect),
+                                it.position.relativeToCenter(pointerHandler.rect),
                             )
                         }
 
                 val (updatedState, startDragGesture) =
-                    handler.handle(
+                    pointerHandler.handle(
                         relativePointers,
                         state,
-                        getStartDragGestureForHandler(handler),
+                        handler.startDragGesture,
+                        handler.data,
                     )
 
-                setStartDragGestureForHandler(handler, startDragGesture)
+                handler.startDragGesture = startDragGesture
                 updatedState
             }
     }

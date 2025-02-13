@@ -25,6 +25,7 @@ data class ButtonPointerHandler(override val id: KeyId, override val rect: Rect)
         pointers: List<Pointer>,
         inputState: InputState,
         startDragGesture: Pointer?,
+        data: Any?,
     ): Result {
         return Result(inputState.setDigitalKey(id, pointers.isNotEmpty()))
     }
