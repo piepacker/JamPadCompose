@@ -22,7 +22,8 @@ import androidx.compose.ui.geometry.Offset
 import gg.jam.jampadcompose.handlers.Pointer
 import gg.jam.jampadcompose.handlers.PointerHandler
 import gg.jam.jampadcompose.ids.ControlId
-import gg.jam.jampadcompose.ids.DirectionId
+import gg.jam.jampadcompose.ids.ContinuousDirectionId
+import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.relativeToCenter
@@ -113,7 +114,8 @@ class JamPadScope {
         return simulatedControlIds.fold(inputState) { state, id ->
             when (id) {
                 is KeyId -> state.setDigitalKey(id, simulatedInputState.getDigitalKey(id))
-                is DirectionId -> state.setDirection(id, simulatedInputState.getDirection(id))
+                is ContinuousDirectionId -> state.setContinuousDirection(id, simulatedInputState.getContinuousDirection(id))
+                is DiscreteDirectionId -> state.setDiscreteDirection(id, simulatedInputState.getDiscreteDirection(id))
             }
         }
     }

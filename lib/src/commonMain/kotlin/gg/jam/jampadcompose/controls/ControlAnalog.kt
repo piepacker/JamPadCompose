@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import gg.jam.jampadcompose.ids.DirectionId
+import gg.jam.jampadcompose.ids.ContinuousDirectionId
 import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.handlers.AnalogPointerHandler
 import gg.jam.jampadcompose.ids.KeyId
@@ -37,14 +37,14 @@ import gg.jam.jampadcompose.ui.DefaultControlBackground
 @Composable
 fun JamPadScope.ControlAnalog(
     modifier: Modifier = Modifier,
-    id: DirectionId,
+    id: ContinuousDirectionId,
     analogPressId: KeyId? = null,
     background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Boolean) -> Unit = {
         DefaultButtonForeground(pressed = it, scale = 1f)
     },
 ) {
-    val position = inputState.value.getDirection(id, Offset.Zero)
+    val position = inputState.value.getContinuousDirection(id, Offset.Zero)
 
     BoxWithConstraints(
         modifier =
@@ -67,7 +67,7 @@ fun JamPadScope.ControlAnalog(
                     .fillMaxSize(0.50f)
                     .offset(maxWidth * position.x * 0.25f, maxHeight * position.y * 0.25f),
         ) {
-            foreground(inputState.value.getDirection(id) != Offset.Unspecified)
+            foreground(inputState.value.getContinuousDirection(id) != Offset.Unspecified)
         }
     }
 }

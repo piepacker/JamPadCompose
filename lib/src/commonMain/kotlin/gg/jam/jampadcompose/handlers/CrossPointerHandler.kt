@@ -18,11 +18,11 @@ package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import gg.jam.jampadcompose.ids.DirectionId
+import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.inputstate.InputState
 
 data class CrossPointerHandler(
-    private val directionId: DirectionId,
+    private val directionId: DiscreteDirectionId,
     override val rect: Rect
 ) : PointerHandler {
 
@@ -50,14 +50,17 @@ data class CrossPointerHandler(
         return when {
             pointers.isEmpty() -> {
                 Result(
-                    inputState.setDirection(directionId, Offset.Unspecified),
+                    inputState.setDiscreteDirection(directionId, Offset.Unspecified),
                     null,
                 )
             }
 
             currentDragGesture != null -> {
                 Result(
-                    inputState.setDirection(directionId, findCloserState(currentDragGesture)),
+                    inputState.setDiscreteDirection(
+                        directionId,
+                        findCloserState(currentDragGesture)
+                    ),
                     startDragGesture,
                 )
             }
@@ -65,7 +68,7 @@ data class CrossPointerHandler(
             else -> {
                 val firstPointer = pointers.first()
                 Result(
-                    inputState.setDirection(directionId, findCloserState(firstPointer)),
+                    inputState.setDiscreteDirection(directionId, findCloserState(firstPointer)),
                     firstPointer,
                 )
             }
