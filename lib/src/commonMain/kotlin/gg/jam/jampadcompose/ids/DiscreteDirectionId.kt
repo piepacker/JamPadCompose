@@ -19,4 +19,4 @@ package gg.jam.jampadcompose.ids
 import kotlin.jvm.JvmInline
 
 @JvmInline
-value class DirectionId(val value: Int) : ControlId
+value class DiscreteDirectionId(val value: Int) : ControlId

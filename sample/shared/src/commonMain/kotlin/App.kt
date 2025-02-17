@@ -29,7 +29,8 @@ import gg.jam.jampadcompose.controls.ControlAnalog
 import gg.jam.jampadcompose.controls.ControlButton
 import gg.jam.jampadcompose.controls.ControlCross
 import gg.jam.jampadcompose.controls.ControlFaceButtons
-import gg.jam.jampadcompose.ids.DirectionId
+import gg.jam.jampadcompose.ids.ContinuousDirectionId
+import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 
 @Composable
@@ -55,7 +56,7 @@ private fun SampleGamePad() {
                 primaryDial = {
                     ControlCross(
                         modifier = Modifier.fillMaxSize(),
-                        id = DirectionId(0),
+                        id = DiscreteDirectionId(0),
                     )
                 },
                 secondaryDials = {
@@ -64,7 +65,7 @@ private fun SampleGamePad() {
                     ControlButton(modifier = Modifier.radialPosition(60f), id = KeyId(2))
                     ControlAnalog(
                         modifier = Modifier.radialPosition(-90f).radialScale(2f),
-                        id = DirectionId(1)
+                        id = ContinuousDirectionId(1)
                     )
                 },
             )
@@ -82,7 +83,7 @@ private fun SampleGamePad() {
                     ControlButton(modifier = Modifier.radialPosition(60f), id = KeyId(5))
                     ControlAnalog(
                         modifier = Modifier.radialPosition(-90f).radialScale(2f),
-                        id = DirectionId(2)
+                        id = ContinuousDirectionId(2)
                     )
                 },
             )

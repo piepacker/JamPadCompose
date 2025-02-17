@@ -18,7 +18,7 @@ package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import gg.jam.jampadcompose.ids.DirectionId
+import gg.jam.jampadcompose.ids.ContinuousDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.Constants
@@ -27,7 +27,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 data class AnalogPointerHandler(
-    private val directionId: DirectionId,
+    private val directionId: ContinuousDirectionId,
     override val rect: Rect,
     private val analogPressId: KeyId?,
 ) : PointerHandler {
@@ -55,7 +55,7 @@ data class AnalogPointerHandler(
                 val deltaPosition = (currentDragGesture.position - startDragGesture.position)
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
                 Result(
-                    inputState.setDirection(directionId, offsetValue),
+                    inputState.setContinuousDirection(directionId, offsetValue),
                     startDragGesture,
                 )
             }
@@ -79,7 +79,7 @@ data class AnalogPointerHandler(
         direction: Offset,
         pressed: Boolean,
     ): InputState {
-        var result = inputState.setDirection(directionId, direction)
+        var result = inputState.setContinuousDirection(directionId, direction)
 
         if (analogPressId != null) {
             result = result.setDigitalKey(analogPressId, pressed)

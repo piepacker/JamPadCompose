@@ -23,16 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import gg.jam.jampadcompose.ids.DirectionId
 import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.handlers.CrossPointerHandler
+import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.ui.DefaultControlBackground
 import gg.jam.jampadcompose.ui.DefaultCrossForeground
 
 @Composable
 fun JamPadScope.ControlCross(
     modifier: Modifier = Modifier,
-    id: DirectionId,
+    id: DiscreteDirectionId,
     background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Offset) -> Unit = { DefaultCrossForeground(direction = it) },
 ) {
@@ -43,6 +43,6 @@ fun JamPadScope.ControlCross(
                 .onGloballyPositioned { registerHandler(CrossPointerHandler(id, it.boundsInRoot())) },
     ) {
         background()
-        foreground(inputState.value.getDirection(id))
+        foreground(inputState.value.getDiscreteDirection(id))
     }
 }

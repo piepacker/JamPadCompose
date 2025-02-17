@@ -17,7 +17,8 @@
 package gg.jam.jampadcompose.inputstate
 
 import androidx.compose.ui.geometry.Offset
-import gg.jam.jampadcompose.ids.DirectionId
+import gg.jam.jampadcompose.ids.ContinuousDirectionId
+import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.PersistentSet
@@ -44,8 +45,8 @@ data class InputState(
         return digitalKeys.contains(digitalId.value)
     }
 
-    fun setDirection(
-        continuousDirectionId: DirectionId,
+    fun setContinuousDirection(
+        continuousDirectionId: ContinuousDirectionId,
         offset: Offset,
     ): InputState {
         return if (offset == Offset.Unspecified) {
@@ -55,10 +56,28 @@ data class InputState(
         }
     }
 
-    fun getDirection(
-        continuousDirectionId: DirectionId,
+    fun getContinuousDirection(
+        continuousDirectionId: ContinuousDirectionId,
         default: Offset = Offset.Unspecified,
     ): Offset {
         return continuousDirections.getOrElse(continuousDirectionId.value) { default }
+    }
+
+    fun setDiscreteDirection(
+        discreteDirectionId: DiscreteDirectionId,
+        offset: Offset,
+    ): InputState {
+        return if (offset == Offset.Unspecified) {
+            copy(discreteDirections = discreteDirections.remove(discreteDirectionId.value))
+        } else {
+            copy(discreteDirections = discreteDirections.put(discreteDirectionId.value, offset))
+        }
+    }
+
+    fun getDiscreteDirection(
+        discreteDirectionId: DiscreteDirectionId,
+        default: Offset = Offset.Unspecified,
+    ): Offset {
+        return discreteDirections.getOrElse(discreteDirectionId.value) { default }
     }
 }
