@@ -36,7 +36,11 @@ import gg.jam.jampadcompose.ids.ControlId
 import gg.jam.jampadcompose.inputevents.InputEvent
 import gg.jam.jampadcompose.inputevents.InputEventsGenerator
 import gg.jam.jampadcompose.inputstate.InputState
+import gg.jam.jampadcompose.utils.AsyncLaunchedEffect
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
 @Composable
 fun JamPad(
     modifier: Modifier = Modifier,
@@ -103,7 +107,7 @@ fun JamPad(
         }
     }
 
-    LaunchedEffect(inputState) {
+    AsyncLaunchedEffect("Haptics", inputState) {
         inputHapticGenerator.onInputStateChanged(inputState)
     }
 }
