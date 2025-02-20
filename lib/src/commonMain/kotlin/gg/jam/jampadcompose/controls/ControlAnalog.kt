@@ -22,17 +22,20 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import gg.jam.jampadcompose.ids.ContinuousDirectionId
 import gg.jam.jampadcompose.JamPadScope
 import gg.jam.jampadcompose.handlers.AnalogPointerHandler
+import gg.jam.jampadcompose.ids.ContinuousDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
+import gg.jam.jampadcompose.utils.ifUnspecified
 
 @Composable
 fun JamPadScope.ControlAnalog(
@@ -44,7 +47,12 @@ fun JamPadScope.ControlAnalog(
         DefaultButtonForeground(pressed = it, scale = 1f)
     },
 ) {
-    val position = inputState.value.getContinuousDirection(id, Offset.Zero)
+    val positionState = remember {
+        derivedStateOf { inputState.value.getContinuousDirection(id) }
+    }
+
+    val position = positionState.value
+    val safePosition = position.ifUnspecified { Offset.Zero }
 
     BoxWithConstraints(
         modifier =
@@ -65,9 +73,9 @@ fun JamPadScope.ControlAnalog(
             modifier =
                 Modifier
                     .fillMaxSize(0.50f)
-                    .offset(maxWidth * position.x * 0.25f, maxHeight * position.y * 0.25f),
+                    .offset(maxWidth * safePosition.x * 0.25f, maxHeight * safePosition.y * 0.25f),
         ) {
-            foreground(inputState.value.getContinuousDirection(id) != Offset.Unspecified)
+            foreground(position != Offset.Unspecified)
         }
     }
 }
