@@ -19,6 +19,8 @@ package gg.jam.jampadcompose.controls
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -35,6 +37,10 @@ fun JamPadScope.ControlButton(
     background: @Composable (Boolean) -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Boolean) -> Unit = { DefaultButtonForeground(pressed = it) },
 ) {
+    val pressedState = remember {
+        derivedStateOf { inputState.value.getDigitalKey(id) }
+    }
+
     Box(
         modifier =
             modifier
@@ -43,7 +49,7 @@ fun JamPadScope.ControlButton(
                     registerHandler(ButtonPointerHandler(id, it.boundsInRoot()))
                 },
     ) {
-        val pressed = inputState.value.getDigitalKey(id)
+        val pressed = pressedState.value
         background(pressed)
         foreground(pressed)
     }
