@@ -18,7 +18,7 @@ package gg.jam.jampadcompose.arrangements
 
 import androidx.compose.ui.geometry.Offset
 
-internal data class GravityPoint(
+data class GravityPoint(
     val position: Offset,
     val strength: Float,
     val keys: Set<Int>,
