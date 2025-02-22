@@ -55,24 +55,49 @@ fun JamPadScope.ControlFaceButtons(
         DefaultCompositeForeground(pressed = pressed)
     },
 ) {
-    val primaryArrangement = rememberPrimaryArrangement(ids, sockets, faceButtonsLayout, rotationInDegrees)
+    val primaryArrangement =
+        rememberPrimaryArrangement(ids, sockets, faceButtonsLayout, rotationInDegrees)
+
     val compositeArrangement =
         rememberCompositeArrangement(includeComposite, ids, sockets, rotationInDegrees)
 
+    ControlFaceButtons(
+        modifier = modifier,
+        primaryArrangement = primaryArrangement,
+        compositeArrangement = compositeArrangement,
+        background = background,
+        foreground = foreground,
+        foregroundComposite = foregroundComposite,
+    )
+}
+
+@Composable
+fun JamPadScope.ControlFaceButtons(
+    modifier: Modifier = Modifier,
+    primaryArrangement: GravityArrangement,
+    compositeArrangement: GravityArrangement,
+    background: @Composable () -> Unit = { DefaultControlBackground() },
+    foreground: @Composable (KeyId, Boolean) -> Unit = { _, pressed ->
+        DefaultButtonForeground(pressed = pressed)
+    },
+    foregroundComposite: @Composable (Boolean) -> Unit = { pressed ->
+        DefaultCompositeForeground(pressed = pressed)
+    },
+) {
     Box(
         modifier =
-            modifier
-                .aspectRatio(1f)
-                .onGloballyPositioned {
-                    registerHandler(
-                        FaceButtonsPointerHandler(
-                            listOf(ids, faceButtonsLayout, rotationInDegrees, sockets).hashCode(),
-                            it.boundsInRoot(),
-                            primaryArrangement,
-                            compositeArrangement,
-                        ),
-                    )
-                },
+        modifier
+            .aspectRatio(1f)
+            .onGloballyPositioned {
+                registerHandler(
+                    FaceButtonsPointerHandler(
+                        listOf(primaryArrangement, compositeArrangement).hashCode(),
+                        it.boundsInRoot(),
+                        primaryArrangement,
+                        compositeArrangement,
+                    ),
+                )
+            },
     ) {
         background()
 
@@ -80,9 +105,14 @@ fun JamPadScope.ControlFaceButtons(
             modifier = Modifier.fillMaxSize(),
             gravityArrangement = primaryArrangement,
         ) {
-            ids.forEach { id ->
-                foreground(id, inputState.value.getDigitalKey(id))
-            }
+            primaryArrangement.getGravityPoints()
+                .flatMap { it.keys }
+                .forEach {
+                    val keyState = remember {
+                        derivedStateOf { inputState.value.getDigitalKey(KeyId(it)) }
+                    }
+                    foreground(KeyId(it), keyState.value)
+                }
         }
 
         GravityArrangementLayout(
