@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package gg.jam.jampadcompose.arrangements
+package gg.jam.jampadcompose.anchors
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.utils.Constants
@@ -24,35 +26,27 @@ import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
-internal class FaceButtonsCircumferenceArrangement(
-    private val ids: List<KeyId>,
-    private val sockets: Int,
-    private val rotationInDegrees: Float,
-) : GravityArrangement() {
-    override fun computeGravityPoints(): List<GravityPoint> {
-        if (sockets <= 1) {
-            return emptyList()
+@Composable
+fun rememberFaceButtonsAnchors(ids: List<KeyId>, rotationInDegrees: Float): List<Anchor> {
+    return remember(ids, rotationInDegrees) {
+        val baseRotation = rotationInDegrees.toRadians()
+        val size = if (ids.size == 1) {
+            0.5f
+        } else {
+            GeometryUtils.computeSizeOfItemsOnCircumference(ids.size)
         }
 
-        val baseRotation = rotationInDegrees.toRadians()
-
-        val primaryGravityPoints =
+        val primaryAnchors =
             ids.mapIndexed { index, id ->
-                val angle = (baseRotation + Constants.PI2 * index / sockets)
-                GravityPoint(
+                val angle = (baseRotation + Constants.PI2 * index / ids.size)
+                Anchor(
                     Offset(cos(angle), sin(angle)),
                     1f,
-                    setOf(id.value),
+                    setOf(KeyId(id.value)),
+                    size,
                 )
             }
 
-        return primaryGravityPoints
-    }
-
-    override fun computeSize(): Float {
-        if (sockets == 1) {
-            return 0.5f
-        }
-        return GeometryUtils.computeSizeOfItemsOnCircumference(sockets)
+        primaryAnchors
     }
 }
