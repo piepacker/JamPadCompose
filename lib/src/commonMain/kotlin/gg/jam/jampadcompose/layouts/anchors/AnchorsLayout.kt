@@ -14,60 +14,56 @@
  * limitations under the License.
  */
 
-package gg.jam.jampadcompose.layouts.gravity
+package gg.jam.jampadcompose.layouts.anchors
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.round
-import gg.jam.jampadcompose.arrangements.GravityArrangement
+import gg.jam.jampadcompose.anchors.Anchor
 import kotlin.math.roundToInt
 
 @Composable
-internal fun GravityArrangementLayout(
+internal fun AnchorsLayout(
     modifier: Modifier = Modifier,
-    gravityArrangement: GravityArrangement,
+    anchors: List<Anchor>,
     content: @Composable () -> Unit,
 ) {
     Layout(
         modifier = modifier,
         content = content,
     ) { measurables, constraints ->
-        val placeableSize =
-            (
-                gravityArrangement.getSize() *
-                    minOf(
-                        constraints.maxHeight,
-                        constraints.maxWidth,
+        val baseSize = minOf(constraints.maxHeight, constraints.maxWidth)
+
+        val placeables = measurables.zip(anchors)
+            .map { (measurable, anchor) ->
+                val measurableConstraints =
+                    constraints.copy(
+                        minWidth = (baseSize * anchor.size).roundToInt(),
+                        maxWidth = (baseSize * anchor.size).roundToInt(),
+                        minHeight = (baseSize * anchor.size).roundToInt(),
+                        maxHeight = (baseSize * anchor.size).roundToInt(),
                     )
-            ).roundToInt()
 
-        val childConstraints =
-            constraints.copy(
-                minWidth = placeableSize,
-                maxWidth = placeableSize,
-                minHeight = placeableSize,
-                maxHeight = placeableSize,
-            )
-
-        val placeables = measurables.map { it.measure(childConstraints) }
-
-        val radius = (minOf(constraints.maxWidth, constraints.maxHeight) - placeableSize) / 2f
+                measurable.measure(measurableConstraints)
+            }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             val center = Offset(constraints.maxWidth / 2f, constraints.maxHeight / 2f)
-            val offsets = gravityArrangement.getGravityPoints().map { it.position }
+            val offsets = anchors.map { it.position }
 
             placeables
                 .zip(offsets)
                 .forEach { (placeable, offset) ->
+                    val radius = (minOf(constraints.maxWidth, constraints.maxHeight) - placeable.width) / 2f
+
                     placeable.place(
                         (
                             center + offset * radius -
                                 Offset(
-                                    placeableSize / 2f,
-                                    placeableSize / 2f,
+                                    placeable.width / 2f,
+                                    placeable.width / 2f,
                                 )
                         ).round(),
                     )

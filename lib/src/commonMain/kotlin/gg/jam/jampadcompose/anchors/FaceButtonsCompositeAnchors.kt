@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package gg.jam.jampadcompose.arrangements
+package gg.jam.jampadcompose.anchors
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.utils.Constants
@@ -23,42 +25,27 @@ import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
-internal class FaceButtonsCompositeArrangement(
-    private val ids: List<KeyId>,
-    private val sockets: Int,
-    private val rotationInDegrees: Float,
-) : GravityArrangement() {
-    override fun computeGravityPoints(): List<GravityPoint> {
-        if (sockets <= 1) {
-            return emptyList()
-        }
-
+@Composable
+fun rememberFaceButtonCompositeAnchors(ids: List<KeyId>, rotationInDegrees: Float): List<Anchor> {
+    return remember(ids, rotationInDegrees) {
         val baseRotation = rotationInDegrees.toRadians()
 
-        val circleBack =
-            if (sockets == ids.size) {
-                ids.take(1)
-            } else {
-                emptyList()
-            }
+        val circleBack = ids.take(1)
 
-        val compositeGravityPoints =
+        val compositeAnchors =
             (ids + circleBack)
                 .zipWithNext()
                 .mapIndexed { index, (prev, next) ->
                     val radius = 0.9f
-                    val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / sockets)
-                    GravityPoint(
+                    val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / ids.size)
+                    Anchor(
                         Offset(cos(angle), sin(angle)) * radius,
                         0.25f,
-                        setOf(prev.value, next.value),
+                        setOf(KeyId(prev.value), KeyId(next.value)),
+                        0.1f,
                     )
                 }
 
-        return compositeGravityPoints
-    }
-
-    override fun computeSize(): Float {
-        return 0.1f
+        compositeAnchors
     }
 }

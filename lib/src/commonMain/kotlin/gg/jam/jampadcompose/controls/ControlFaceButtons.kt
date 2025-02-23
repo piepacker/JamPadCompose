@@ -26,15 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.JamPadScope
-import gg.jam.jampadcompose.arrangements.EmptyArrangement
-import gg.jam.jampadcompose.arrangements.FaceButtonsCircleArrangement
-import gg.jam.jampadcompose.arrangements.FaceButtonsCircumferenceArrangement
-import gg.jam.jampadcompose.arrangements.FaceButtonsCompositeArrangement
-import gg.jam.jampadcompose.arrangements.GravityArrangement
-import gg.jam.jampadcompose.config.FaceButtonsLayout
+import gg.jam.jampadcompose.anchors.Anchor
+import gg.jam.jampadcompose.anchors.rememberFaceButtonCompositeAnchors
+import gg.jam.jampadcompose.anchors.rememberFaceButtonsAnchors
 import gg.jam.jampadcompose.handlers.FaceButtonsPointerHandler
 import gg.jam.jampadcompose.ids.KeyId
-import gg.jam.jampadcompose.layouts.gravity.GravityArrangementLayout
+import gg.jam.jampadcompose.layouts.anchors.AnchorsLayout
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultCompositeForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
@@ -44,8 +41,6 @@ fun JamPadScope.ControlFaceButtons(
     modifier: Modifier = Modifier,
     rotationInDegrees: Float = 0f,
     ids: List<KeyId>,
-    sockets: Int = ids.size,
-    faceButtonsLayout: FaceButtonsLayout = FaceButtonsLayout.CIRCUMFERENCE,
     includeComposite: Boolean = true,
     background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (KeyId, Boolean) -> Unit = { _, pressed ->
@@ -55,16 +50,17 @@ fun JamPadScope.ControlFaceButtons(
         DefaultCompositeForeground(pressed = pressed)
     },
 ) {
-    val primaryArrangement =
-        rememberPrimaryArrangement(ids, sockets, faceButtonsLayout, rotationInDegrees)
-
-    val compositeArrangement =
-        rememberCompositeArrangement(includeComposite, ids, sockets, rotationInDegrees)
+    val mainAnchors = rememberFaceButtonsAnchors(ids, rotationInDegrees)
+    val compositeAnchors = if (includeComposite) {
+        rememberFaceButtonCompositeAnchors(ids, rotationInDegrees)
+    } else {
+        emptyList()
+    }
 
     ControlFaceButtons(
         modifier = modifier,
-        primaryArrangement = primaryArrangement,
-        compositeArrangement = compositeArrangement,
+        mainAnchors = mainAnchors,
+        compositeAnchors = compositeAnchors,
         background = background,
         foreground = foreground,
         foregroundComposite = foregroundComposite,
@@ -74,8 +70,8 @@ fun JamPadScope.ControlFaceButtons(
 @Composable
 fun JamPadScope.ControlFaceButtons(
     modifier: Modifier = Modifier,
-    primaryArrangement: GravityArrangement,
-    compositeArrangement: GravityArrangement,
+    mainAnchors: List<Anchor>,
+    compositeAnchors: List<Anchor>,
     background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (KeyId, Boolean) -> Unit = { _, pressed ->
         DefaultButtonForeground(pressed = pressed)
@@ -86,82 +82,39 @@ fun JamPadScope.ControlFaceButtons(
 ) {
     Box(
         modifier =
-        modifier
-            .aspectRatio(1f)
-            .onGloballyPositioned {
-                registerHandler(
-                    FaceButtonsPointerHandler(
-                        listOf(primaryArrangement, compositeArrangement).hashCode(),
-                        it.boundsInRoot(),
-                        primaryArrangement,
-                        compositeArrangement,
-                    ),
-                )
-            },
+            modifier
+                .aspectRatio(1f)
+                .onGloballyPositioned {
+                    val anchors = mainAnchors + compositeAnchors
+                    registerHandler(FaceButtonsPointerHandler(anchors, it.boundsInRoot()))
+                },
     ) {
         background()
 
-        GravityArrangementLayout(
+        AnchorsLayout(
             modifier = Modifier.fillMaxSize(),
-            gravityArrangement = primaryArrangement,
+            anchors = mainAnchors,
         ) {
-            primaryArrangement.getGravityPoints()
+            mainAnchors
                 .flatMap { it.keys }
                 .forEach {
                     val keyState = remember {
-                        derivedStateOf { inputState.value.getDigitalKey(KeyId(it)) }
+                        derivedStateOf { inputState.value.getDigitalKey(it) }
                     }
-                    foreground(KeyId(it), keyState.value)
+                    foreground(it, keyState.value)
                 }
         }
 
-        GravityArrangementLayout(
+        AnchorsLayout(
             modifier = Modifier.fillMaxSize(),
-            gravityArrangement = compositeArrangement,
+            anchors = compositeAnchors,
         ) {
-            compositeArrangement.getGravityPoints().forEach { point ->
+            compositeAnchors.forEach { point ->
                 val compositeState = remember {
-                    derivedStateOf { point.keys.all { inputState.value.getDigitalKey(KeyId(it)) } }
+                    derivedStateOf { point.keys.all { inputState.value.getDigitalKey(it) } }
                 }
                 foregroundComposite(compositeState.value)
             }
-        }
-    }
-}
-
-@Composable
-private fun rememberCompositeArrangement(
-    includeCompositeButtons: Boolean,
-    ids: List<KeyId>,
-    sockets: Int,
-    rotationInDegrees: Float,
-): GravityArrangement {
-    return remember(ids, includeCompositeButtons, rotationInDegrees) {
-        if (includeCompositeButtons) {
-            FaceButtonsCompositeArrangement(ids, sockets, rotationInDegrees)
-        } else {
-            EmptyArrangement
-        }
-    }
-}
-
-@Composable
-private fun rememberPrimaryArrangement(
-    ids: List<KeyId>,
-    sockets: Int,
-    faceButtonsLayout: FaceButtonsLayout,
-    rotationInDegrees: Float,
-): GravityArrangement {
-    return remember(ids, faceButtonsLayout, rotationInDegrees) {
-        when (faceButtonsLayout) {
-            FaceButtonsLayout.CIRCUMFERENCE ->
-                FaceButtonsCircumferenceArrangement(
-                    ids,
-                    sockets,
-                    rotationInDegrees,
-                )
-
-            FaceButtonsLayout.CIRCLE -> FaceButtonsCircleArrangement(ids, sockets, rotationInDegrees)
         }
     }
 }

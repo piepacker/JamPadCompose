@@ -23,13 +23,12 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import gg.jam.jampadcompose.arrangements.CrossCompositeArrangement
+import gg.jam.jampadcompose.anchors.rememberCrossCompositeAnchors
 import gg.jam.jampadcompose.layouts.circular.CircularLayout
-import gg.jam.jampadcompose.layouts.gravity.GravityArrangementLayout
+import gg.jam.jampadcompose.layouts.anchors.AnchorsLayout
 import gg.jam.jampadcompose.utils.ifUnspecified
 
 @Composable
@@ -77,11 +76,11 @@ fun DefaultCrossForeground(
         topDial(isTop)
     }
 
-    val compositeArrangement = remember { CrossCompositeArrangement(0f) }
+    val compositeAnchors = rememberCrossCompositeAnchors()
 
-    GravityArrangementLayout(
+    AnchorsLayout(
         modifier = Modifier.fillMaxSize(),
-        gravityArrangement = compositeArrangement,
+        anchors = compositeAnchors,
     ) {
         foregroundComposite(isBottom && isRight)
         foregroundComposite(isBottom && isLeft)

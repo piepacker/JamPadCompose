@@ -14,34 +14,31 @@
  * limitations under the License.
  */
 
-package gg.jam.jampadcompose.arrangements
+package gg.jam.jampadcompose.anchors
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
 import gg.jam.jampadcompose.utils.Constants
-import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
-internal class CrossCompositeArrangement(private val rotationInDegrees: Float, ) : GravityArrangement() {
-    override fun computeGravityPoints(): List<GravityPoint> {
-        val baseRotation = rotationInDegrees.toRadians()
-
-        val compositeGravityPoints =
-            (0 .. 4)
+@Composable
+internal fun rememberCrossCompositeAnchors(): List<Anchor> {
+    return remember {
+        val compositeAnchors =
+            (0..4)
                 .map { index ->
                     val radius = 0.9f
-                    val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / 4)
-                    GravityPoint(
+                    val angle = (Constants.PI2 * (index + 0.5f) / 4)
+                    Anchor(
                         Offset(cos(angle), sin(angle)) * radius,
                         0.25f,
-                        setOf(index),
+                        setOf(),
+                        0.1f,
                     )
                 }
 
-        return compositeGravityPoints
-    }
-
-    override fun computeSize(): Float {
-        return 0.1f
+        compositeAnchors
     }
 }

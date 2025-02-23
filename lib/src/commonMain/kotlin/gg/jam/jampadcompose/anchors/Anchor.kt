@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package gg.jam.jampadcompose.arrangements
+package gg.jam.jampadcompose.anchors
 
 import androidx.compose.ui.geometry.Offset
+import gg.jam.jampadcompose.ids.KeyId
 
-data class GravityPoint(
+data class Anchor(
     val position: Offset,
     val strength: Float,
-    val keys: Set<Int>,
+    val keys: Set<KeyId>,
+    val size: Float,
 ) {
     fun distance(point: Offset): Float {
         return (point - position).getDistanceSquared() / strength
