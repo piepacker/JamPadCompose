@@ -29,12 +29,11 @@ import kotlin.math.sin
 @Composable
 fun rememberFaceButtonsAnchors(ids: List<KeyId>, rotationInDegrees: Float): List<Anchor> {
     return remember(ids, rotationInDegrees) {
-        val baseRotation = rotationInDegrees.toRadians()
-        val size = if (ids.size == 1) {
-            0.5f
-        } else {
-            GeometryUtils.computeSizeOfItemsOnCircumference(ids.size)
+        if (ids.size == 1) {
+            return@remember listOf(Anchor(Offset.Zero, 1f, setOf(ids.first()), 0.5f))
         }
+        val baseRotation = rotationInDegrees.toRadians()
+        val size = GeometryUtils.computeSizeOfItemsOnCircumference(ids.size)
 
         val primaryAnchors =
             ids.mapIndexed { index, id ->
