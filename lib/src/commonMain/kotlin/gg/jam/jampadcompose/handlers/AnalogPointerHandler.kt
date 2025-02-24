@@ -52,7 +52,10 @@ data class AnalogPointerHandler(
                 )
             }
             startDragGesture != null && currentDragGesture != null -> {
-                val deltaPosition = (currentDragGesture.position - startDragGesture.position)
+                val deltaPosition = Offset(
+                    currentDragGesture.position.x - startDragGesture.position.x,
+                    startDragGesture.position.y - currentDragGesture.position.y,
+                )
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
                 Result(
                     inputState.setContinuousDirection(directionId, offsetValue),

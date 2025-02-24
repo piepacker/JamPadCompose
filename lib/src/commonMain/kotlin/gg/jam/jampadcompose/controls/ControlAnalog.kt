@@ -73,7 +73,7 @@ fun JamPadScope.ControlAnalog(
             modifier =
                 Modifier
                     .fillMaxSize(0.50f)
-                    .offset(maxWidth * safePosition.x * 0.25f, maxHeight * safePosition.y * 0.25f),
+                    .offset(maxWidth * safePosition.x * 0.25f, -maxHeight * safePosition.y * 0.25f),
         ) {
             foreground(position != Offset.Unspecified)
         }
