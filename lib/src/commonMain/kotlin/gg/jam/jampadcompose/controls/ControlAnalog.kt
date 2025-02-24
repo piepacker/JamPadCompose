@@ -35,6 +35,7 @@ import gg.jam.jampadcompose.ids.ContinuousDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
+import gg.jam.jampadcompose.utils.GeometryUtils
 import gg.jam.jampadcompose.utils.ifUnspecified
 
 @Composable
@@ -52,7 +53,9 @@ fun JamPadScope.ControlAnalog(
     }
 
     val position = positionState.value
-    val safePosition = position.ifUnspecified { Offset.Zero }
+    val safePosition = GeometryUtils.mapSquareToCircle(
+        position.ifUnspecified { Offset.Zero }
+    )
 
     BoxWithConstraints(
         modifier =
