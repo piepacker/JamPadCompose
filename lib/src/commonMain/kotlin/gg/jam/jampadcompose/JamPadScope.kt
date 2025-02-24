@@ -19,6 +19,7 @@ package gg.jam.jampadcompose
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.handlers.Pointer
 import gg.jam.jampadcompose.handlers.PointerHandler
 import gg.jam.jampadcompose.ids.ControlId
@@ -33,15 +34,24 @@ class JamPadScope {
     private data class HandlerState(
         val pointerHandler: PointerHandler,
         var startDragGesture: Pointer? = null,
+        var rect: Rect = Rect.Zero,
         val data: Any? = null
     )
 
     internal val inputState = mutableStateOf(InputState())
 
-    private val handlers = mutableMapOf<String, HandlerState>()
+    private val handlers = mutableMapOf<PointerHandler, HandlerState>()
 
     internal fun registerHandler(pointerHandler: PointerHandler, data: Any? = null) {
-        handlers[pointerHandler.handlerId()] = HandlerState(pointerHandler, null, data)
+        handlers[pointerHandler] = HandlerState(pointerHandler, null, Rect.Zero, data)
+    }
+
+    internal fun unregisterHandler(pointerHandler: PointerHandler) {
+        handlers.remove(pointerHandler)
+    }
+
+    internal fun updateHandlerPosition(pointerHandler: PointerHandler, rect: Rect) {
+        handlers[pointerHandler]?.rect = rect
     }
 
     private fun getAllHandlers(): Collection<HandlerState> {
@@ -56,7 +66,7 @@ class JamPadScope {
 
     private fun getHandlerAtPosition(position: Offset): PointerHandler? {
         return handlers.values
-            .firstOrNull { (handler, _) -> handler.rect.contains(position) }
+            .firstOrNull { it.rect.contains(position) }
             ?.pointerHandler
     }
 
@@ -79,7 +89,7 @@ class JamPadScope {
             }
 
         return getAllHandlers()
-            .fold(inputState.value) { state, handler ->
+            .fold(InputState()) { state, handler ->
                 val pointerHandler = handler.pointerHandler
                 val pointers =
                     handlersAssociations.getOrElse(pointerHandler) { emptyList() }
@@ -89,7 +99,7 @@ class JamPadScope {
                         .map {
                             Pointer(
                                 it.pointerId,
-                                it.position.relativeToCenter(pointerHandler.rect),
+                                it.position.relativeToCenter(handler.rect),
                             )
                         }
 

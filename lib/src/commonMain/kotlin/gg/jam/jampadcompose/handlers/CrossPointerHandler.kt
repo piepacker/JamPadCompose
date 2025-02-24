@@ -17,14 +17,10 @@
 package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.inputstate.InputState
 
-data class CrossPointerHandler(
-    private val directionId: DiscreteDirectionId,
-    override val rect: Rect
-) : PointerHandler {
+internal class CrossPointerHandler(private val directionId: DiscreteDirectionId) : PointerHandler {
 
     enum class State(val position: Offset) {
         UP(Offset(0f, 1f)),
@@ -36,8 +32,6 @@ data class CrossPointerHandler(
         DOWN_LEFT(Offset(-1f, -1f)),
         DOWN_RIGHT(Offset(1f, -1f)),
     }
-
-    override val id: Int = directionId.value
 
     override fun handle(
         pointers: List<Pointer>,

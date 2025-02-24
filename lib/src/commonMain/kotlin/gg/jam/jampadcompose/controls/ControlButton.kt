@@ -19,6 +19,7 @@ package gg.jam.jampadcompose.controls
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.JamPadScope
+import gg.jam.jampadcompose.handlers.AnalogPointerHandler
 import gg.jam.jampadcompose.handlers.ButtonPointerHandler
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
@@ -41,13 +43,19 @@ fun JamPadScope.ControlButton(
         derivedStateOf { inputState.value.getDigitalKey(id) }
     }
 
+    val handler = remember { ButtonPointerHandler(id) }
+    DisposableEffect(Unit) {
+        registerHandler(handler)
+        onDispose {
+            unregisterHandler(handler)
+        }
+    }
+
     Box(
         modifier =
             modifier
                 .fillMaxSize()
-                .onGloballyPositioned {
-                    registerHandler(ButtonPointerHandler(id, it.boundsInRoot()))
-                },
+                .onGloballyPositioned { updateHandlerPosition(handler, it.boundsInRoot()) },
     ) {
         val pressed = pressedState.value
         background(pressed)

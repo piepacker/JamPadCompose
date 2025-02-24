@@ -19,6 +19,7 @@ package gg.jam.jampadcompose.controls
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -42,11 +43,19 @@ fun JamPadScope.ControlCross(
         derivedStateOf { inputState.value.getDiscreteDirection(id) }
     }
 
+    val handler = remember { CrossPointerHandler(id) }
+    DisposableEffect(Unit) {
+        registerHandler(handler)
+        onDispose {
+            unregisterHandler(handler)
+        }
+    }
+
     Box(
         modifier =
             modifier
                 .aspectRatio(1f)
-                .onGloballyPositioned { registerHandler(CrossPointerHandler(id, it.boundsInRoot())) },
+                .onGloballyPositioned { updateHandlerPosition(handler, it.boundsInRoot()) },
     ) {
         background()
         foreground(positionState.value)

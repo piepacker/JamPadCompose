@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Jam.gg 2024.
+ * Copyright (c) Jam.gg 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package gg.jam.jampadcompose.handlers
+package gg.jam.jampadcompose.inputstate
 
 import gg.jam.jampadcompose.ids.KeyId
-import gg.jam.jampadcompose.inputstate.InputState
-import gg.jam.jampadcompose.inputstate.setDigitalKeyIfPressed
 
-internal class ButtonPointerHandler(private val buttonId: KeyId) : PointerHandler {
-    override fun handle(
-        pointers: List<Pointer>,
-        inputState: InputState,
-        startDragGesture: Pointer?,
-        data: Any?,
-    ): Result {
-        return Result(inputState.setDigitalKeyIfPressed(buttonId, pointers.isNotEmpty()))
+// It's possible that multiple buttons set the same key so we don't want to override their behavior.
+internal fun InputState.setDigitalKeyIfPressed(digitalId: KeyId, value: Boolean): InputState {
+    if (value) {
+        return setDigitalKey(digitalId, true)
     }
+    return this
 }
