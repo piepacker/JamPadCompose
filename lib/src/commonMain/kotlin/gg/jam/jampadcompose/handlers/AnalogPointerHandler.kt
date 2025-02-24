@@ -22,6 +22,7 @@ import gg.jam.jampadcompose.ids.ContinuousDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.utils.Constants
+import gg.jam.jampadcompose.utils.GeometryUtils
 import gg.jam.jampadcompose.utils.coerceIn
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -58,7 +59,7 @@ data class AnalogPointerHandler(
                 )
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
                 Result(
-                    inputState.setContinuousDirection(directionId, offsetValue),
+                    inputState.setContinuousDirection(directionId, GeometryUtils.mapCircleToSquare(offsetValue)),
                     startDragGesture,
                 )
             }
