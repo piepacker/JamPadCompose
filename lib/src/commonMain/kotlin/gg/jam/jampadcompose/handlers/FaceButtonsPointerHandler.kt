@@ -16,19 +16,11 @@
 
 package gg.jam.jampadcompose.handlers
 
-import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.anchors.Anchor
 import gg.jam.jampadcompose.inputstate.InputState
+import gg.jam.jampadcompose.inputstate.setDigitalKeyIfPressed
 
-internal data class FaceButtonsPointerHandler(
-    private val anchors: List<Anchor>,
-    override val rect: Rect,
-) : PointerHandler {
-
-    override val id: Int = anchors
-        .flatMap { it.keys }
-        .hashCode()
-
+internal class FaceButtonsPointerHandler(private val anchors: List<Anchor>) : PointerHandler {
     private val keys =
         anchors
             .flatMap { it.keys }
@@ -51,7 +43,7 @@ internal data class FaceButtonsPointerHandler(
 
         val finalState =
             keys.fold(inputState) { updatedState, key ->
-                updatedState.setDigitalKey(key, key in pressedKeys)
+                updatedState.setDigitalKeyIfPressed(key, key in pressedKeys)
             }
 
         return Result(finalState)

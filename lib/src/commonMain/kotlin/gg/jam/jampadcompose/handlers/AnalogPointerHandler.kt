@@ -17,25 +17,22 @@
 package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.ids.ContinuousDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
+import gg.jam.jampadcompose.inputstate.setDigitalKeyIfPressed
 import gg.jam.jampadcompose.utils.Constants
 import gg.jam.jampadcompose.utils.GeometryUtils
 import gg.jam.jampadcompose.utils.coerceIn
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
-data class AnalogPointerHandler(
+internal class AnalogPointerHandler(
     private val directionId: ContinuousDirectionId,
-    override val rect: Rect,
     private val analogPressId: KeyId?,
 ) : PointerHandler {
 
     data class Data(var lastDownEvent: Instant = Instant.DISTANT_PAST)
-
-    override val id: Int = directionId.value
 
     override fun handle(
         pointers: List<Pointer>,
@@ -86,7 +83,7 @@ data class AnalogPointerHandler(
         var result = inputState.setContinuousDirection(directionId, direction)
 
         if (analogPressId != null) {
-            result = result.setDigitalKey(analogPressId, pressed)
+            result = result.setDigitalKeyIfPressed(analogPressId, pressed)
         }
 
         return result

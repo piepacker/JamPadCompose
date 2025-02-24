@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -80,14 +81,20 @@ fun JamPadScope.ControlFaceButtons(
         DefaultCompositeForeground(pressed = pressed)
     },
 ) {
+    val anchors = mainAnchors + compositeAnchors
+    val handler = remember(anchors) { FaceButtonsPointerHandler(anchors) }
+    DisposableEffect(Unit) {
+        registerHandler(handler)
+        onDispose {
+            unregisterHandler(handler)
+        }
+    }
+
     Box(
         modifier =
             modifier
                 .aspectRatio(1f)
-                .onGloballyPositioned {
-                    val anchors = mainAnchors + compositeAnchors
-                    registerHandler(FaceButtonsPointerHandler(anchors, it.boundsInRoot()))
-                },
+                .onGloballyPositioned { updateHandlerPosition(handler, it.boundsInRoot()) },
     ) {
         background()
 

@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,16 +58,19 @@ fun JamPadScope.ControlAnalog(
         position.ifUnspecified { Offset.Zero }
     )
 
+    val handler = remember { AnalogPointerHandler(id, analogPressId) }
+    DisposableEffect(Unit) {
+        registerHandler(handler, AnalogPointerHandler.Data())
+        onDispose {
+            unregisterHandler(handler)
+        }
+    }
+
     BoxWithConstraints(
         modifier =
             modifier
                 .aspectRatio(1f)
-                .onGloballyPositioned {
-                    registerHandler(
-                        AnalogPointerHandler(id, it.boundsInRoot(), analogPressId),
-                        AnalogPointerHandler.Data()
-                    )
-                },
+                .onGloballyPositioned { updateHandlerPosition(handler, it.boundsInRoot()) },
         contentAlignment = Alignment.Center,
     ) {
         Box(modifier = Modifier.fillMaxSize(0.75f)) {
