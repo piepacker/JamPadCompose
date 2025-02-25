@@ -62,6 +62,7 @@ fun DefaultCrossForeground(
     foregroundComposite: @Composable (Boolean) -> Unit = { pressed ->
         DefaultCompositeForeground(pressed = pressed)
     },
+    allowDiagonals: Boolean = true,
 ) {
     val adjustedDirection = direction.ifUnspecified { Offset.Zero }
     val isTop = adjustedDirection.y > 0.5f
@@ -78,13 +79,15 @@ fun DefaultCrossForeground(
 
     val compositeAnchors = rememberCrossCompositeAnchors()
 
-    AnchorsLayout(
-        modifier = Modifier.fillMaxSize(),
-        anchors = compositeAnchors,
-    ) {
-        foregroundComposite(isBottom && isRight)
-        foregroundComposite(isBottom && isLeft)
-        foregroundComposite(isTop && isLeft)
-        foregroundComposite(isTop && isRight)
+    if (allowDiagonals) {
+        AnchorsLayout(
+            modifier = Modifier.fillMaxSize(),
+            anchors = compositeAnchors,
+        ) {
+            foregroundComposite(isBottom && isRight)
+            foregroundComposite(isBottom && isLeft)
+            foregroundComposite(isTop && isLeft)
+            foregroundComposite(isTop && isRight)
+        }
     }
 }
