@@ -36,14 +36,17 @@ import gg.jam.jampadcompose.ui.DefaultCrossForeground
 fun JamPadScope.ControlCross(
     modifier: Modifier = Modifier,
     id: DiscreteDirectionId,
+    allowDiagonals: Boolean = true,
     background: @Composable () -> Unit = { DefaultControlBackground() },
-    foreground: @Composable (Offset) -> Unit = { DefaultCrossForeground(direction = it) },
+    foreground: @Composable (Offset) -> Unit = {
+        DefaultCrossForeground(direction = it, allowDiagonals = allowDiagonals)
+    },
 ) {
     val positionState = remember {
         derivedStateOf { inputState.value.getDiscreteDirection(id) }
     }
 
-    val handler = remember { CrossPointerHandler(id) }
+    val handler = remember { CrossPointerHandler(id, allowDiagonals) }
     DisposableEffect(Unit) {
         registerHandler(handler)
         onDispose {

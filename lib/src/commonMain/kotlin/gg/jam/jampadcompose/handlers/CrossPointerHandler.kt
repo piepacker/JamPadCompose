@@ -20,17 +20,30 @@ import androidx.compose.ui.geometry.Offset
 import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.inputstate.InputState
 
-internal class CrossPointerHandler(private val directionId: DiscreteDirectionId) : PointerHandler {
+internal class CrossPointerHandler(
+    private val directionId: DiscreteDirectionId,
+    allowDiagonals: Boolean,
+) : PointerHandler {
 
-    enum class State(val position: Offset) {
-        UP(Offset(0f, 1f)),
-        DOWN(Offset(0f, -1f)),
-        LEFT(Offset(-1f, 0f)),
-        RIGHT(Offset(1f, 0f)),
-        UP_LEFT(Offset(-1f, 1f)),
-        UP_RIGHT(Offset(1f, 1f)),
-        DOWN_LEFT(Offset(-1f, -1f)),
-        DOWN_RIGHT(Offset(1f, -1f)),
+    enum class State(val position: Offset, val isDiagonal: Boolean) {
+        UP(Offset(0f, 1f), false),
+        DOWN(Offset(0f, -1f), false),
+        LEFT(Offset(-1f, 0f), false),
+        RIGHT(Offset(1f, 0f), false),
+        UP_LEFT(Offset(-1f, 1f), true),
+        UP_RIGHT(Offset(1f, 1f), true),
+        DOWN_LEFT(Offset(-1f, -1f), true),
+        DOWN_RIGHT(Offset(1f, -1f), true),
+    }
+
+    private val allStates = buildList {
+        val orthogonalDirections = State.entries.filter { !it.isDiagonal }
+        addAll(orthogonalDirections)
+
+        if (allowDiagonals) {
+            val diagonalDirections = State.entries.filter { it.isDiagonal }
+            addAll(diagonalDirections)
+        }
     }
 
     override fun handle(
@@ -70,7 +83,7 @@ internal class CrossPointerHandler(private val directionId: DiscreteDirectionId)
     }
 
     private fun findCloserState(pointer: Pointer): Offset {
-        return State.entries
+        return allStates
             .minBy { (pointer.position - it.position).getDistanceSquared() }
             .position
             .let { it.copy(y = -it.y) }
