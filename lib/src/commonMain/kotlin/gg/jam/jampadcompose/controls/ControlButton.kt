@@ -44,7 +44,7 @@ fun JamPadScope.ControlButton(
     }
 
     val handler = remember { ButtonPointerHandler(id) }
-    DisposableEffect(Unit) {
+    DisposableEffect(handler) {
         registerHandler(handler)
         onDispose {
             unregisterHandler(handler)

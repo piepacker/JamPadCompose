@@ -46,8 +46,11 @@ fun JamPadScope.ControlCross(
         derivedStateOf { inputState.value.getDiscreteDirection(id) }
     }
 
-    val handler = remember { CrossPointerHandler(id, allowDiagonals) }
-    DisposableEffect(Unit) {
+    val handler = remember(id, allowDiagonals) {
+        CrossPointerHandler(id, allowDiagonals)
+    }
+
+    DisposableEffect(handler) {
         registerHandler(handler)
         onDispose {
             unregisterHandler(handler)
