@@ -83,7 +83,7 @@ fun JamPadScope.ControlFaceButtons(
 ) {
     val anchors = mainAnchors + compositeAnchors
     val handler = remember(anchors) { FaceButtonsPointerHandler(anchors) }
-    DisposableEffect(Unit) {
+    DisposableEffect(handler) {
         registerHandler(handler)
         onDispose {
             unregisterHandler(handler)

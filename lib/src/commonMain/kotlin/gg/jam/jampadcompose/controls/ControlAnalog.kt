@@ -59,7 +59,7 @@ fun JamPadScope.ControlAnalog(
     )
 
     val handler = remember { AnalogPointerHandler(id, analogPressId) }
-    DisposableEffect(Unit) {
+    DisposableEffect(handler) {
         registerHandler(handler, AnalogPointerHandler.Data())
         onDispose {
             unregisterHandler(handler)
