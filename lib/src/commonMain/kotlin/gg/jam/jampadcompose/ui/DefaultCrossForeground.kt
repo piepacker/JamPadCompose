@@ -28,7 +28,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import gg.jam.jampadcompose.anchors.rememberCrossCompositeAnchors
 import gg.jam.jampadcompose.layouts.circular.CircularLayout
-import gg.jam.jampadcompose.layouts.anchors.AnchorsLayout
+import gg.jam.jampadcompose.layouts.anchors.ButtonAnchorsLayout
 import gg.jam.jampadcompose.utils.ifUnspecified
 
 @Composable
@@ -80,9 +80,9 @@ fun DefaultCrossForeground(
     val compositeAnchors = rememberCrossCompositeAnchors()
 
     if (allowDiagonals) {
-        AnchorsLayout(
+        ButtonAnchorsLayout(
             modifier = Modifier.fillMaxSize(),
-            anchors = compositeAnchors,
+            buttonAnchors = compositeAnchors,
         ) {
             foregroundComposite(isBottom && isRight)
             foregroundComposite(isBottom && isLeft)

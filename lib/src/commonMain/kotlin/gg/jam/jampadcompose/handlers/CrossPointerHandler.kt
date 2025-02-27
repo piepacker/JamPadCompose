@@ -17,23 +17,57 @@
 package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Offset
+import gg.jam.jampadcompose.anchors.BaseAnchor
 import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.inputstate.InputState
+import kotlin.math.sqrt
 
 internal class CrossPointerHandler(
     private val directionId: DiscreteDirectionId,
     allowDiagonals: Boolean,
 ) : PointerHandler {
 
-    enum class State(val position: Offset, val isDiagonal: Boolean) {
-        UP(Offset(0f, 1f), false),
-        DOWN(Offset(0f, -1f), false),
-        LEFT(Offset(-1f, 0f), false),
-        RIGHT(Offset(1f, 0f), false),
-        UP_LEFT(Offset(-1f, 1f), true),
-        UP_RIGHT(Offset(1f, 1f), true),
-        DOWN_LEFT(Offset(-1f, -1f), true),
-        DOWN_RIGHT(Offset(1f, -1f), true),
+    enum class State(val position: Offset, val anchor: BaseAnchor, val isDiagonal: Boolean) {
+        UP(
+            Offset(+0f, +1f),
+            BaseAnchor(Offset(+0f, +1f), ORTHOGONAL_DIRECTION_STRENGTH),
+            false
+        ),
+        DOWN(
+            Offset(+0f, -1f),
+            BaseAnchor(Offset(+0f, -1f), ORTHOGONAL_DIRECTION_STRENGTH),
+            false
+        ),
+        LEFT(
+            Offset(-1f, +0f),
+            BaseAnchor(Offset(-1f, +0f), ORTHOGONAL_DIRECTION_STRENGTH),
+            false
+        ),
+        RIGHT(
+            Offset(+1f, +0f),
+            BaseAnchor(Offset(+1f, +0f), ORTHOGONAL_DIRECTION_STRENGTH),
+            false
+        ),
+        UP_LEFT(
+            Offset(-1f, +1f),
+            BaseAnchor(Offset(-DIAGONAL_DISTANCE, +DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
+            true
+        ),
+        UP_RIGHT(
+            Offset(+1f, +1f),
+            BaseAnchor(Offset(+DIAGONAL_DISTANCE, +DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
+            true
+        ),
+        DOWN_LEFT(
+            Offset(-1f, -1f),
+            BaseAnchor(Offset(-DIAGONAL_DISTANCE, -DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
+            true
+        ),
+        DOWN_RIGHT(
+            Offset(+1f, -1f),
+            BaseAnchor(Offset(+DIAGONAL_DISTANCE, -DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
+            true
+        ),
     }
 
     private val allStates = buildList {
@@ -84,8 +118,13 @@ internal class CrossPointerHandler(
 
     private fun findCloserState(pointer: Pointer): Offset {
         return allStates
-            .minBy { (pointer.position - it.position).getDistanceSquared() }
-            .position
-            .let { it.copy(y = -it.y) }
+            .minBy { it.anchor.distance(pointer.position) }
+            .let { it.position.copy(y = -it.position.y) }
+    }
+
+    companion object {
+        private const val ORTHOGONAL_DIRECTION_STRENGTH = 1f
+        private const val DIAGONAL_DIRECTION_STRENGTH = 0.5f
+        private val DIAGONAL_DISTANCE = 0.9f * sqrt(2f) / 2f
     }
 }
