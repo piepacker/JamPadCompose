@@ -24,21 +24,21 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-internal fun rememberCrossCompositeAnchors(): List<Anchor> {
+internal fun rememberCrossCompositeAnchors(): List<ButtonAnchor> {
     return remember {
-        val compositeAnchors =
+        val compositeButtonAnchors =
             (0..4)
                 .map { index ->
                     val radius = 0.9f
                     val angle = (Constants.PI2 * (index + 0.5f) / 4)
-                    Anchor(
+                    ButtonAnchor(
                         Offset(cos(angle), sin(angle)) * radius,
-                        0.25f,
+                        0.5f,
                         setOf(),
                         0.1f,
                     )
                 }
 
-        compositeAnchors
+        compositeButtonAnchors
     }
 }

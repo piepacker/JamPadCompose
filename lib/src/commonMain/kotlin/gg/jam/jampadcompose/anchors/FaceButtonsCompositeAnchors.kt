@@ -26,26 +26,26 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun rememberFaceButtonCompositeAnchors(ids: List<KeyId>, rotationInDegrees: Float): List<Anchor> {
+fun rememberFaceButtonCompositeAnchors(ids: List<KeyId>, rotationInDegrees: Float): List<ButtonAnchor> {
     return remember(ids, rotationInDegrees) {
         val baseRotation = rotationInDegrees.toRadians()
 
         val circleBack = ids.take(1)
 
-        val compositeAnchors =
+        val compositeButtonAnchors =
             (ids + circleBack)
                 .zipWithNext()
                 .mapIndexed { index, (prev, next) ->
                     val radius = 0.9f
                     val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / ids.size)
-                    Anchor(
+                    ButtonAnchor(
                         Offset(cos(angle), sin(angle)) * radius,
-                        0.25f,
+                        0.5f,
                         setOf(KeyId(prev.value), KeyId(next.value)),
                         0.1f,
                     )
                 }
 
-        compositeAnchors
+        compositeButtonAnchors
     }
 }

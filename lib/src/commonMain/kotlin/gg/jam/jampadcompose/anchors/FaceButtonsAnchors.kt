@@ -27,18 +27,20 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun rememberFaceButtonsAnchors(ids: List<KeyId>, rotationInDegrees: Float): List<Anchor> {
+fun rememberFaceButtonsAnchors(ids: List<KeyId>, rotationInDegrees: Float): List<ButtonAnchor> {
     return remember(ids, rotationInDegrees) {
         if (ids.size == 1) {
-            return@remember listOf(Anchor(Offset.Zero, 1f, setOf(ids.first()), 0.5f))
+            return@remember listOf(
+                ButtonAnchor(Offset.Zero, 1f, setOf(ids.first()), 0.5f)
+            )
         }
         val baseRotation = rotationInDegrees.toRadians()
         val size = GeometryUtils.computeSizeOfItemsOnCircumference(ids.size)
 
-        val primaryAnchors =
+        val primaryButtonAnchors =
             ids.mapIndexed { index, id ->
                 val angle = (baseRotation + Constants.PI2 * index / ids.size)
-                Anchor(
+                ButtonAnchor(
                     Offset(cos(angle), sin(angle)),
                     1f,
                     setOf(KeyId(id.value)),
@@ -46,6 +48,6 @@ fun rememberFaceButtonsAnchors(ids: List<KeyId>, rotationInDegrees: Float): List
                 )
             }
 
-        primaryAnchors
+        primaryButtonAnchors
     }
 }

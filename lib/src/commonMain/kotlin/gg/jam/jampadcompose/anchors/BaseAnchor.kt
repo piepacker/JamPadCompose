@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Jam.gg 2024.
+ * Copyright (c) Jam.gg 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,10 @@
 package gg.jam.jampadcompose.anchors
 
 import androidx.compose.ui.geometry.Offset
-import gg.jam.jampadcompose.ids.KeyId
 
-data class Anchor(
+data class BaseAnchor(
     val position: Offset,
     val strength: Float,
-    val keys: Set<KeyId>,
-    val size: Float,
 ) {
     fun distance(point: Offset): Float {
         return (point - position).getDistanceSquared() / strength
