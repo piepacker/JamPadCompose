@@ -54,9 +54,11 @@ fun JamPad(
     val scope = remember { JamPadScope() }
     val rootPosition = remember { mutableStateOf(Offset.Zero) }
 
-    val hapticGenerator = rememberHapticGenerator()
-    val inputHapticGenerator = remember { InputHapticGenerator(hapticGenerator, hapticFeedbackType) }
     val inputEventsGenerator = remember { InputEventsGenerator() }
+    val hapticGenerator = rememberHapticGenerator()
+    val inputHapticGenerator = remember(hapticFeedbackType) {
+        InputHapticGenerator(hapticGenerator, hapticFeedbackType, scope.inputState.value)
+    }
 
     LaunchedEffect(simulatedState.value) {
         scope.inputState.value = scope.handleSimulatedInputEvents(

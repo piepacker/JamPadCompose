@@ -23,8 +23,8 @@ import gg.jam.jampadcompose.inputstate.InputState
 class InputHapticGenerator(
     private val generator: HapticGenerator,
     private val hapticFeedbackType: HapticFeedbackType,
+    private var previousInputState: InputState
 ) {
-    private var previousInputState: InputState? = null
 
     fun onInputStateChanged(current: InputState) {
         if (hapticFeedbackType == HapticFeedbackType.NONE) {
@@ -32,11 +32,6 @@ class InputHapticGenerator(
         }
 
         val previous = previousInputState
-
-        if (previous == null) {
-            previousInputState = current
-            return
-        }
 
         val requestedEffect =
             keyEffect(previous, current)
