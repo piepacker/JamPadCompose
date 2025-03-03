@@ -117,9 +117,17 @@ internal class CrossPointerHandler(
     }
 
     private fun findCloserState(pointer: Pointer): Offset {
+        if (isInDeadZone(pointer)) {
+            return Offset.Zero
+        }
+
         return allStates
             .minBy { it.anchor.distance(pointer.position) }
             .let { it.position.copy(y = -it.position.y) }
+    }
+
+    private fun isInDeadZone(pointer: Pointer): Boolean {
+        return pointer.position.getDistanceSquared() < 0.025
     }
 
     companion object {
