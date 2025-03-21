@@ -32,7 +32,10 @@ internal class AnalogPointerHandler(
     private val analogPressId: KeyId?,
 ) : PointerHandler {
 
-    data class Data(var lastDownEvent: Instant = Instant.DISTANT_PAST)
+    data class Data(
+        var lastDownEvent: Instant = Instant.DISTANT_PAST,
+        var pressed: Boolean = false,
+    )
 
     override fun handle(
         pointers: List<Pointer>,
@@ -40,12 +43,15 @@ internal class AnalogPointerHandler(
         startDragGesture: Pointer?,
         data: Any?,
     ): Result {
+        val analogData = data as Data
+
         val currentDragGesture = pointers.firstOrNull { it.pointerId == startDragGesture?.pointerId }
 
         return when {
             pointers.isEmpty() -> {
+                analogData.pressed = false
                 Result(
-                    updateInputState(inputState, Offset.Unspecified, false),
+                    updateInputState(inputState, Offset.Unspecified, analogData.pressed),
                     null,
                 )
             }
@@ -56,21 +62,18 @@ internal class AnalogPointerHandler(
                 )
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
                 Result(
-                    inputState.setContinuousDirection(directionId, GeometryUtils.mapCircleToSquare(offsetValue)),
+                    updateInputState(inputState, GeometryUtils.mapCircleToSquare(offsetValue), analogData.pressed),
                     startDragGesture,
                 )
             }
             else -> {
-                val analogData = data as Data
-
                 val previousTime = analogData.lastDownEvent
                 val currentTime = Clock.System.now()
                 analogData.lastDownEvent = currentTime
-
-                val isDoubleTap = currentTime - previousTime < Constants.DOUBLE_TAP_INTERVAL
+                analogData.pressed = currentTime - previousTime < Constants.DOUBLE_TAP_INTERVAL
 
                 val firstPointer = pointers.first()
-                Result(updateInputState(inputState, Offset.Zero, isDoubleTap), firstPointer)
+                Result(updateInputState(inputState, Offset.Zero, analogData.pressed), firstPointer)
             }
         }
     }
