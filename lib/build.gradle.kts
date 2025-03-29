@@ -79,7 +79,7 @@ android {
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     signAllPublications()
-    coordinates("io.github.piepacker", "jampadcompose", "0.0.1-alpha1")
+    coordinates("io.github.piepacker", "jampadcompose", "0.1.0-alpha1")
 
     pom {
         name.set(project.name)
