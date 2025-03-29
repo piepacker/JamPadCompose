@@ -17,4 +17,4 @@ jobs:
           java-version: '17'
       - name: Check code style
         shell: bash
-        run: ./gradlew ktlintCheck
+        run: ./gradlew --no-build-cache ktlintCheck
