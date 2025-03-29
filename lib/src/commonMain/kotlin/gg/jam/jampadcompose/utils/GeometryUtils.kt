@@ -78,19 +78,21 @@ object GeometryUtils {
     }
 
     private fun pointToPolarCoordinates(input: Offset): Offset {
-        val result = Offset(
-            -((-atan2(input.y, input.x) + Constants.PI2) % (Constants.PI2)),
-            hypot(input.x, input.y).coerceIn(0f, 1f)
-        )
+        val result =
+            Offset(
+                -((-atan2(input.y, input.x) + Constants.PI2) % (Constants.PI2)),
+                hypot(input.x, input.y).coerceIn(0f, 1f),
+            )
         return result
     }
 
     private fun convertPolarCoordinatesToSquare(input: Offset): Offset {
         val (angle, strength) = input
-        val offset = Offset(
-            strength * cos(angle),
-            strength * sin(angle),
-        )
+        val offset =
+            Offset(
+                strength * cos(angle),
+                strength * sin(angle),
+            )
         return mapEllipticalDiskCoordinatesToSquare(offset)
     }
 

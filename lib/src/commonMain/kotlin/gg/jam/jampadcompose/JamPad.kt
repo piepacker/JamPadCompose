@@ -56,16 +56,18 @@ fun JamPad(
 
     val inputEventsGenerator = remember { InputEventsGenerator() }
     val hapticGenerator = rememberHapticGenerator()
-    val inputHapticGenerator = remember(hapticFeedbackType) {
-        InputHapticGenerator(hapticGenerator, hapticFeedbackType, scope.inputState.value)
-    }
+    val inputHapticGenerator =
+        remember(hapticFeedbackType) {
+            InputHapticGenerator(hapticGenerator, hapticFeedbackType, scope.inputState.value)
+        }
 
     LaunchedEffect(simulatedState.value) {
-        scope.inputState.value = scope.handleSimulatedInputEvents(
-            simulatedControlIds.value,
-            scope.inputState.value,
-            simulatedState.value
-        )
+        scope.inputState.value =
+            scope.handleSimulatedInputEvents(
+                simulatedControlIds.value,
+                scope.inputState.value,
+                simulatedState.value,
+            )
     }
 
     Box(
@@ -77,17 +79,19 @@ fun JamPad(
                     awaitPointerEventScope {
                         while (true) {
                             val event = awaitPointerEvent()
-                            val pointers = event.changes
-                                .asSequence()
-                                .filter { it.pressed }
-                                .map { Pointer(it.id.value, it.position + rootPosition.value) }
+                            val pointers =
+                                event.changes
+                                    .asSequence()
+                                    .filter { it.pressed }
+                                    .map { Pointer(it.id.value, it.position + rootPosition.value) }
 
                             val updatedInputState = scope.handleInputEvent(pointers)
-                            scope.inputState.value = scope.handleSimulatedInputEvents(
-                                simulatedControlIds.value,
-                                updatedInputState,
-                                simulatedState.value
-                            )
+                            scope.inputState.value =
+                                scope.handleSimulatedInputEvents(
+                                    simulatedControlIds.value,
+                                    updatedInputState,
+                                    simulatedState.value,
+                                )
                         }
                     }
                 },

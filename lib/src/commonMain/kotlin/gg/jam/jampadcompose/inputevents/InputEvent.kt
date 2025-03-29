@@ -20,6 +20,8 @@ import androidx.compose.ui.geometry.Offset
 
 sealed interface InputEvent {
     data class ContinuousDirection(val id: Int, val direction: Offset) : InputEvent
+
     data class DiscreteDirection(val id: Int, val direction: Offset) : InputEvent
+
     data class Button(val id: Int, val pressed: Boolean) : InputEvent
 }

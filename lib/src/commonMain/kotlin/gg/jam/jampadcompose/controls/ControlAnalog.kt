@@ -49,14 +49,16 @@ fun JamPadScope.ControlAnalog(
         DefaultButtonForeground(pressed = it, scale = 1f)
     },
 ) {
-    val positionState = remember {
-        derivedStateOf { inputState.value.getContinuousDirection(id) }
-    }
+    val positionState =
+        remember {
+            derivedStateOf { inputState.value.getContinuousDirection(id) }
+        }
 
     val position = positionState.value
-    val safePosition = GeometryUtils.mapSquareToCircle(
-        position.ifUnspecified { Offset.Zero }
-    )
+    val safePosition =
+        GeometryUtils.mapSquareToCircle(
+            position.ifUnspecified { Offset.Zero },
+        )
 
     val handler = remember { AnalogPointerHandler(id, analogPressId) }
     DisposableEffect(handler) {

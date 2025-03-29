@@ -26,7 +26,10 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun rememberFaceButtonCompositeAnchors(ids: List<KeyId>, rotationInDegrees: Float): List<ButtonAnchor> {
+fun rememberFaceButtonCompositeAnchors(
+    ids: List<KeyId>,
+    rotationInDegrees: Float,
+): List<ButtonAnchor> {
     return remember(ids, rotationInDegrees) {
         val baseRotation = rotationInDegrees.toRadians()
 

@@ -22,8 +22,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import gg.jam.jampadcompose.handlers.Pointer
 import gg.jam.jampadcompose.handlers.PointerHandler
-import gg.jam.jampadcompose.ids.ControlId
 import gg.jam.jampadcompose.ids.ContinuousDirectionId
+import gg.jam.jampadcompose.ids.ControlId
 import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
@@ -35,14 +35,17 @@ class JamPadScope {
         val pointerHandler: PointerHandler,
         var startDragGesture: Pointer? = null,
         var rect: Rect = Rect.Zero,
-        val data: Any? = null
+        val data: Any? = null,
     )
 
     internal val inputState = mutableStateOf(InputState())
 
     private val handlers = mutableMapOf<PointerHandler, HandlerState>()
 
-    internal fun registerHandler(pointerHandler: PointerHandler, data: Any? = null) {
+    internal fun registerHandler(
+        pointerHandler: PointerHandler,
+        data: Any? = null,
+    ) {
         handlers[pointerHandler] = HandlerState(pointerHandler, null, Rect.Zero, data)
     }
 
@@ -50,7 +53,10 @@ class JamPadScope {
         handlers.remove(pointerHandler)
     }
 
-    internal fun updateHandlerPosition(pointerHandler: PointerHandler, rect: Rect) {
+    internal fun updateHandlerPosition(
+        pointerHandler: PointerHandler,
+        rect: Rect,
+    ) {
         handlers[pointerHandler]?.rect = rect
     }
 
@@ -79,14 +85,15 @@ class JamPadScope {
     internal fun handleInputEvent(eventPointers: Sequence<Pointer>): InputState {
         val trackedPointers = getTrackedIds()
 
-        val handlersAssociations: Map<PointerHandler?, List<Pointer>> = eventPointers
-            .groupBy { pointer ->
-                if (pointer.pointerId in trackedPointers) {
-                    getHandlerTracking(pointer.pointerId)
-                } else {
-                    getHandlerAtPosition(pointer.position)
+        val handlersAssociations: Map<PointerHandler?, List<Pointer>> =
+            eventPointers
+                .groupBy { pointer ->
+                    if (pointer.pointerId in trackedPointers) {
+                        getHandlerTracking(pointer.pointerId)
+                    } else {
+                        getHandlerAtPosition(pointer.position)
+                    }
                 }
-            }
 
         return getAllHandlers()
             .fold(InputState()) { state, handler ->

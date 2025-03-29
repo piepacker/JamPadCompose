@@ -28,7 +28,11 @@ import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
 @Composable
-fun AsyncLaunchedEffect(threadKey: String, key: Any?, block: suspend CoroutineScope.() -> Unit) {
+fun AsyncLaunchedEffect(
+    threadKey: String,
+    key: Any?,
+    block: suspend CoroutineScope.() -> Unit,
+) {
     val executor = remember { newSingleThreadContext(threadKey) }
 
     LaunchedEffect(key) {
