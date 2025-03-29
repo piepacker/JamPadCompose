@@ -65,7 +65,7 @@ private fun SampleGamePad() {
                     ControlButton(modifier = Modifier.radialPosition(60f), id = KeyId(2))
                     ControlAnalog(
                         modifier = Modifier.radialPosition(-90f).radialScale(2f),
-                        id = ContinuousDirectionId(1)
+                        id = ContinuousDirectionId(1),
                     )
                 },
             )
@@ -83,7 +83,7 @@ private fun SampleGamePad() {
                     ControlButton(modifier = Modifier.radialPosition(60f), id = KeyId(5))
                     ControlAnalog(
                         modifier = Modifier.radialPosition(-90f).radialScale(2f),
-                        id = ContinuousDirectionId(2)
+                        id = ContinuousDirectionId(2),
                     )
                 },
             )

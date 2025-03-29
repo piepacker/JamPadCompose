@@ -26,59 +26,59 @@ internal class CrossPointerHandler(
     private val directionId: DiscreteDirectionId,
     allowDiagonals: Boolean,
 ) : PointerHandler {
-
     enum class State(val position: Offset, val anchor: BaseAnchor, val isDiagonal: Boolean) {
         UP(
             Offset(+0f, +1f),
             BaseAnchor(Offset(+0f, +1f), ORTHOGONAL_DIRECTION_STRENGTH),
-            false
+            false,
         ),
         DOWN(
             Offset(+0f, -1f),
             BaseAnchor(Offset(+0f, -1f), ORTHOGONAL_DIRECTION_STRENGTH),
-            false
+            false,
         ),
         LEFT(
             Offset(-1f, +0f),
             BaseAnchor(Offset(-1f, +0f), ORTHOGONAL_DIRECTION_STRENGTH),
-            false
+            false,
         ),
         RIGHT(
             Offset(+1f, +0f),
             BaseAnchor(Offset(+1f, +0f), ORTHOGONAL_DIRECTION_STRENGTH),
-            false
+            false,
         ),
         UP_LEFT(
             Offset(-1f, +1f),
             BaseAnchor(Offset(-DIAGONAL_DISTANCE, +DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
-            true
+            true,
         ),
         UP_RIGHT(
             Offset(+1f, +1f),
             BaseAnchor(Offset(+DIAGONAL_DISTANCE, +DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
-            true
+            true,
         ),
         DOWN_LEFT(
             Offset(-1f, -1f),
             BaseAnchor(Offset(-DIAGONAL_DISTANCE, -DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
-            true
+            true,
         ),
         DOWN_RIGHT(
             Offset(+1f, -1f),
             BaseAnchor(Offset(+DIAGONAL_DISTANCE, -DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
-            true
+            true,
         ),
     }
 
-    private val allStates = buildList {
-        val orthogonalDirections = State.entries.filter { !it.isDiagonal }
-        addAll(orthogonalDirections)
+    private val allStates =
+        buildList {
+            val orthogonalDirections = State.entries.filter { !it.isDiagonal }
+            addAll(orthogonalDirections)
 
-        if (allowDiagonals) {
-            val diagonalDirections = State.entries.filter { it.isDiagonal }
-            addAll(diagonalDirections)
+            if (allowDiagonals) {
+                val diagonalDirections = State.entries.filter { it.isDiagonal }
+                addAll(diagonalDirections)
+            }
         }
-    }
 
     override fun handle(
         pointers: List<Pointer>,
@@ -100,7 +100,7 @@ internal class CrossPointerHandler(
                 Result(
                     inputState.setDiscreteDirection(
                         directionId,
-                        findCloserState(currentDragGesture)
+                        findCloserState(currentDragGesture),
                     ),
                     startDragGesture,
                 )

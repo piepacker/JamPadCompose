@@ -61,10 +61,11 @@ fun JamPadScope.LayoutRadial(
         val primaryDialMeasurable = measurables.first { it.layoutId == "primary" }
         val secondaryDialsMeasurables = measurables.filter { it.layoutId != "primary" }
 
-        val secondaryDialsProperties = findSecondaryDialProperties(
-            secondaryDialsMeasurables,
-            secondaryDialsBaseRotationInDegrees,
-        )
+        val secondaryDialsProperties =
+            findSecondaryDialProperties(
+                secondaryDialsMeasurables,
+                secondaryDialsBaseRotationInDegrees,
+            )
 
         val relativeLayoutRect =
             LayoutRadialSecondaryDialGeometry.findLayoutRectRelativeToPrimaryDial(
@@ -72,40 +73,46 @@ fun JamPadScope.LayoutRadial(
                 secondaryDialsBaseScale,
             )
 
-        val relativeLayoutSizes = Offset(
-            constraints.maxWidth / relativeLayoutRect.width,
-            constraints.maxHeight / relativeLayoutRect.height,
-        )
+        val relativeLayoutSizes =
+            Offset(
+                constraints.maxWidth / relativeLayoutRect.width,
+                constraints.maxHeight / relativeLayoutRect.height,
+            )
 
-        val primaryDialSize = minOf(
-            relativeLayoutSizes.min().roundToInt(),
-            primaryDialMaxSize.roundToPx()
-        )
+        val primaryDialSize =
+            minOf(
+                relativeLayoutSizes.min().roundToInt(),
+                primaryDialMaxSize.roundToPx(),
+            )
 
-        val layoutSize = Size(
-            primaryDialSize * relativeLayoutRect.width,
-            primaryDialSize * relativeLayoutRect.height
-        )
+        val layoutSize =
+            Size(
+                primaryDialSize * relativeLayoutRect.width,
+                primaryDialSize * relativeLayoutRect.height,
+            )
 
-        val primaryDialCenter = Offset(0f, 0f)
-            .relativeToTopLeft(relativeLayoutRect)
-            .let { Offset(it.x * layoutSize.width, it.y * layoutSize.height) }
+        val primaryDialCenter =
+            Offset(0f, 0f)
+                .relativeToTopLeft(relativeLayoutRect)
+                .let { Offset(it.x * layoutSize.width, it.y * layoutSize.height) }
 
-        val placePrimaryDial = placePrimaryDial(
-            primaryDialMeasurable,
-            primaryDialSize,
-            primaryDialCenter,
-        )
+        val placePrimaryDial =
+            placePrimaryDial(
+                primaryDialMeasurable,
+                primaryDialSize,
+                primaryDialCenter,
+            )
 
         val secondaryDialSize = primaryDialSize * secondaryDialsBaseScale
 
-        val placeSecondaryDials = placeSecondaryDials(
-            secondaryDialsMeasurables,
-            secondaryDialsProperties,
-            primaryDialSize,
-            secondaryDialSize,
-            primaryDialCenter,
-        )
+        val placeSecondaryDials =
+            placeSecondaryDials(
+                secondaryDialsMeasurables,
+                secondaryDialsProperties,
+                primaryDialSize,
+                secondaryDialSize,
+                primaryDialCenter,
+            )
 
         layout(layoutSize.width.roundToInt(), layoutSize.height.roundToInt()) {
             placePrimaryDial()
@@ -146,21 +153,23 @@ private fun placeSecondaryDials(
     secondaryDialSize: Float,
     primaryLayoutCenter: Offset,
 ): Placeable.PlacementScope.() -> Unit {
-    val placeables = secondaryMeasurables.mapIndexed { index, measurable ->
-        val parentData = secondaryParentData[index]
-        val size = (secondaryDialSize * parentData.scale).roundToInt()
-        val childConstraints = Constraints.fixed(size, size)
-        measurable.measure(childConstraints)
-    }
+    val placeables =
+        secondaryMeasurables.mapIndexed { index, measurable ->
+            val parentData = secondaryParentData[index]
+            val size = (secondaryDialSize * parentData.scale).roundToInt()
+            val childConstraints = Constraints.fixed(size, size)
+            measurable.measure(childConstraints)
+        }
 
     return {
         placeables.forEachIndexed { index, placeable ->
-            val position = LayoutRadialSecondaryDialGeometry.findSecondaryDialCenterPosition(
-                secondaryParentData[index],
-                primaryDialSize.toFloat(),
-                secondaryDialSize,
-                primaryLayoutCenter,
-            )
+            val position =
+                LayoutRadialSecondaryDialGeometry.findSecondaryDialCenterPosition(
+                    secondaryParentData[index],
+                    primaryDialSize.toFloat(),
+                    secondaryDialSize,
+                    primaryLayoutCenter,
+                )
             val sizeOffset = IntOffset(placeable.width, placeable.height) / 2f
             placeable.place(position.round() - sizeOffset)
         }

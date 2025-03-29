@@ -25,10 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.JamPadScope
-import gg.jam.jampadcompose.handlers.AnalogPointerHandler
 import gg.jam.jampadcompose.handlers.ButtonPointerHandler
+import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.ui.DefaultButtonForeground
 import gg.jam.jampadcompose.ui.DefaultControlBackground
 
@@ -39,9 +38,10 @@ fun JamPadScope.ControlButton(
     background: @Composable (Boolean) -> Unit = { DefaultControlBackground() },
     foreground: @Composable (Boolean) -> Unit = { DefaultButtonForeground(pressed = it) },
 ) {
-    val pressedState = remember {
-        derivedStateOf { inputState.value.getDigitalKey(id) }
-    }
+    val pressedState =
+        remember {
+            derivedStateOf { inputState.value.getDigitalKey(id) }
+        }
 
     val handler = remember { ButtonPointerHandler(id) }
     DisposableEffect(handler) {

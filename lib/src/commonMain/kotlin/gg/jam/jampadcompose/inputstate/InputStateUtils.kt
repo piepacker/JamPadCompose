@@ -19,7 +19,10 @@ package gg.jam.jampadcompose.inputstate
 import gg.jam.jampadcompose.ids.KeyId
 
 // It's possible that multiple buttons set the same key so we don't want to override their behavior.
-internal fun InputState.setDigitalKeyIfPressed(digitalId: KeyId, value: Boolean): InputState {
+internal fun InputState.setDigitalKeyIfPressed(
+    digitalId: KeyId,
+    value: Boolean,
+): InputState {
     if (value) {
         return setDigitalKey(digitalId, true)
     }

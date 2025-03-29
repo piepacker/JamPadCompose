@@ -30,12 +30,13 @@ class InputEventsGenerator {
             return emptyList()
         }
 
-        val result = buildList {
-            addButtonPresses(previous, current)
-            addButtonReleases(previous, current)
-            addContinuousDirections(previous, current)
-            addDiscreteDirections(previous, current)
-        }
+        val result =
+            buildList {
+                addButtonPresses(previous, current)
+                addButtonReleases(previous, current)
+                addContinuousDirections(previous, current)
+                addDiscreteDirections(previous, current)
+            }
 
         previousInputState = current
 
@@ -44,7 +45,7 @@ class InputEventsGenerator {
 
     private fun MutableList<InputEvent>.addButtonPresses(
         previous: InputState,
-        current: InputState
+        current: InputState,
     ) {
         (current.digitalKeys - previous.digitalKeys)
             .forEach { add(InputEvent.Button(it, true)) }
@@ -52,7 +53,7 @@ class InputEventsGenerator {
 
     private fun MutableList<InputEvent>.addButtonReleases(
         previous: InputState,
-        current: InputState
+        current: InputState,
     ) {
         (previous.digitalKeys - current.digitalKeys)
             .forEach { add(InputEvent.Button(it, false)) }
@@ -60,7 +61,7 @@ class InputEventsGenerator {
 
     private fun MutableList<InputEvent>.addContinuousDirections(
         previous: InputState,
-        current: InputState
+        current: InputState,
     ) {
         val transformer = { key: Int, direction: Offset ->
             InputEvent.ContinuousDirection(key, direction)
@@ -70,7 +71,7 @@ class InputEventsGenerator {
 
     private fun MutableList<InputEvent>.addDiscreteDirections(
         previous: InputState,
-        current: InputState
+        current: InputState,
     ) {
         val transformer = { key: Int, direction: Offset ->
             InputEvent.DiscreteDirection(key, direction)

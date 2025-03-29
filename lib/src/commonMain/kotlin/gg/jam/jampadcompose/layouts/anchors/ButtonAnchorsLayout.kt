@@ -36,18 +36,19 @@ internal fun ButtonAnchorsLayout(
     ) { measurables, constraints ->
         val baseSize = minOf(constraints.maxHeight, constraints.maxWidth)
 
-        val placeables = measurables.zip(buttonAnchors)
-            .map { (measurable, anchor) ->
-                val measurableConstraints =
-                    constraints.copy(
-                        minWidth = (baseSize * anchor.size).roundToInt(),
-                        maxWidth = (baseSize * anchor.size).roundToInt(),
-                        minHeight = (baseSize * anchor.size).roundToInt(),
-                        maxHeight = (baseSize * anchor.size).roundToInt(),
-                    )
+        val placeables =
+            measurables.zip(buttonAnchors)
+                .map { (measurable, anchor) ->
+                    val measurableConstraints =
+                        constraints.copy(
+                            minWidth = (baseSize * anchor.size).roundToInt(),
+                            maxWidth = (baseSize * anchor.size).roundToInt(),
+                            minHeight = (baseSize * anchor.size).roundToInt(),
+                            maxHeight = (baseSize * anchor.size).roundToInt(),
+                        )
 
-                measurable.measure(measurableConstraints)
-            }
+                    measurable.measure(measurableConstraints)
+                }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             val center = Offset(constraints.maxWidth / 2f, constraints.maxHeight / 2f)

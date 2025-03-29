@@ -23,9 +23,8 @@ import gg.jam.jampadcompose.inputstate.InputState
 class InputHapticGenerator(
     private val generator: HapticGenerator,
     private val hapticFeedbackType: HapticFeedbackType,
-    private var previousInputState: InputState
+    private var previousInputState: InputState,
 ) {
-
     fun onInputStateChanged(current: InputState) {
         if (hapticFeedbackType == HapticFeedbackType.NONE) {
             return

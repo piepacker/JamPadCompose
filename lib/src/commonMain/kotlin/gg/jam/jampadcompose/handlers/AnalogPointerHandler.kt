@@ -31,7 +31,6 @@ internal class AnalogPointerHandler(
     private val directionId: ContinuousDirectionId,
     private val analogPressId: KeyId?,
 ) : PointerHandler {
-
     data class Data(
         var lastDownEvent: Instant = Instant.DISTANT_PAST,
         var pressed: Boolean = false,
@@ -56,10 +55,11 @@ internal class AnalogPointerHandler(
                 )
             }
             startDragGesture != null && currentDragGesture != null -> {
-                val deltaPosition = Offset(
-                    currentDragGesture.position.x - startDragGesture.position.x,
-                    startDragGesture.position.y - currentDragGesture.position.y,
-                )
+                val deltaPosition =
+                    Offset(
+                        currentDragGesture.position.x - startDragGesture.position.x,
+                        startDragGesture.position.y - currentDragGesture.position.y,
+                    )
                 val offsetValue = deltaPosition.coerceIn(Offset(-1f, -1f), Offset(1f, 1f))
                 Result(
                     updateInputState(inputState, GeometryUtils.mapCircleToSquare(offsetValue), analogData.pressed),

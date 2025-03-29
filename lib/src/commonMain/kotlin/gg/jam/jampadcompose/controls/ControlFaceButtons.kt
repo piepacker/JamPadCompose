@@ -52,11 +52,12 @@ fun JamPadScope.ControlFaceButtons(
     },
 ) {
     val mainAnchors = rememberFaceButtonsAnchors(ids, rotationInDegrees)
-    val compositeAnchors = if (includeComposite) {
-        rememberFaceButtonCompositeAnchors(ids, rotationInDegrees)
-    } else {
-        emptyList()
-    }
+    val compositeAnchors =
+        if (includeComposite) {
+            rememberFaceButtonCompositeAnchors(ids, rotationInDegrees)
+        } else {
+            emptyList()
+        }
 
     ControlFaceButtons(
         modifier = modifier,
@@ -105,9 +106,10 @@ fun JamPadScope.ControlFaceButtons(
             mainButtonAnchors
                 .flatMap { it.buttons }
                 .forEach {
-                    val keyState = remember {
-                        derivedStateOf { inputState.value.getDigitalKey(it) }
-                    }
+                    val keyState =
+                        remember {
+                            derivedStateOf { inputState.value.getDigitalKey(it) }
+                        }
                     foreground(it, keyState.value)
                 }
         }
@@ -117,9 +119,10 @@ fun JamPadScope.ControlFaceButtons(
             buttonAnchors = compositeButtonAnchors,
         ) {
             compositeButtonAnchors.forEach { point ->
-                val compositeState = remember {
-                    derivedStateOf { point.buttons.all { inputState.value.getDigitalKey(it) } }
-                }
+                val compositeState =
+                    remember {
+                        derivedStateOf { point.buttons.all { inputState.value.getDigitalKey(it) } }
+                    }
                 foregroundComposite(compositeState.value)
             }
         }

@@ -30,7 +30,10 @@ data class InputState(
     internal val continuousDirections: PersistentMap<Int, Offset> = persistentMapOf(),
     internal val discreteDirections: PersistentMap<Int, Offset> = persistentMapOf(),
 ) {
-    fun setDigitalKey(digitalId: KeyId, value: Boolean): InputState {
+    fun setDigitalKey(
+        digitalId: KeyId,
+        value: Boolean,
+    ): InputState {
         return if (value) {
             copy(digitalKeys = digitalKeys.add(digitalId.value))
         } else {
