@@ -21,13 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.round
-import gg.jam.jampadcompose.anchors.ButtonAnchor
+import gg.jam.jampadcompose.anchors.Anchor
 import kotlin.math.roundToInt
 
 @Composable
-internal fun ButtonAnchorsLayout(
+internal fun <T> ButtonAnchorsLayout(
     modifier: Modifier = Modifier,
-    buttonAnchors: List<ButtonAnchor>,
+    anchors: List<Anchor<T>>,
     content: @Composable () -> Unit,
 ) {
     Layout(
@@ -37,7 +37,7 @@ internal fun ButtonAnchorsLayout(
         val baseSize = minOf(constraints.maxHeight, constraints.maxWidth)
 
         val placeables =
-            measurables.zip(buttonAnchors)
+            measurables.zip(anchors)
                 .map { (measurable, anchor) ->
                     val measurableConstraints =
                         constraints.copy(
@@ -52,7 +52,7 @@ internal fun ButtonAnchorsLayout(
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             val center = Offset(constraints.maxWidth / 2f, constraints.maxHeight / 2f)
-            val offsets = buttonAnchors.map { it.position }
+            val offsets = anchors.map { it.position }
 
             placeables
                 .zip(offsets)

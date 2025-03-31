@@ -26,9 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import gg.jam.jampadcompose.anchors.rememberCrossCompositeAnchors
+import gg.jam.jampadcompose.anchors.rememberCompositeAnchors
+import gg.jam.jampadcompose.anchors.rememberPrimaryAnchors
+import gg.jam.jampadcompose.handlers.CrossPointerHandler
 import gg.jam.jampadcompose.layouts.anchors.ButtonAnchorsLayout
-import gg.jam.jampadcompose.layouts.circular.CircularLayout
 import gg.jam.jampadcompose.utils.ifUnspecified
 
 @Composable
@@ -70,19 +71,25 @@ fun DefaultCrossForeground(
     val isRight = adjustedDirection.x > 0.5f
     val isBottom = adjustedDirection.y < -0.5f
 
-    CircularLayout(modifier = modifier.fillMaxSize()) {
+    val directions = CrossPointerHandler.Direction.entries
+    val primaryAnchors = rememberPrimaryAnchors(directions, 0f)
+
+    ButtonAnchorsLayout(
+        modifier = modifier.fillMaxSize(),
+        anchors = primaryAnchors,
+    ) {
         rightDial(isRight)
         bottomDial(isBottom)
         leftDial(isLeft)
         topDial(isTop)
     }
 
-    val compositeAnchors = rememberCrossCompositeAnchors()
+    val compositeAnchors = rememberCompositeAnchors(directions, 0f)
 
     if (allowDiagonals) {
         ButtonAnchorsLayout(
-            modifier = Modifier.fillMaxSize(),
-            buttonAnchors = compositeAnchors,
+            modifier = modifier.fillMaxSize(),
+            anchors = compositeAnchors,
         ) {
             foregroundComposite(isBottom && isRight)
             foregroundComposite(isBottom && isLeft)

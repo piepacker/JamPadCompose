@@ -17,68 +17,20 @@
 package gg.jam.jampadcompose.handlers
 
 import androidx.compose.ui.geometry.Offset
-import gg.jam.jampadcompose.anchors.BaseAnchor
+import gg.jam.jampadcompose.anchors.Anchor
 import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.inputstate.InputState
-import kotlin.math.sqrt
 
 internal class CrossPointerHandler(
     private val directionId: DiscreteDirectionId,
-    allowDiagonals: Boolean,
+    private val directions: List<Anchor<Direction>>,
 ) : PointerHandler {
-    enum class State(val position: Offset, val anchor: BaseAnchor, val isDiagonal: Boolean) {
-        UP(
-            Offset(+0f, +1f),
-            BaseAnchor(Offset(+0f, +1f), ORTHOGONAL_DIRECTION_STRENGTH),
-            false,
-        ),
-        DOWN(
-            Offset(+0f, -1f),
-            BaseAnchor(Offset(+0f, -1f), ORTHOGONAL_DIRECTION_STRENGTH),
-            false,
-        ),
-        LEFT(
-            Offset(-1f, +0f),
-            BaseAnchor(Offset(-1f, +0f), ORTHOGONAL_DIRECTION_STRENGTH),
-            false,
-        ),
-        RIGHT(
-            Offset(+1f, +0f),
-            BaseAnchor(Offset(+1f, +0f), ORTHOGONAL_DIRECTION_STRENGTH),
-            false,
-        ),
-        UP_LEFT(
-            Offset(-1f, +1f),
-            BaseAnchor(Offset(-DIAGONAL_DISTANCE, +DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
-            true,
-        ),
-        UP_RIGHT(
-            Offset(+1f, +1f),
-            BaseAnchor(Offset(+DIAGONAL_DISTANCE, +DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
-            true,
-        ),
-        DOWN_LEFT(
-            Offset(-1f, -1f),
-            BaseAnchor(Offset(-DIAGONAL_DISTANCE, -DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
-            true,
-        ),
-        DOWN_RIGHT(
-            Offset(+1f, -1f),
-            BaseAnchor(Offset(+DIAGONAL_DISTANCE, -DIAGONAL_DISTANCE), DIAGONAL_DIRECTION_STRENGTH),
-            true,
-        ),
+    enum class Direction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
     }
-
-    private val allStates =
-        buildList {
-            val orthogonalDirections = State.entries.filter { !it.isDiagonal }
-            addAll(orthogonalDirections)
-
-            if (allowDiagonals) {
-                val diagonalDirections = State.entries.filter { it.isDiagonal }
-                addAll(diagonalDirections)
-            }
-        }
 
     override fun handle(
         pointers: List<Pointer>,
@@ -121,18 +73,12 @@ internal class CrossPointerHandler(
             return Offset.Zero
         }
 
-        return allStates
-            .minBy { it.anchor.distance(pointer.position) }
+        return directions
+            .minBy { it.distance(pointer.position) }
             .let { it.position.copy(y = -it.position.y) }
     }
 
     private fun isInDeadZone(pointer: Pointer): Boolean {
         return pointer.position.getDistanceSquared() < 0.025
-    }
-
-    companion object {
-        private const val ORTHOGONAL_DIRECTION_STRENGTH = 1f
-        private const val DIAGONAL_DIRECTION_STRENGTH = 0.5f
-        private val DIAGONAL_DISTANCE = 0.9f * sqrt(2f) / 2f
     }
 }

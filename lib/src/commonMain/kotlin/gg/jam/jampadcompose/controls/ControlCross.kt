@@ -27,6 +27,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.JamPadScope
+import gg.jam.jampadcompose.anchors.rememberCompositeAnchors
+import gg.jam.jampadcompose.anchors.rememberPrimaryAnchors
 import gg.jam.jampadcompose.handlers.CrossPointerHandler
 import gg.jam.jampadcompose.ids.DiscreteDirectionId
 import gg.jam.jampadcompose.ui.DefaultControlBackground
@@ -42,14 +44,23 @@ fun JamPadScope.ControlCross(
         DefaultCrossForeground(direction = it, allowDiagonals = allowDiagonals)
     },
 ) {
+    val directions = CrossPointerHandler.Direction.entries
+    val primaryAnchors = rememberPrimaryAnchors(directions, 0f)
+    val compositeAnchors =
+        if (allowDiagonals) {
+            rememberCompositeAnchors(directions, 0f)
+        } else {
+            emptyList()
+        }
+
     val positionState =
         remember {
             derivedStateOf { inputState.value.getDiscreteDirection(id) }
         }
 
     val handler =
-        remember(id, allowDiagonals) {
-            CrossPointerHandler(id, allowDiagonals)
+        remember(id, primaryAnchors, compositeAnchors) {
+            CrossPointerHandler(id, primaryAnchors + compositeAnchors)
         }
 
     DisposableEffect(handler) {

@@ -19,36 +19,36 @@ package gg.jam.jampadcompose.anchors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
-import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.utils.Constants
+import gg.jam.jampadcompose.utils.GeometryUtils
 import gg.jam.jampadcompose.utils.GeometryUtils.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun rememberFaceButtonCompositeAnchors(
-    ids: List<KeyId>,
+fun <T> rememberPrimaryAnchors(
+    ids: List<T>,
     rotationInDegrees: Float,
-): List<ButtonAnchor> {
+): List<Anchor<T>> {
     return remember(ids, rotationInDegrees) {
+        if (ids.size == 1) {
+            return@remember listOf(
+                Anchor(Offset.Zero, setOf(ids.first()), 0.5f),
+            )
+        }
         val baseRotation = rotationInDegrees.toRadians()
+        val size = GeometryUtils.computeSizeOfItemsOnCircumference(ids.size)
 
-        val circleBack = ids.take(1)
+        val primaryAnchors =
+            ids.mapIndexed { index, id ->
+                val angle = (baseRotation + Constants.PI2 * index / ids.size)
+                Anchor(
+                    Offset(cos(angle), sin(angle)),
+                    setOf(id),
+                    size,
+                )
+            }
 
-        val compositeButtonAnchors =
-            (ids + circleBack)
-                .zipWithNext()
-                .mapIndexed { index, (prev, next) ->
-                    val radius = 0.9f
-                    val angle = (baseRotation + Constants.PI2 * (index + 0.5f) / ids.size)
-                    ButtonAnchor(
-                        Offset(cos(angle), sin(angle)) * radius,
-                        0.5f,
-                        setOf(KeyId(prev.value), KeyId(next.value)),
-                        0.1f,
-                    )
-                }
-
-        compositeButtonAnchors
+        primaryAnchors
     }
 }

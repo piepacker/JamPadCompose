@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Jam.gg 2025.
+ * Copyright (c) Jam.gg 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@ package gg.jam.jampadcompose.anchors
 
 import androidx.compose.ui.geometry.Offset
 
-data class BaseAnchor(
+data class Anchor<T>(
     val position: Offset,
-    val strength: Float,
+    val buttons: Set<T>,
+    val size: Float,
 ) {
     fun distance(point: Offset): Float {
-        return (point - position).getDistanceSquared() / strength
+        return maxOf((point - position).getDistance() - size, 0f)
     }
 }
