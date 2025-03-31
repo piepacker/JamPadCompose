@@ -27,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import gg.jam.jampadcompose.JamPadScope
-import gg.jam.jampadcompose.anchors.ButtonAnchor
-import gg.jam.jampadcompose.anchors.rememberFaceButtonCompositeAnchors
-import gg.jam.jampadcompose.anchors.rememberFaceButtonsAnchors
+import gg.jam.jampadcompose.anchors.Anchor
+import gg.jam.jampadcompose.anchors.rememberCompositeAnchors
+import gg.jam.jampadcompose.anchors.rememberPrimaryAnchors
 import gg.jam.jampadcompose.handlers.FaceButtonsPointerHandler
 import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.layouts.anchors.ButtonAnchorsLayout
@@ -51,18 +51,18 @@ fun JamPadScope.ControlFaceButtons(
         DefaultCompositeForeground(pressed = pressed)
     },
 ) {
-    val mainAnchors = rememberFaceButtonsAnchors(ids, rotationInDegrees)
+    val primaryAnchors = rememberPrimaryAnchors(ids, rotationInDegrees)
     val compositeAnchors =
         if (includeComposite) {
-            rememberFaceButtonCompositeAnchors(ids, rotationInDegrees)
+            rememberCompositeAnchors(ids, rotationInDegrees)
         } else {
             emptyList()
         }
 
     ControlFaceButtons(
         modifier = modifier,
-        mainButtonAnchors = mainAnchors,
-        compositeButtonAnchors = compositeAnchors,
+        primaryAnchors = primaryAnchors,
+        compositeAnchors = compositeAnchors,
         background = background,
         foreground = foreground,
         foregroundComposite = foregroundComposite,
@@ -72,8 +72,8 @@ fun JamPadScope.ControlFaceButtons(
 @Composable
 fun JamPadScope.ControlFaceButtons(
     modifier: Modifier = Modifier,
-    mainButtonAnchors: List<ButtonAnchor>,
-    compositeButtonAnchors: List<ButtonAnchor>,
+    primaryAnchors: List<Anchor<KeyId>>,
+    compositeAnchors: List<Anchor<KeyId>>,
     background: @Composable () -> Unit = { DefaultControlBackground() },
     foreground: @Composable (KeyId, Boolean) -> Unit = { _, pressed ->
         DefaultButtonForeground(pressed = pressed)
@@ -82,7 +82,7 @@ fun JamPadScope.ControlFaceButtons(
         DefaultCompositeForeground(pressed = pressed)
     },
 ) {
-    val anchors = mainButtonAnchors + compositeButtonAnchors
+    val anchors = primaryAnchors + compositeAnchors
     val handler = remember(anchors) { FaceButtonsPointerHandler(anchors) }
     DisposableEffect(handler) {
         registerHandler(handler)
@@ -101,9 +101,9 @@ fun JamPadScope.ControlFaceButtons(
 
         ButtonAnchorsLayout(
             modifier = Modifier.fillMaxSize(),
-            buttonAnchors = mainButtonAnchors,
+            anchors = primaryAnchors,
         ) {
-            mainButtonAnchors
+            primaryAnchors
                 .flatMap { it.buttons }
                 .forEach {
                     val keyState =
@@ -116,9 +116,9 @@ fun JamPadScope.ControlFaceButtons(
 
         ButtonAnchorsLayout(
             modifier = Modifier.fillMaxSize(),
-            buttonAnchors = compositeButtonAnchors,
+            anchors = compositeAnchors,
         ) {
-            compositeButtonAnchors.forEach { point ->
+            compositeAnchors.forEach { point ->
                 val compositeState =
                     remember {
                         derivedStateOf { point.buttons.all { inputState.value.getDigitalKey(it) } }

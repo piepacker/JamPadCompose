@@ -16,13 +16,14 @@
 
 package gg.jam.jampadcompose.handlers
 
-import gg.jam.jampadcompose.anchors.ButtonAnchor
+import gg.jam.jampadcompose.anchors.Anchor
+import gg.jam.jampadcompose.ids.KeyId
 import gg.jam.jampadcompose.inputstate.InputState
 import gg.jam.jampadcompose.inputstate.setDigitalKeyIfPressed
 
-internal class FaceButtonsPointerHandler(private val buttonAnchors: List<ButtonAnchor>) : PointerHandler {
+internal class FaceButtonsPointerHandler(private val anchors: List<Anchor<KeyId>>) : PointerHandler {
     private val keys =
-        buttonAnchors
+        anchors
             .flatMap { it.buttons }
             .toSet()
 
@@ -35,7 +36,7 @@ internal class FaceButtonsPointerHandler(private val buttonAnchors: List<ButtonA
         val pressedKeys =
             pointers
                 .flatMap { pointer ->
-                    buttonAnchors
+                    anchors
                         .minBy { it.distance(pointer.position) }
                         .buttons
                 }
